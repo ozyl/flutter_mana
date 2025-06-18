@@ -170,6 +170,7 @@ class _ManaWidgetState extends State<ManaWidget> {
           // The main application content, wrapped in a RepaintBoundary for performance.
           // 主要应用程序内容，包裹在 RepaintBoundary 中以提高性能。
           RepaintBoundary(key: manaRootKey, child: widget.child),
+
           // AdaptiveMediaQuery helps adapt to different screen sizes and orientations.
           // AdaptiveMediaQuery 有助于适应不同的屏幕尺寸和方向。
           AdaptiveMediaQuery(

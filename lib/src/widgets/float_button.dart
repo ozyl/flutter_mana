@@ -13,7 +13,7 @@ const double margin = 10;
 
 /// Defines the distance from the bottom of the screen for the floating button's initial position.
 /// 定义浮动按钮初始位置距离屏幕底部的距离。
-const double bottomDistance = 140;
+const double bottomDistance = 100;
 
 /// A draggable floating action button.
 /// This button allows users to tap it to open the plugin manager,

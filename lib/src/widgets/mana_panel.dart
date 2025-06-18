@@ -70,7 +70,7 @@ class _ManaPanelState extends State<ManaPanel> {
 
       return GridView.count(
         crossAxisCount: crossAxisCount,
-        padding: const EdgeInsets.all(0),
+        padding: const EdgeInsets.all(4),
         crossAxisSpacing: 0,
         // Column spacing. 列间距。
         mainAxisSpacing: 0,

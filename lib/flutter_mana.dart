@@ -1,4 +1,3 @@
-// ui
 library;
 
 /// 插件接口
@@ -12,4 +11,4 @@ export 'src/mana_widget.dart' show ManaWidget, manaRootKey;
 export 'src/plugins/plugins.dart';
 
 /// 内置组件
-export 'src/widgets/mana_floating_window.dart' show ManaFloatingWindow;
+export 'src/widgets/mana_floating_window.dart' show ManaFloatingWindow, PositionType;

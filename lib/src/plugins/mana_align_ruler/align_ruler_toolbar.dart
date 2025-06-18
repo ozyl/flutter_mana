@@ -46,38 +46,6 @@ class AlignRulerToolbar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min, // 使 Column 占用最小的垂直空间
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 26),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                // 左侧和右侧距离显示
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Left: ${dotPosition.dx.toStringAsFixed(1)}', style: coordinateTextStyle),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text('Right: ${(windowSize.width - dotPosition.dx).toStringAsFixed(1)}',
-                          style: coordinateTextStyle),
-                    ],
-                  ),
-                ),
-                // 顶部和底部距离显示
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Top: ${dotPosition.dy.toStringAsFixed(1)}', style: coordinateTextStyle),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text('Bottom: ${(windowSize.height - dotPosition.dy).toStringAsFixed(1)}',
-                          style: coordinateTextStyle),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
             padding: const EdgeInsets.only(top: 12),
             child: Row(
               children: <Widget>[

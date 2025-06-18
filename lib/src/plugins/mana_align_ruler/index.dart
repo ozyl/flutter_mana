@@ -50,16 +50,19 @@ class _ManaAlignRulerState extends State<ManaAlignRuler> {
 
   // 十字准线可拖动点的尺寸。
   final Size _dotSize = const Size(80, 80);
+
   // 从可拖动点左上角到其中心的偏移量，用于精确放置。
   late Offset _dotCenterOffset;
 
   // 坐标文本的样式。
   static const TextStyle _coordinateTextStyle = TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.bold);
+
   // 坐标文本的尺寸，用于布局计算。
   Size _coordinateTextSize = Size.zero;
 
   // 工具栏的当前垂直屏幕位置。
   double _toolBarY = 60.0;
+
   // 控制是否启用“吸附到最近部件边缘”功能的开关状态。
   bool _snapToWidgetEnabled = false;
 
@@ -125,7 +128,8 @@ class _ManaAlignRulerState extends State<ManaAlignRuler> {
 
     return ManaFloatingWindow(
       name: _name,
-      initialHeight: 180,
+      initialHeight: 130,
+      position: PositionType.top,
       // ManaFloatingWindow 负责浮动窗口的显示和交互。
       // 这里的 `body` 参数现在承载了独立的工具栏组件。
       body: GestureDetector(
@@ -133,7 +137,8 @@ class _ManaAlignRulerState extends State<ManaAlignRuler> {
         child: AlignRulerToolbar(
           // 注意：dotPosition 不再直接传递给 toolbar，toolbar 只需知道吸附状态
           // dotPosition 现在由 _AlignRulerOverlay 内部管理和显示
-          dotPosition: Offset.zero, // 占位符，实际坐标在 AlignRulerOverlay 中处理
+          dotPosition: Offset.zero,
+          // 占位符，实际坐标在 AlignRulerOverlay 中处理
           windowSize: _windowSize,
           snapToWidgetEnabled: _snapToWidgetEnabled,
           onSnapToWidgetChanged: _switchSnapToWidget,

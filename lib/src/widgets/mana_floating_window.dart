@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
+enum PositionType {
+  normal,
+  top,
+  bottom,
+}
+
 /// A customizable floating window widget.
 ///
 /// This widget provides a resizable and draggable window with optional
@@ -40,12 +46,41 @@ class ManaFloatingWindow extends StatefulWidget {
   /// 如果不传入，默认为屏幕高度的0.6。
   final double? initialHeight;
 
+  /// The initial position of the window.
+  ///
+  /// 窗口位置
+  final PositionType position;
+
+  /// The initial dx of the window.
+  ///
+  /// 窗口的初始横坐标
+  final double? dx;
+
+  /// The initial dy of the window.
+  ///
+  /// 窗口的初始纵坐标
+  final double? dy;
+
   /// Controls whether the top control bar is displayed.
   /// Defaults to true.
   ///
   /// 控制顶部控制栏是否显示。
   /// 默认为true。
   final bool showControls;
+
+  /// Controls whether the modal is displayed.
+  /// Defaults to true.
+  ///
+  /// 控制modal是否显示。
+  /// 默认为true。
+  final bool showModal;
+
+  /// Can the window be dragged.
+  /// Default to true.
+  ///
+  /// 窗口是否可以被拖动。
+  /// 默认为true。
+  final bool drag;
 
   /// Callback triggered when the window is closed.
   ///
@@ -67,7 +102,12 @@ class ManaFloatingWindow extends StatefulWidget {
     this.modal,
     this.initialWidth,
     this.initialHeight,
+    this.position = PositionType.normal,
+    this.dx,
+    this.dy,
     this.showControls = true,
+    this.showModal = true,
+    this.drag = true,
     this.onClose,
     this.onMinimize,
   });
@@ -152,8 +192,18 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
   ///
   /// 根据初始宽度/高度或屏幕尺寸计算窗口的实际大小。
   Size _getWindowActualSize(Size screenSize) {
-    final double width = widget.initialWidth ?? screenSize.width * 0.6;
-    final double height = widget.initialHeight ?? screenSize.height * 0.6;
+    double width = widget.initialWidth ?? 0;
+    if (widget.initialWidth == null) {
+      width = (screenSize.width * 0.6).clamp(300, 600);
+    } else if (widget.initialWidth == double.infinity) {
+      width = screenSize.width;
+    }
+    double height = widget.initialHeight ?? 0;
+    if (widget.initialHeight == null) {
+      height = screenSize.height * 0.6;
+    } else if (widget.initialHeight == double.infinity) {
+      height = screenSize.height;
+    }
     return Size(width, height);
   }
 
@@ -163,11 +213,23 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
   void _calculateInitialPosition() {
     final Size screenSize = MediaQuery.of(context).size;
     final Size windowSize = _getWindowActualSize(screenSize);
-    final double windowWidth = widget.initialWidth ?? windowSize.width;
-    final double windowHeight = widget.initialHeight ?? windowSize.height;
+
+    final dx = widget.dx ?? (screenSize.width - windowSize.width) / 2;
+    double dy = 0;
+
+    switch (widget.position) {
+      case PositionType.normal:
+        dy = widget.dy ?? (screenSize.height - windowSize.height) / 2;
+
+      case PositionType.top:
+        dy = 100;
+
+      case PositionType.bottom:
+        dy = screenSize.height - windowSize.height;
+    }
 
     setState(() {
-      _currentOffset = Offset((screenSize.width - windowWidth) / 2, (screenSize.height - windowHeight) / 2);
+      _currentOffset = Offset(dx, dy);
     });
   }
 
@@ -177,8 +239,6 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
   void _onPanUpdate(DragUpdateDetails details) {
     final Size screenSize = MediaQuery.of(context).size;
     final Size windowSize = _getWindowActualSize(screenSize);
-    final double windowWidth = widget.initialWidth ?? windowSize.width;
-    final double windowHeight = widget.initialHeight ?? windowSize.height;
 
     setState(() {
       // Update position.
@@ -187,11 +247,11 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
 
       // Clamp X-axis position within screen bounds.
       // 限制X轴位置在屏幕范围内。
-      _currentOffset = Offset(_currentOffset.dx.clamp(0.0, screenSize.width - windowWidth), _currentOffset.dy);
+      _currentOffset = Offset(_currentOffset.dx.clamp(0.0, screenSize.width - windowSize.width), _currentOffset.dy);
 
       // Clamp Y-axis position within screen bounds.
       // 限制Y轴位置在屏幕范围内。
-      _currentOffset = Offset(_currentOffset.dx, _currentOffset.dy.clamp(0.0, screenSize.height - windowHeight));
+      _currentOffset = Offset(_currentOffset.dx, _currentOffset.dy.clamp(0.0, screenSize.height - windowSize.height));
     });
   }
 
@@ -247,13 +307,11 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final Size windowSize = _getWindowActualSize(screenSize);
-    final double windowWidth = widget.initialWidth ?? windowSize.width;
-    final double windowHeight = widget.initialHeight ?? windowSize.height;
 
     final double currentLeft = _isFullscreen ? 0 : _currentOffset.dx;
     final double currentTop = _isFullscreen ? 0 : _currentOffset.dy;
-    final double currentWidth = _isFullscreen ? screenSize.width : windowWidth;
-    final double currentHeight = _isFullscreen ? screenSize.height : windowHeight;
+    final double currentWidth = _isFullscreen ? screenSize.width : windowSize.width;
+    final double currentHeight = _isFullscreen ? screenSize.height : windowSize.height;
 
     return Stack(
       children: [
@@ -262,21 +320,22 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
         // enhancing the window closing animation.
         // 充满整个容器的透明点击层。
         // AnimatedOpacity用于点击层淡入淡出，增加关闭窗口的动画效果。
-        widget.modal ??
-            AnimatedOpacity(
-              opacity: _isVisible ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 300),
-              child: GestureDetector(
-                onTap: _onMinimize, // Tap transparent layer to minimize window.
-                // 点击透明层关闭窗口。
-                child: Container(
-                  color: Colors.transparent, // Nearly transparent, but captures tap events.
-                  // 近乎透明，但能捕获点击事件。
-                  width: double.infinity,
-                  height: double.infinity,
+        if (widget.showModal)
+          widget.modal ??
+              AnimatedOpacity(
+                opacity: _isVisible ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: GestureDetector(
+                  onTap: _onMinimize, // Tap transparent layer to minimize window.
+                  // 点击透明层关闭窗口。
+                  child: Container(
+                    color: Colors.transparent, // Nearly transparent, but captures tap events.
+                    // 近乎透明，但能捕获点击事件。
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
                 ),
               ),
-            ),
 
         if (ManaPluginManager.instance.manaPluginManagerWindowMainVisibility)
           Positioned(
@@ -304,28 +363,35 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
                     borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
                     child: Container(
                       color: Colors.white,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Top control bar, visibility determined by showControls.
-                          // 顶部控制栏，根据showControls决定是否显示。
-                          if (widget.showControls)
-                            _WindowControls(
-                              isFullscreen: _isFullscreen,
-                              isHandlePressed: _isHandlePressed && !_isFullscreen,
-                              // Set _isHandlePressed to true on drag start, false on drag end.
-                              // 拖动开始时设置_isHandlePressed为true，结束时设置为false。
-                              onHandlePanStart: () => setState(() => _isHandlePressed = true),
-                              onHandlePanEnd: () => setState(() => _isHandlePressed = false),
-                              onPanUpdate: _onPanUpdate,
-                              onFullscreen: _onFullscreen,
-                              onMinimize: _onMinimize,
-                              onClose: _onClose,
-                            ),
-                          // Main content area.
-                          // 主体内容区域。
-                          Expanded(child: widget.body),
-                        ],
+                      child: SafeArea(
+                        left: _isFullscreen,
+                        top: _isFullscreen,
+                        right: _isFullscreen,
+                        bottom: _isFullscreen,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Top control bar, visibility determined by showControls.
+                            // 顶部控制栏，根据showControls决定是否显示。
+                            if (widget.showControls)
+                              _WindowControls(
+                                drag: widget.drag,
+                                isFullscreen: _isFullscreen,
+                                isHandlePressed: _isHandlePressed && !_isFullscreen,
+                                // Set _isHandlePressed to true on drag start, false on drag end.
+                                // 拖动开始时设置_isHandlePressed为true，结束时设置为false。
+                                onHandlePanStart: () => setState(() => _isHandlePressed = true),
+                                onHandlePanEnd: () => setState(() => _isHandlePressed = false),
+                                onPanUpdate: _onPanUpdate,
+                                onFullscreen: _onFullscreen,
+                                onMinimize: _onMinimize,
+                                onClose: _onClose,
+                              ),
+                            // Main content area.
+                            // 主体内容区域。
+                            Expanded(child: widget.body),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -345,6 +411,13 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
 /// 顶部控制栏小组件。
 /// 包含全屏、缩小、拖动控件和关闭按钮。
 class _WindowControls extends StatelessWidget {
+  /// Can the window be dragged.
+  /// Default to true.
+  ///
+  /// 窗口是否可以被拖动。
+  /// 默认为true。
+  final bool drag;
+
   /// Whether the window is in full-screen mode.
   ///
   /// 是否处于全屏状态。
@@ -389,6 +462,7 @@ class _WindowControls extends StatelessWidget {
   ///
   /// 构造函数。
   const _WindowControls({
+    required this.drag,
     required this.isFullscreen,
     required this.isHandlePressed,
     required this.onHandlePanStart,
@@ -402,7 +476,7 @@ class _WindowControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.all(0),
       height: 40,
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -418,6 +492,7 @@ class _WindowControls extends StatelessWidget {
           Flexible(
             fit: FlexFit.tight,
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   icon: Icon(isFullscreen ? Icons.fullscreen_exit : Icons.fullscreen, size: 18, color: Colors.black54),
@@ -431,37 +506,39 @@ class _WindowControls extends StatelessWidget {
             ),
           ),
 
-          // Central draggable area (drag handle), wrapped in a transparent container
-          // to increase the clickable area.
-          // 中间可拖动区域（拖动控件），由透明容器包裹，增加可点击区域。
-          Flexible(
-            // Use Flexible to let it occupy the remaining space.
-            // 使用Flexible让其占据剩余空间。
-            fit: FlexFit.tight,
-            child: GestureDetector(
-              onPanStart: (details) => onHandlePanStart(),
-              onPanEnd: (details) => onHandlePanEnd(),
-              onPanUpdate: onPanUpdate,
-              child: Container(
-                color: Colors.transparent,
-                alignment: Alignment.center,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOut,
-                  height: isHandlePressed ? 6 : 4,
-                  width: isHandlePressed ? 60 : 50,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(isHandlePressed ? 3 : 2),
+          if (drag)
+            // Central draggable area (drag handle), wrapped in a transparent container
+            // to increase the clickable area.
+            // 中间可拖动区域（拖动控件），由透明容器包裹，增加可点击区域。
+            Flexible(
+              // Use Flexible to let it occupy the remaining space.
+              // 使用Flexible让其占据剩余空间。
+              fit: FlexFit.tight,
+              child: GestureDetector(
+                onPanStart: (details) => onHandlePanStart(),
+                onPanEnd: (details) => onHandlePanEnd(),
+                onPanUpdate: onPanUpdate,
+                child: Container(
+                  color: Colors.transparent,
+                  alignment: Alignment.center,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                    height: isHandlePressed ? 6 : 4,
+                    width: isHandlePressed ? 60 : 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(isHandlePressed ? 3 : 2),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
 
           Flexible(
             fit: FlexFit.tight,
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 // Right close button.

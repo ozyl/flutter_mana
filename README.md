@@ -4,7 +4,7 @@
 
 Flutter 应用内调试工具平台.
 
-> 因为flutter_ume不维护，此项目因此而生
+> 因为flutter_ume不维护，项目因此而生
 
 ## 使用
 
@@ -24,7 +24,8 @@ void main() {
   if (kDebugMode) {
     ManaPluginManager.instance
       ..register(Demo())
-      ..register(ManaAlignRuler());                
+      ..register(ManaLogger())
+      ..register(ManaAlignRuler());             
     runApp(ManaWidget(child: MyApp(), enable: true)); // 初始化
   } else {
     runApp(MyApp());
@@ -34,10 +35,13 @@ void main() {
 
 ## 内置插件
 
+- [x] [标尺 - AlignRuler](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_align_ruler)
+- [x] [日志查看器 - Logger](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_logger)
+
 
 ## 插件开发
 
-- [参考](./lib/src/plugins/demo)
+- [参考](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/demo)
 
 - 安装依赖
 
@@ -110,3 +114,9 @@ void main() {
 ## 工具
 
 - [PNG图片转Base64](https://base64.guru/converter/encode/image/png)
+
+## 参考
+
+- [flutter_ume](https://github.com/bytedance/flutter_ume)
+- [inspector](https://github.com/kekland/inspector)
+- [logarte](https://github.com/kamranbekirovyz/logarte)
