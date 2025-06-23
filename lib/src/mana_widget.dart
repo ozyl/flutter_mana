@@ -142,10 +142,7 @@ class _ManaWidgetState extends State<ManaWidget> {
       }
       if (widget.enable) {
         _overlayEntry = OverlayEntry(
-          builder: (_) => const Material(
-            type: MaterialType.transparency,
-            child: ManaOverlay(), // The actual overlay content.
-          ),
+          builder: (_) => ManaOverlay(),
         );
         // Insert the overlay entry using the global key.
         // 使用全局 key 插入 OverlayEntry。
@@ -171,19 +168,30 @@ class _ManaWidgetState extends State<ManaWidget> {
           // 主要应用程序内容，包裹在 RepaintBoundary 中以提高性能。
           RepaintBoundary(key: manaRootKey, child: widget.child),
 
-          // AdaptiveMediaQuery helps adapt to different screen sizes and orientations.
-          // AdaptiveMediaQuery 有助于适应不同的屏幕尺寸和方向。
-          AdaptiveMediaQuery(
-            child: Localizations(
-              // Use the first supported locale if provided, otherwise use the platform's locale.
-              // 如果提供了支持的语言环境，则使用第一个，否则使用平台的语言环境。
-              locale: widget.supportedLocales?.first ?? locale,
-              delegates: widget.localizationsDelegates.toList(),
-              child: ScaffoldMessenger(
-                child: Overlay(key: manaOverlayKey), // The Overlay widget where dynamic content will be injected.
-                // Overlay 部件，动态内容将在此处注入。
-              ),
-            ),
+          // 必须包裹在一个应用程序骨架组件内，否则TextField输入文字无法删除
+          WidgetsApp(
+            color: Colors.white,
+            builder: (context, child) {
+              return Directionality(
+                textDirection: TextDirection.ltr,
+                // AdaptiveMediaQuery helps adapt to different screen sizes and orientations.
+                // AdaptiveMediaQuery 有助于适应不同的屏幕尺寸和方向。
+                child: AdaptiveMediaQuery(
+                  child: Localizations(
+                    // Use the first supported locale if provided, otherwise use the platform's locale.
+                    // 如果提供了支持的语言环境，则使用第一个，否则使用平台的语言环境。
+                    locale: widget.supportedLocales?.first ?? locale,
+                    delegates: widget.localizationsDelegates.toList(),
+                    child: Material(
+                      type: MaterialType.transparency,
+                      // The Overlay widget where dynamic content will be injected.
+                      // Overlay 部件，动态内容将在此处注入。
+                      child: Overlay(key: manaOverlayKey),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),

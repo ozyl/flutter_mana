@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:example/json_demo.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 import 'package:logger/logger.dart';
 
@@ -39,6 +40,11 @@ class LogGenerator {
       jsonEncode(jsonDemo),
     ];
     final message = messages[_random.nextInt(messages.length)];
+
+    if (_random.nextBool()) {
+      debugPrint('[debugPrint] $message');
+      return;
+    }
 
     // 添加随机错误堆栈
     final error = _random.nextBool() ? null : Exception("随机异常 ${_random.nextInt(100)}");

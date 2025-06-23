@@ -23,10 +23,13 @@ import 'package:flutter_mana/flutter_mana.dart';
 void main() {
   if (kDebugMode) {
     ManaPluginManager.instance
-      ..register(Demo())
       ..register(ManaLogger())
-      ..register(ManaAlignRuler());             
-    runApp(ManaWidget(child: MyApp(), enable: true)); // 初始化
+      ..register(ManaDeviceInfo())
+      ..register(ManaColorSucker())
+      ..register(ManaDio())
+      ..register(ManaAlignRuler());
+    
+    runApp(ManaWidget(child: MyApp(), enable: true));
   } else {
     runApp(MyApp());
   }
@@ -37,7 +40,9 @@ void main() {
 
 - [x] [标尺 - AlignRuler](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_align_ruler)
 - [x] [日志查看器 - Logger](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_logger)
-
+- [x] [设备信息 - DeviceInfo](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_device_info)
+- [x] [颜色吸管 - ColorSucker](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_color_sucker)
+- [x] [Dio网络检查器 - DioInspector](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_dio)
 
 ## 插件开发
 
@@ -111,6 +116,14 @@ void main() {
 }
 ```
 
+## 第三方依赖
+
+| 名字               | 作用   | 最新版本                                                                                                           |
+|------------------|------|----------------------------------------------------------------------------------------------------------------|
+| logger           | 日志记录 | [![pub package](https://img.shields.io/pub/v/logger.svg)](https://pub.dev/packages/logger)                     |
+| device_info_plus | 设备信息 | [![pub package](https://img.shields.io/pub/v/device_info_plus.svg)](https://pub.dev/packages/device_info_plus) |
+| dio              | 网络请求 | [![pub package](https://img.shields.io/pub/v/dio.svg)](https://pub.dev/packages/dio)                           |
+
 ## 工具
 
 - [PNG图片转Base64](https://base64.guru/converter/encode/image/png)
@@ -120,3 +133,6 @@ void main() {
 - [flutter_ume](https://github.com/bytedance/flutter_ume)
 - [inspector](https://github.com/kekland/inspector)
 - [logarte](https://github.com/kamranbekirovyz/logarte)
+- [plus_plugins](https://github.com/fluttercommunity/plus_plugins)
+- [free api](https://jsonplaceholder.typicode.com/)
+- [info_popup](https://pub.dev/packages/info_popup)

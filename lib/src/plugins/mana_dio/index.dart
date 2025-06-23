@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
+import 'package:flutter_mana/src/plugins/mana_dio/dio_list_view.dart';
+import 'package:flutter_mana/src/plugins/mana_dio/dio_top_bar.dart';
 
+import 'dio_filter_input.dart';
 import 'icon.dart';
-import 'logger_filter_input.dart';
-import 'logger_list_view.dart';
-import 'logger_top_bar.dart';
 
-class ManaLogger extends StatefulWidget implements ManaPluggable {
-  ManaLogger({super.key}) {
-    ManaLoggerCollector.redirectDebugPrint();
-  }
+class ManaDio extends StatefulWidget implements ManaPluggable {
+  const ManaDio({super.key});
 
   @override
-  State<ManaLogger> createState() => _ManaLoggerState();
+  State<ManaDio> createState() => _ManaDioState();
 
   @override
   Widget? buildWidget(BuildContext? context) => this;
@@ -21,9 +19,9 @@ class ManaLogger extends StatefulWidget implements ManaPluggable {
   String getLocalizedDisplayName(Locale locale) {
     switch (locale.languageCode) {
       case 'zh':
-        return '日志查看器';
+        return 'Dio网络检查器';
       default:
-        return 'Logger Viewer';
+        return 'Dio Inspector';
     }
   }
 
@@ -31,19 +29,19 @@ class ManaLogger extends StatefulWidget implements ManaPluggable {
   ImageProvider<Object> get iconImageProvider => iconImage;
 
   @override
-  String get name => 'mana_logger';
+  String get name => 'mana_dio';
 
   @override
   void onTrigger() {}
 }
 
-class _ManaLoggerState extends State<ManaLogger> {
+class _ManaDioState extends State<ManaDio> {
   final ScrollController _scrollController = ScrollController();
-  String _selectedLevel = 'All';
+  String _selectedMethod = 'All';
   bool _filter = false;
   String _filterKeywords = '';
 
-  final List<String> _levels = ['All', 'Debug', 'Info', 'Warning', 'Error'];
+  final List<String> _methods = ['All', 'Get', 'Post', 'Put', 'Delete'];
 
   @override
   void dispose() {
@@ -63,9 +61,9 @@ class _ManaLoggerState extends State<ManaLogger> {
     }
   }
 
-  void _onLevelSelected(String level) {
+  void _onMethodSelected(String method) {
     setState(() {
-      _selectedLevel = level;
+      _selectedMethod = method;
     });
   }
 
@@ -84,7 +82,7 @@ class _ManaLoggerState extends State<ManaLogger> {
   @override
   Widget build(BuildContext context) {
     return ManaFloatingWindow(
-      name: 'mana_logger',
+      name: 'mana_dio',
       showModal: false,
       initialWidth: double.infinity,
       position: PositionType.bottom,
@@ -92,27 +90,27 @@ class _ManaLoggerState extends State<ManaLogger> {
       body: Column(
         children: [
           Divider(height: 1, color: Colors.grey[200]),
-          LoggerTopBar(
-            levels: _levels,
-            selectedLevel: _selectedLevel,
-            onLevelSelected: _onLevelSelected,
+          DioTopBar(
+            methods: _methods,
+            selectedMethod: _selectedMethod,
+            onMethodSelected: _onMethodSelected,
             filterEnabled: _filter,
             onToggleFilter: _toggleFilterVisibility,
           ),
           if (_filter) ...[
             Divider(height: 1, color: Colors.grey[200]),
-            LoggerFilterInput(
+            DioFilterInput(
               onFilterKeywordsChanged: _onFilterKeywordsChanged,
             ),
           ],
           Divider(height: 1, color: Colors.grey[200]),
-          LoggerListView(
+          DioListView(
             scrollController: _scrollController,
-            selectedLevel: _selectedLevel,
+            selectedMethod: _selectedMethod,
             filterKeywords: _filterKeywords,
             filterEnabled: _filter,
-            onLogsUpdated: _scrollToBottom,
-          ),
+            onResponsesUpdated: _scrollToBottom,
+          )
         ],
       ),
     );

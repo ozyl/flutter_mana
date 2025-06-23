@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 class ManaLoggerCollector implements LogOutput {
@@ -20,6 +20,26 @@ class ManaLoggerCollector implements LogOutput {
 
   /// 用 ValueNotifier 实现观察者模式
   final ValueNotifier<List<OutputEvent>> logs = ValueNotifier(<OutputEvent>[]);
+
+  static DebugPrintCallback? _originalDebugPrint;
+
+  /// 重定向 Flutter 的 debugPrint 输出
+  static redirectDebugPrint() {
+    if (_originalDebugPrint != null) return;
+    _originalDebugPrint = debugPrint;
+    debugPrint = (String? message, {int? wrapWidth}) {
+      ManaLoggerCollector._instance.output(OutputEvent(
+          LogEvent(
+            Level.debug,
+            message,
+          ),
+          []));
+
+      if (_originalDebugPrint != null) {
+        _originalDebugPrint!(message, wrapWidth: wrapWidth);
+      }
+    };
+  }
 
   @override
   void output(OutputEvent event) {

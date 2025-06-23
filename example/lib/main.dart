@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
+import 'dio_client.dart';
 import 'log_generator.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ManaPluginManager.instance
-    ..register(Demo())
     ..register(ManaLogger())
+    ..register(ManaDeviceInfo())
+    ..register(ManaColorSucker())
+    ..register(ManaDio())
     ..register(ManaAlignRuler());
 
   runApp(const ManaWidget(child: MyApp()));
@@ -24,7 +27,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Example',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent)),
-      home: const MyHomePage(title: 'Example'),
+      home: MyHomePage(title: 'Mana Example'),
     );
   }
 }
@@ -52,7 +55,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void sendRequest() {}
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void sendRequest() async {
+    DioClient().randomRequest();
+  }
 
   void addLog() {
     LogGenerator.generateRandomLog();
@@ -62,47 +72,29 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
-      body: Center(
-        child: Container(
-          width: 300,
-          height: 300,
-          decoration: BoxDecoration(color: Colors.lightBlue, borderRadius: BorderRadius.circular(16)),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Mana',
-                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: toggleOrientation,
-                  child: const Text(
-                    'Toggle Orientation',
-                    style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: sendRequest,
-                  child: const Text(
-                    'Send Request',
-                    style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: addLog,
-                  child: const Text(
-                    'Add Log',
-                    style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          spacing: 16,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ElevatedButton(
+              onPressed: toggleOrientation,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, foregroundColor: Colors.white),
+              child: const Text('Toggle Orientation', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
-          ),
+            ElevatedButton(
+              onPressed: sendRequest,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+              child: const Text('Send Request', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+            ElevatedButton(
+              onPressed: addLog,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan, foregroundColor: Colors.white),
+              child: const Text('Add Log', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+          ],
         ),
       ),
     );

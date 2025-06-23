@@ -6,6 +6,7 @@
 
 ```dart
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
 void main() {
@@ -22,9 +23,12 @@ class App extends StatelessWidget {
     return Scaffold(
       body: ElevatedButton(
         onPressed: () {
-          /// set output
+          /// use logger to set output
           final logger = Logger(output: ManaLoggerCollector());
           logger.e('error');
+
+          /// use debugPrint
+          debugPrint('hello');
         },
         child: const Text('Add Log'),
       ),

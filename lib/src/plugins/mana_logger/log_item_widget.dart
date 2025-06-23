@@ -58,7 +58,7 @@ class _LogItemWidgetState extends State<LogItemWidget> {
                     IconButton(
                       icon: Icon(
                         _expanded ? Icons.expand_less : Icons.expand_more,
-                        size: 14,
+                        size: 16,
                       ),
                       style: IconButton.styleFrom(
                         minimumSize: Size.zero,
