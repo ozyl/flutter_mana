@@ -6,6 +6,9 @@ Flutter 应用内调试工具平台.
 
 > 因为flutter_ume不维护，项目因此而生，`mana`的名字来自于一部国漫《灵笼》中的玛娜设定，强烈推荐！
 
+
+**尽量在开发环境使用，部分插件只在开发环境才能生效！！！**
+
 ## 使用
 
 - 安装
@@ -27,6 +30,7 @@ void main() {
       ..register(ManaDeviceInfo())
       ..register(ManaColorSucker())
       ..register(ManaDio())
+      ..register(ManaWidgetInfoInspector())
       ..register(ManaAlignRuler());
     
     runApp(ManaWidget(child: MyApp(), enable: true));
@@ -43,11 +47,12 @@ void main() {
 - [x] [设备信息 - DeviceInfo](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_device_info)
 - [x] [颜色吸管 - ColorSucker](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_color_sucker)
 - [x] [Dio网络检查器 - DioInspector](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_dio)
+- [x] [Widget详情 - WidgetInfo](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_widget_info_inspector)
 
-| 插件   | 预览                                                                                                        | 插件       | 预览                                                                                                   | 插件   | 预览                                                                                                       |
-|------|-----------------------------------------------------------------------------------------------------------|----------|------------------------------------------------------------------------------------------------------|------|----------------------------------------------------------------------------------------------------------|
-| 标尺   | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.jpg" alt="标尺">    | 日志查看器    | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_logger.jpg" alt="日志查看器"> | 设备信息 | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_device_info.jpg" alt="设备信息"> |
-| 颜色吸管 | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_color_sucker.jpg" alt="颜色吸管"> | Dio网络检查器 | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_dio.jpg" alt="Dio网络检查器"> |      |                                                                                                          |
+| 插件   | 预览                                                                                                        | 插件       | 预览                                                                                                   | 插件       | 预览                                                                                                                     |
+|------|-----------------------------------------------------------------------------------------------------------|----------|------------------------------------------------------------------------------------------------------|----------|------------------------------------------------------------------------------------------------------------------------|
+| 标尺   | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.jpg" alt="标尺">    | 日志查看器    | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_logger.jpg" alt="日志查看器"> | 设备信息     | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_device_info.jpg" alt="设备信息">               |
+| 颜色吸管 | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_color_sucker.jpg" alt="颜色吸管"> | Dio网络检查器 | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_dio.jpg" alt="Dio网络检查器"> | Widget详情 | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_widget_info_inspector.jpg" alt="Widget详情"> |
 
 ## 插件开发
 

@@ -5,8 +5,6 @@ import 'align_ruler_overlay.dart';
 import 'align_ruler_toolbar.dart';
 import 'icon.dart';
 
-const _name = 'mana_align_ruler';
-
 /// `ManaAlignRuler` 是一个 Flutter 插件，提供交互式对齐标尺工具。
 ///
 /// 该工具允许开发者：
@@ -28,7 +26,7 @@ class ManaAlignRuler extends StatefulWidget implements ManaPluggable {
   ImageProvider<Object> get iconImageProvider => iconImage;
 
   @override
-  String get name => _name;
+  String get name => 'mana_align_ruler';
 
   @override
   String getLocalizedDisplayName(Locale locale) {
@@ -127,7 +125,7 @@ class _ManaAlignRulerState extends State<ManaAlignRuler> {
     }
 
     return ManaFloatingWindow(
-      name: _name,
+      name: widget.name,
       initialHeight: 130,
       position: PositionType.top,
       // ManaFloatingWindow 负责浮动窗口的显示和交互。

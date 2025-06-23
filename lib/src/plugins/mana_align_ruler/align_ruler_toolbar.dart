@@ -40,44 +40,35 @@ class AlignRulerToolbar extends StatelessWidget {
     return Container(
       width: screenWidth * 0.8, // 工具栏宽度为屏幕宽度的 80%
       color: Colors.white,
-      padding: const EdgeInsets.only(bottom: 16, top: 12), // 内部填充
+      padding: const EdgeInsets.all(16), // 内部填充
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min, // 使 Column 占用最小的垂直空间
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: Row(
-              children: <Widget>[
-                // 吸附功能开关
-                Container(
-                  padding: const EdgeInsets.only(left: 20),
-                  height: 30,
-                  child: Transform.scale(
-                    scale: 1.3, // 放大 Switch 控件
-                    child: Switch(
-                      value: snapToWidgetEnabled,
-                      onChanged: onSnapToWidgetChanged,
-                      activeColor: Colors.red,
-                    ),
+        children: [
+          Row(
+            spacing: 8,
+            children: [
+              // 吸附功能开关
+              Switch(
+                value: snapToWidgetEnabled,
+                onChanged: onSnapToWidgetChanged,
+                activeColor: Colors.red,
+              ),
+              // 吸附功能提示文本
+              Expanded(
+                child: Text(
+                  // 根据当前语言环境显示不同的提示文本
+                  Localizations.localeOf(context).languageCode == 'zh'
+                      ? '开启后松手将会自动吸附至最近部件边缘'
+                      : 'Snap to nearest widget edge on release',
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
                   ),
                 ),
-                // 吸附功能提示文本
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text(
-                      // 根据当前语言环境显示不同的提示文本
-                      Localizations.localeOf(context).languageCode == 'zh'
-                          ? '开启后松手将会自动吸附至最近部件边缘'
-                          : 'Snap to nearest widget edge on release',
-                      style: const TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.w500), // 注意这里改为 FontWeight.w500，与原代码保持一致
-                    ),
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           )
         ],
       ),

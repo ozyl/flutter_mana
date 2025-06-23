@@ -1,3 +1,7 @@
+## 1.0.0-beta.4
+
+- Add plugin mana_widget_info_inspector
+
 ## 1.0.0-beta.3
 
 - Added text filtering support to mana_logger

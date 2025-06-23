@@ -6,3 +6,4 @@ export 'mana_dio/index.dart' show ManaDio;
 export 'mana_dio/mana_dio_collector.dart' show ManaDioCollector;
 export 'mana_logger/index.dart' show ManaLogger;
 export 'mana_logger/mana_logger_collector.dart' show ManaLoggerCollector;
+export 'mana_widget_info_inspector/index.dart' show ManaWidgetInfoInspector;

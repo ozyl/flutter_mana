@@ -40,7 +40,7 @@ class _ManaColorSuckerState extends State<ManaColorSucker> {
   @override
   Widget build(BuildContext context) {
     return ManaFloatingWindow(
-      name: 'mana_color_sucker',
+      name: widget.name,
       modal: ColorSucker(
         onColorChanged: (color) {
           _color = color;

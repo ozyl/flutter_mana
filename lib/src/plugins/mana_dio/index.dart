@@ -82,7 +82,7 @@ class _ManaDioState extends State<ManaDio> {
   @override
   Widget build(BuildContext context) {
     return ManaFloatingWindow(
-      name: 'mana_dio',
+      name: widget.name,
       showModal: false,
       initialWidth: double.infinity,
       position: PositionType.bottom,

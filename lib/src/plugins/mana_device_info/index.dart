@@ -83,6 +83,6 @@ class _ManaDeviceInfoState extends State<ManaDeviceInfo> {
         ),
       );
     }
-    return ManaFloatingWindow(name: 'mana_device_info', body: body);
+    return ManaFloatingWindow(name: widget.name, body: body);
   }
 }

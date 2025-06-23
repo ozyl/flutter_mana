@@ -84,7 +84,7 @@ class _ManaLoggerState extends State<ManaLogger> {
   @override
   Widget build(BuildContext context) {
     return ManaFloatingWindow(
-      name: 'mana_logger',
+      name: widget.name,
       showModal: false,
       initialWidth: double.infinity,
       position: PositionType.bottom,
