@@ -52,7 +52,6 @@ void main() {
 - [x] [Widget详情 - WidgetInfo](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_widget_info_inspector)
 - [x] [帧率监控 - FpsMonitor](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_fps_monitor)
 - [x] [SharedPreferences查看器 - SharedPreferencesViewer](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_shared_preferences_viewer)
-- [ ] [显示代码 - ShowCode](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_show_code)
 
 | 插件                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
