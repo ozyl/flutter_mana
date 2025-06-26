@@ -25,14 +25,16 @@ import 'package:flutter_mana/flutter_mana.dart';
 
 void main() {
   if (kDebugMode) {
-    ManaPluginManager.instance
-      ..register(ManaLogger())
-      ..register(ManaDeviceInfo())
-      ..register(ManaColorSucker())
-      ..register(ManaDio())
-      ..register(ManaWidgetInfoInspector())
-      ..register(ManaAlignRuler());
-    
+  ManaPluginManager.instance
+    ..register(ManaLogger())
+    ..register(ManaDeviceInfo())
+    ..register(ManaColorSucker())
+    ..register(ManaDio())
+    ..register(ManaWidgetInfoInspector())
+    ..register(ManaFpsMonitor())
+    ..register(ManaSharedPreferencesViewer())
+    ..register(ManaAlignRuler());
+
     runApp(ManaWidget(child: MyApp(), enable: true));
   } else {
     runApp(MyApp());
@@ -48,11 +50,18 @@ void main() {
 - [x] [颜色吸管 - ColorSucker](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_color_sucker)
 - [x] [Dio网络检查器 - DioInspector](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_dio)
 - [x] [Widget详情 - WidgetInfo](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_widget_info_inspector)
+- [x] [帧率监控 - FpsMonitor](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_fps_monitor)
+- [x] [SharedPreferences查看器 - SharedPreferencesViewer](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_shared_preferences_viewer)
+- [ ] [显示代码 - ShowCode](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_show_code)
 
-| 插件   | 预览                                                                                                        | 插件       | 预览                                                                                                   | 插件       | 预览                                                                                                                     |
-|------|-----------------------------------------------------------------------------------------------------------|----------|------------------------------------------------------------------------------------------------------|----------|------------------------------------------------------------------------------------------------------------------------|
-| 标尺   | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.jpg" alt="标尺">    | 日志查看器    | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_logger.jpg" alt="日志查看器"> | 设备信息     | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_device_info.jpg" alt="设备信息">               |
-| 颜色吸管 | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_color_sucker.jpg" alt="颜色吸管"> | Dio网络检查器 | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_dio.jpg" alt="Dio网络检查器"> | Widget详情 | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_widget_info_inspector.png" alt="Widget详情"> |
+| 插件                                                                                                        |                                                                                                                                        |                                                                                                              |
+|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| 标尺                                                                                                        | 日志查看器                                                                                                                                  | 设备信息                                                                                                         |
+| <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.png" alt="标尺">    | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_logger.png" alt="日志查看器">                                   | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_device_info.png" alt="设备信息">     |
+| 颜色吸管                                                                                                      | Dio网络检查器                                                                                                                               | Widget详情                                                                                                     |
+| <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_color_sucker.png" alt="颜色吸管"> | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_dio.png" alt="Dio网络检查器">                                   | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_widget_info.png" alt="Widget详情"> |
+| 帧率监控                                                                                                      | SharedPreferences查看器                                                                                                                   |                                                                                                              |
+| <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_fps_monitor.png" alt="帧率监控">  | <img src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_shared_preferences_viewer.png" alt="SharedPreferences查看器"> |                                                                                                              |
 
 ## 插件开发
 
@@ -146,3 +155,6 @@ void main() {
 - [plus_plugins](https://github.com/fluttercommunity/plus_plugins)
 - [free api](https://jsonplaceholder.typicode.com/)
 - [info_popup](https://pub.dev/packages/info_popup)
+- [do kit](https://github.com/didi/DoKit)
+- [fps monitor](https://github.com/Nayuta403/fps_monitor)
+- [code highlight](https://github.com/toly1994328/FlutterUnit/blob/master/modules/basic_system/toly_ui/lib/code/code_widget.dart)

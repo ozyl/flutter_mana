@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
-import 'package:flutter_mana/src/plugins/mana_dio/response_item_widget.dart';
+
+import 'response_item_widget.dart';
 
 class DioListView extends StatelessWidget {
   final ScrollController scrollController;

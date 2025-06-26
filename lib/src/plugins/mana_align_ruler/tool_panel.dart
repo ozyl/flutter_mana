@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// `AlignRulerToolbar` 是对齐标尺插件的控制面板 UI。
+/// `ToolPanel` 是对齐标尺插件的控制面板 UI。
 /// 它显示当前十字准线的坐标信息，并提供一个开关来控制吸附到部件边缘的功能。
-class AlignRulerToolbar extends StatelessWidget {
+class ToolPanel extends StatelessWidget {
   /// 当前十字准线的屏幕坐标。
   final Offset dotPosition;
 
@@ -19,7 +19,7 @@ class AlignRulerToolbar extends StatelessWidget {
   final TextStyle coordinateTextStyle;
 
   /// 构造一个 `AlignRulerToolbar`。
-  const AlignRulerToolbar({
+  const ToolPanel({
     super.key,
     required this.dotPosition,
     required this.windowSize,

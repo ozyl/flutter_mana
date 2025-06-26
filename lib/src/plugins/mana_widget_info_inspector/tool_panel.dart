@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class WidgetInfoInspectorToolPanel extends StatefulWidget {
+class ToolPanel extends StatefulWidget {
   final ValueChanged<bool>? onChanged;
 
-  const WidgetInfoInspectorToolPanel({super.key, this.onChanged});
+  const ToolPanel({super.key, this.onChanged});
 
   @override
-  State<WidgetInfoInspectorToolPanel> createState() => _WidgetInfoInspectorToolPanelState();
+  State<ToolPanel> createState() => _ToolPanelState();
 }
 
-class _WidgetInfoInspectorToolPanelState extends State<WidgetInfoInspectorToolPanel> {
+class _ToolPanelState extends State<ToolPanel> {
   @override
   Widget build(BuildContext context) {
     return Padding(

@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class DioFilterInput extends StatefulWidget {
+class FilterInput extends StatefulWidget {
   final ValueChanged<String> onFilterKeywordsChanged;
 
-  const DioFilterInput({super.key, required this.onFilterKeywordsChanged});
+  const FilterInput({super.key, required this.onFilterKeywordsChanged});
 
   @override
-  State<DioFilterInput> createState() => _DioFilterInputState();
+  State<FilterInput> createState() => _FilterInputState();
 }
 
-class _DioFilterInputState extends State<DioFilterInput> {
+class _FilterInputState extends State<FilterInput> {
   final TextEditingController _textController = TextEditingController();
   Timer? _debounceTimer;
 
@@ -44,7 +44,7 @@ class _DioFilterInputState extends State<DioFilterInput> {
       controller: _textController,
       style: const TextStyle(fontSize: 14),
       decoration: const InputDecoration(
-        hintText: 'Filter path',
+        hintText: 'Filter keywords',
         hintStyle: TextStyle(color: Colors.grey),
         border: InputBorder.none,
         focusedBorder: InputBorder.none,

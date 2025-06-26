@@ -3,7 +3,7 @@ import 'package:flutter/services.dart'; // 用于触觉反馈
 
 import '../../utils/hit_test_utils.dart';
 // 导入依赖的绘制器和工具类
-import 'align_ruler_painter.dart';
+import 'selected_rect_painter.dart';
 
 /// `AlignRulerOverlay` 是对齐标尺插件的核心覆盖层 UI 组件。
 /// 它负责绘制十字准线、水平/垂直标尺线、坐标文本，并处理十字准线的拖动和吸附逻辑。

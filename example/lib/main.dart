@@ -1,3 +1,4 @@
+import 'package:example/sp_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mana/flutter_mana.dart';
@@ -14,6 +15,8 @@ void main() async {
     ..register(ManaColorSucker())
     ..register(ManaDio())
     ..register(ManaWidgetInfoInspector())
+    ..register(ManaFpsMonitor())
+    ..register(ManaSharedPreferencesViewer())
     ..register(ManaAlignRuler());
 
   runApp(const ManaWidget(child: MyApp()));
@@ -62,11 +65,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void sendRequest() async {
-    DioClient().randomRequest();
+    await DioClient().randomRequest();
   }
 
   void addLog() {
     LogGenerator.generateRandomLog();
+  }
+
+  void addSharedPreferences() async {
+    await SpClient.insertRandom();
   }
 
   @override
@@ -74,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           spacing: 16,
@@ -95,6 +102,11 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: addLog,
               style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan, foregroundColor: Colors.white),
               child: const Text('Add Log', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+            ElevatedButton(
+              onPressed: addSharedPreferences,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple, foregroundColor: Colors.white),
+              child: const Text('Add SharedPreferences', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
           ],
         ),

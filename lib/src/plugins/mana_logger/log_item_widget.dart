@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mana/flutter_mana.dart';
 import 'package:logger/logger.dart';
 
 /// 单条日志组件
@@ -15,7 +16,6 @@ class LogItemWidget extends StatefulWidget {
 
 class _LogItemWidgetState extends State<LogItemWidget> {
   bool _expanded = false;
-  bool _copied = false;
 
   static const maxLength = 200;
 
@@ -72,8 +72,9 @@ class _LogItemWidgetState extends State<LogItemWidget> {
                       },
                     ),
                   const SizedBox(width: 12),
-                  IconButton(
-                    icon: Icon(_copied ? Icons.check : Icons.copy, size: 14),
+                  CheckIconButton(
+                    initialIcon: Icons.copy,
+                    size: 14,
                     style: IconButton.styleFrom(
                       minimumSize: Size.zero,
                       padding: EdgeInsets.zero,
@@ -83,12 +84,6 @@ class _LogItemWidgetState extends State<LogItemWidget> {
                       Clipboard.setData(
                         ClipboardData(text: widget.log.origin.message),
                       );
-                      setState(() => _copied = true);
-                      Future.delayed(Duration(seconds: 2), () {
-                        if (mounted && _copied) {
-                          setState(() => _copied = false);
-                        }
-                      });
                     },
                   ),
                 ],

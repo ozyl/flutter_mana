@@ -20,6 +20,11 @@ class ManaFloatingWindow extends StatefulWidget {
   /// 窗口唯一名字，可以是插件的唯一名字
   final String name;
 
+  /// The header area of the window.
+  ///
+  /// 窗口头部区域。
+  final Widget? header;
+
   /// The content area of the window.
   ///
   /// 窗口内容区域。
@@ -98,6 +103,7 @@ class ManaFloatingWindow extends StatefulWidget {
   const ManaFloatingWindow({
     super.key,
     required this.name,
+    this.header,
     required this.body,
     this.modal,
     this.initialWidth,
@@ -355,9 +361,19 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeOutBack,
                 alignment: Alignment.center,
-                child: Material(
-                  elevation: 8,
-                  borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(50),
+                        blurRadius: 16,
+                        spreadRadius: 0,
+                        offset: Offset(0, 0),
+                      ),
+                    ],
+                  ),
                   clipBehavior: Clip.antiAlias,
                   child: ClipRRect(
                     borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
@@ -387,6 +403,10 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
                                 onMinimize: _onMinimize,
                                 onClose: _onClose,
                               ),
+
+                            // Header area
+                            if (widget.header != null) widget.header!,
+
                             // Main content area.
                             // 主体内容区域。
                             Expanded(child: widget.body),

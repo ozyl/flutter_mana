@@ -3,14 +3,14 @@ import 'package:flutter_mana/flutter_mana.dart';
 
 import 'mana_logger_collector.dart';
 
-class LoggerTopBar extends StatelessWidget {
+class TopBar extends StatelessWidget {
   final List<String> levels;
   final String selectedLevel;
   final ValueChanged<String> onLevelSelected;
   final bool filterEnabled;
   final VoidCallback onToggleFilter;
 
-  const LoggerTopBar({
+  const TopBar({
     super.key,
     required this.levels,
     required this.selectedLevel,
@@ -26,19 +26,11 @@ class LoggerTopBar extends StatelessWidget {
       children: [
         Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 8),
-              child: IconButton(
-                onPressed: () {
-                  ManaLoggerCollector().clear(); // Clear logs using the collector
-                },
-                style: IconButton.styleFrom(
-                  minimumSize: Size.zero,
-                  padding: EdgeInsets.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                icon: const Icon(Icons.block_flipped, size: 16),
-              ),
+            IconButton(
+              onPressed: () {
+                ManaLoggerCollector().clear(); // Clear logs using the collector
+              },
+              icon: const Icon(Icons.block_flipped, size: 16),
             ),
             for (final level in levels)
               FilterChip(
@@ -58,19 +50,11 @@ class LoggerTopBar extends StatelessWidget {
               ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: IconButton(
-            onPressed: onToggleFilter,
-            style: IconButton.styleFrom(
-              minimumSize: Size.zero,
-              padding: EdgeInsets.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: Icon(
-              filterEnabled ? Icons.filter_alt_outlined : Icons.filter_alt_off_outlined,
-              size: 16,
-            ),
+        IconButton(
+          onPressed: onToggleFilter,
+          icon: Icon(
+            filterEnabled ? Icons.filter_alt_outlined : Icons.filter_alt_off_outlined,
+            size: 16,
           ),
         ),
       ],

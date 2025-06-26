@@ -4,7 +4,7 @@ import 'package:flutter_mana/flutter_mana.dart';
 
 import '../../service/inspector_overlay.dart';
 import 'icon.dart';
-import 'widget_info_inspector_tool_panel.dart';
+import 'tool_panel.dart';
 
 class ManaWidgetInfoInspector extends StatefulWidget implements ManaPluggable {
   const ManaWidgetInfoInspector({super.key});
@@ -132,10 +132,14 @@ class _ManaWidgetInfoInspectorState extends State<ManaWidgetInfoInspector> with 
     List<Widget> children = [];
     // 创建手势检测器，用于捕获用户的触摸事件。
     GestureDetector gesture = GestureDetector(
-      onTap: _handleTap, // 监听点击事件。
-      onPanDown: _handlePanDown, // 监听手势按下事件。
-      onPanEnd: _handlePanEnd, // 监听手势结束事件。
-      behavior: HitTestBehavior.opaque, // 使整个区域都能响应点击。
+      onTap: _handleTap,
+      // 监听点击事件。
+      onPanDown: _handlePanDown,
+      // 监听手势按下事件。
+      onPanEnd: _handlePanEnd,
+      // 监听手势结束事件。
+      behavior: HitTestBehavior.opaque,
+      // 使整个区域都能响应点击。
       child: IgnorePointer(
         // 忽略子 Widget 的指针事件，确保手势检测器能捕获所有事件。
         child: SizedBox(
@@ -154,7 +158,7 @@ class _ManaWidgetInfoInspectorState extends State<ManaWidgetInfoInspector> with 
       initialWidth: 300,
       initialHeight: 100,
       modal: Stack(textDirection: TextDirection.ltr, children: children),
-      body: WidgetInfoInspectorToolPanel(
+      body: ToolPanel(
         onChanged: (value) {
           selection.clear();
           _showAllSize();

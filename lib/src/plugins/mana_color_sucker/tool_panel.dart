@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mana/flutter_mana.dart';
 
-class ColorToolPanel extends StatefulWidget {
+class ToolPanel extends StatefulWidget {
   /// 初始颜色
   final Color color;
 
-  const ColorToolPanel({
+  const ToolPanel({
     super.key,
     required this.color,
   });
 
   @override
-  State<ColorToolPanel> createState() => _ColorToolPanelState();
+  State<ToolPanel> createState() => _ToolPanelState();
 }
 
-class _ColorToolPanelState extends State<ColorToolPanel> {
+class _ToolPanelState extends State<ToolPanel> {
   late Color _color;
-
-  bool _copied = false;
 
   @override
   void initState() {
@@ -26,7 +25,7 @@ class _ColorToolPanelState extends State<ColorToolPanel> {
   }
 
   @override
-  void didUpdateWidget(covariant ColorToolPanel oldWidget) {
+  void didUpdateWidget(covariant ToolPanel oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.color != widget.color) {
       setState(() {
@@ -39,13 +38,6 @@ class _ColorToolPanelState extends State<ColorToolPanel> {
 
   void _copyToClipboard() {
     Clipboard.setData(ClipboardData(text: colorHex));
-    _copied = true;
-    setState(() {});
-    Future.delayed(Duration(seconds: 2), () {
-      if (mounted && _copied) {
-        setState(() => _copied = false);
-      }
-    });
   }
 
   @override
@@ -72,10 +64,8 @@ class _ColorToolPanelState extends State<ColorToolPanel> {
             ),
           ),
           // Copy button
-          IconButton(
-            icon: Icon(
-              _copied ? Icons.check : Icons.copy,
-            ),
+          CheckIconButton(
+            initialIcon: Icons.copy,
             onPressed: _copyToClipboard,
           )
         ],

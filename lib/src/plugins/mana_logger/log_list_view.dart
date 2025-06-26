@@ -4,14 +4,14 @@ import 'package:logger/logger.dart';
 import 'log_item_widget.dart';
 import 'mana_logger_collector.dart';
 
-class LoggerListView extends StatelessWidget {
+class LogListView extends StatelessWidget {
   final ScrollController scrollController;
   final String selectedLevel;
   final String filterKeywords;
   final bool filterEnabled;
   final VoidCallback onLogsUpdated;
 
-  const LoggerListView({
+  const LogListView({
     super.key,
     required this.scrollController,
     required this.selectedLevel,

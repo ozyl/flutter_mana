@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
-class DioTopBar extends StatelessWidget {
+class TopBar extends StatelessWidget {
   final List<String> methods;
   final String selectedMethod;
   final ValueChanged<String> onMethodSelected;
   final bool filterEnabled;
   final VoidCallback onToggleFilter;
 
-  const DioTopBar({
+  const TopBar({
     super.key,
     required this.methods,
     required this.selectedMethod,
@@ -24,19 +24,11 @@ class DioTopBar extends StatelessWidget {
       children: [
         Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 8),
-              child: IconButton(
-                onPressed: () {
-                  ManaDioCollector().clear();
-                },
-                style: IconButton.styleFrom(
-                  minimumSize: Size.zero,
-                  padding: EdgeInsets.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                icon: const Icon(Icons.block_flipped, size: 16),
-              ),
+            IconButton(
+              onPressed: () {
+                ManaDioCollector().clear();
+              },
+              icon: const Icon(Icons.block_flipped, size: 16),
             ),
             for (final method in methods)
               FilterChip(
@@ -56,19 +48,11 @@ class DioTopBar extends StatelessWidget {
               ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: IconButton(
-            onPressed: onToggleFilter,
-            style: IconButton.styleFrom(
-              minimumSize: Size.zero,
-              padding: EdgeInsets.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: Icon(
-              filterEnabled ? Icons.filter_alt_outlined : Icons.filter_alt_off_outlined,
-              size: 16,
-            ),
+        IconButton(
+          onPressed: onToggleFilter,
+          icon: Icon(
+            filterEnabled ? Icons.filter_alt_outlined : Icons.filter_alt_off_outlined,
+            size: 16,
           ),
         ),
       ],

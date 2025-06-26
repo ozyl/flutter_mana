@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class LoggerFilterInput extends StatefulWidget {
+class FilterInput extends StatefulWidget {
   final ValueChanged<String> onFilterKeywordsChanged;
 
-  const LoggerFilterInput({super.key, required this.onFilterKeywordsChanged});
+  const FilterInput({super.key, required this.onFilterKeywordsChanged});
 
   @override
-  State<LoggerFilterInput> createState() => _LoggerFilterInputState();
+  State<FilterInput> createState() => _FilterInputState();
 }
 
-class _LoggerFilterInputState extends State<LoggerFilterInput> {
+class _FilterInputState extends State<FilterInput> {
   final TextEditingController _textController = TextEditingController();
   Timer? _debounceTimer;
 
@@ -44,7 +44,7 @@ class _LoggerFilterInputState extends State<LoggerFilterInput> {
       controller: _textController,
       style: const TextStyle(fontSize: 14),
       decoration: const InputDecoration(
-        hintText: 'Filter keywords',
+        hintText: 'Filter path',
         hintStyle: TextStyle(color: Colors.grey),
         border: InputBorder.none,
         focusedBorder: InputBorder.none,

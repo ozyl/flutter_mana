@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
 import 'color_sucker.dart';
-import 'color_tool_panel.dart';
 import 'icon.dart';
+import 'tool_panel.dart';
 
 class ManaColorSucker extends StatefulWidget implements ManaPluggable {
   const ManaColorSucker({super.key});
@@ -48,9 +48,9 @@ class _ManaColorSuckerState extends State<ManaColorSucker> {
         },
       ),
       position: PositionType.top,
-      initialWidth: 240,
+      initialWidth: 300,
       initialHeight: 100,
-      body: ColorToolPanel(
+      body: ToolPanel(
         color: _color,
       ),
     );

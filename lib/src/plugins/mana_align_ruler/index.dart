@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
 import 'align_ruler_overlay.dart';
-import 'align_ruler_toolbar.dart';
 import 'icon.dart';
+import 'tool_panel.dart';
 
 /// `ManaAlignRuler` 是一个 Flutter 插件，提供交互式对齐标尺工具。
 ///
@@ -88,7 +88,7 @@ class _ManaAlignRulerState extends State<ManaAlignRuler> {
   void _toolBarPanUpdate(DragUpdateDetails dragDetails) {
     setState(() {
       _toolBarY = dragDetails.globalPosition.dy - 40;
-      _toolBarY = _toolBarY.clamp(0.0, _windowSize.height - AlignRulerToolbar.estimatedToolbarHeight - 16);
+      _toolBarY = _toolBarY.clamp(0.0, _windowSize.height - ToolPanel.estimatedToolbarHeight - 16);
     });
   }
 
@@ -132,7 +132,7 @@ class _ManaAlignRulerState extends State<ManaAlignRuler> {
       // 这里的 `body` 参数现在承载了独立的工具栏组件。
       body: GestureDetector(
         onVerticalDragUpdate: _toolBarPanUpdate,
-        child: AlignRulerToolbar(
+        child: ToolPanel(
           // 注意：dotPosition 不再直接传递给 toolbar，toolbar 只需知道吸附状态
           // dotPosition 现在由 _AlignRulerOverlay 内部管理和显示
           dotPosition: Offset.zero,

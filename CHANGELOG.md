@@ -1,6 +1,11 @@
+## 1.0.0-beta.5
+- 
+- Add plugin mana_shared_preferences_viewer
+
 ## 1.0.0-beta.4
 
 - Add plugin mana_widget_info_inspector
+- Add plugin mana_fps_monitor
 
 ## 1.0.0-beta.3
 

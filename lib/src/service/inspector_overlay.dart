@@ -84,6 +84,7 @@ class RenderInspectorOverlay extends RenderBox {
 
   bool get needDescription => _needDescription;
   bool _needDescription;
+
   set needDescription(bool value) {
     if (value != _needDescription) {
       _needDescription = value;
@@ -93,6 +94,7 @@ class RenderInspectorOverlay extends RenderBox {
 
   bool get needEdges => _needEdges;
   bool _needEdges;
+
   set needEdges(bool value) {
     if (value != _needEdges) {
       _needEdges = value;
@@ -102,6 +104,7 @@ class RenderInspectorOverlay extends RenderBox {
 
   InspectorSelection get selection => _selection;
   InspectorSelection _selection;
+
   set selection(InspectorSelection value) {
     if (value != _selection) {
       _selection = value;
@@ -160,6 +163,7 @@ class _InspectorOverlayLayer extends Layer {
 
   // 用于绘制文本的 TextPainter。
   TextPainter? _textPainter;
+
   // TextPainter 的最大宽度缓存。
   double? _textPainterMaxWidth;
 
@@ -186,8 +190,10 @@ class _InspectorOverlayLayer extends Layer {
     final _InspectorOverlayRenderState state = _InspectorOverlayRenderState(
       selectionInfo: info,
       overlayRect: overlayRect,
-      selected: _TransformedRect(selected), // selected 已在前面检查过 null。
-      textDirection: TextDirection.ltr, // 强制文本方向为从左到右。
+      selected: _TransformedRect(selected),
+      // selected 已在前面检查过 null。
+      textDirection: TextDirection.ltr,
+      // 强制文本方向为从左到右。
       candidates: candidates,
     );
 
@@ -335,6 +341,7 @@ class _InspectorOverlayLayer extends Layer {
 /// [_SelectionInfo] 辅助类，用于封装选中 Widget 的相关信息。
 class _SelectionInfo {
   const _SelectionInfo(this.selection);
+
   final InspectorSelection selection;
 
   /// 获取当前选中的 [RenderObject]。

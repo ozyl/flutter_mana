@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
+import 'filter_input.dart';
 import 'icon.dart';
-import 'logger_filter_input.dart';
-import 'logger_list_view.dart';
-import 'logger_top_bar.dart';
+import 'log_list_view.dart';
+import 'top_bar.dart';
 
 class ManaLogger extends StatefulWidget implements ManaPluggable {
   ManaLogger({super.key}) {
@@ -89,10 +89,10 @@ class _ManaLoggerState extends State<ManaLogger> {
       initialWidth: double.infinity,
       position: PositionType.bottom,
       drag: false,
-      body: Column(
+      header: Column(
         children: [
           Divider(height: 1, color: Colors.grey[200]),
-          LoggerTopBar(
+          TopBar(
             levels: _levels,
             selectedLevel: _selectedLevel,
             onLevelSelected: _onLevelSelected,
@@ -101,12 +101,16 @@ class _ManaLoggerState extends State<ManaLogger> {
           ),
           if (_filter) ...[
             Divider(height: 1, color: Colors.grey[200]),
-            LoggerFilterInput(
+            FilterInput(
               onFilterKeywordsChanged: _onFilterKeywordsChanged,
             ),
           ],
           Divider(height: 1, color: Colors.grey[200]),
-          LoggerListView(
+        ],
+      ),
+      body: Column(
+        children: [
+          LogListView(
             scrollController: _scrollController,
             selectedLevel: _selectedLevel,
             filterKeywords: _filterKeywords,

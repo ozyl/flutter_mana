@@ -1,0 +1,62 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+class FilterInput extends StatefulWidget {
+  final ValueChanged<String>? onFilterKeywordsChanged;
+
+  const FilterInput({super.key, this.onFilterKeywordsChanged});
+
+  @override
+  State<FilterInput> createState() => _FilterInputState();
+}
+
+class _FilterInputState extends State<FilterInput> {
+  final TextEditingController _textController = TextEditingController();
+  Timer? _debounceTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController.addListener(_onTextChanged);
+  }
+
+  @override
+  void dispose() {
+    _debounceTimer?.cancel();
+    _textController.dispose();
+    super.dispose();
+  }
+
+  void _onTextChanged() {
+    if (_debounceTimer?.isActive ?? false) {
+      _debounceTimer?.cancel();
+    }
+
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      widget.onFilterKeywordsChanged?.call(_textController.text);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _textController,
+      style: const TextStyle(fontSize: 14),
+      decoration: const InputDecoration(
+        hintText: 'Filter key',
+        hintStyle: TextStyle(color: Colors.grey),
+        border: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        errorBorder: InputBorder.none,
+        disabledBorder: InputBorder.none,
+        hoverColor: Colors.white,
+        focusColor: Colors.white,
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: EdgeInsets.symmetric(horizontal: 12),
+      ),
+    );
+  }
+}

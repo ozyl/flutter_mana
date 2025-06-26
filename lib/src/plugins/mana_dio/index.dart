@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana/src/plugins/mana_dio/dio_list_view.dart';
-import 'package:flutter_mana/src/plugins/mana_dio/dio_top_bar.dart';
 
-import 'dio_filter_input.dart';
+import 'filter_input.dart';
 import 'icon.dart';
+import 'top_bar.dart';
 
 class ManaDio extends StatefulWidget implements ManaPluggable {
   const ManaDio({super.key});
@@ -87,10 +87,10 @@ class _ManaDioState extends State<ManaDio> {
       initialWidth: double.infinity,
       position: PositionType.bottom,
       drag: false,
-      body: Column(
+      header: Column(
         children: [
           Divider(height: 1, color: Colors.grey[200]),
-          DioTopBar(
+          TopBar(
             methods: _methods,
             selectedMethod: _selectedMethod,
             onMethodSelected: _onMethodSelected,
@@ -99,11 +99,15 @@ class _ManaDioState extends State<ManaDio> {
           ),
           if (_filter) ...[
             Divider(height: 1, color: Colors.grey[200]),
-            DioFilterInput(
+            FilterInput(
               onFilterKeywordsChanged: _onFilterKeywordsChanged,
             ),
           ],
           Divider(height: 1, color: Colors.grey[200]),
+        ],
+      ),
+      body: Column(
+        children: [
           DioListView(
             scrollController: _scrollController,
             selectedMethod: _selectedMethod,

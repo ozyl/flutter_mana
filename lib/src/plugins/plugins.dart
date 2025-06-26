@@ -4,6 +4,8 @@ export 'mana_color_sucker/index.dart' show ManaColorSucker;
 export 'mana_device_info/index.dart' show ManaDeviceInfo;
 export 'mana_dio/index.dart' show ManaDio;
 export 'mana_dio/mana_dio_collector.dart' show ManaDioCollector;
+export 'mana_fps_monitor/index.dart' show ManaFpsMonitor;
 export 'mana_logger/index.dart' show ManaLogger;
 export 'mana_logger/mana_logger_collector.dart' show ManaLoggerCollector;
+export 'mana_shared_preferences_viewer/index.dart' show ManaSharedPreferencesViewer;
 export 'mana_widget_info_inspector/index.dart' show ManaWidgetInfoInspector;
