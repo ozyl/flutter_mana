@@ -57,11 +57,11 @@ class App extends StatelessWidget {
 ## 内置插件
 
 - [x] [标尺 - AlignRuler](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_align_ruler)
-- [x] [日志查看器 - Logger](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_logger)
+- [x] [日志查看器 - LogViewer](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_logger)
 - [x] [设备信息 - DeviceInfo](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_device_info)
 - [x] [颜色吸管 - ColorSucker](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_color_sucker)
 - [x] [Dio网络检查器 - DioInspector](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_dio)
-- [x] [Widget详情 - WidgetInfo](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_widget_info_inspector)
+- [x] [Widget详情 - WidgetInfoInspector](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_widget_info_inspector)
 - [x] [帧率监控 - FpsMonitor](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_fps_monitor)
 - [x] [SharedPreferences查看器 - SharedPreferencesViewer](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_shared_preferences_viewer)
 
