@@ -1,25 +1,27 @@
-import 'package:example/sp_client.dart';
+import 'dart:async';
+
+import 'package:example/utils/sp_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
-import 'dio_client.dart';
-import 'log_generator.dart';
+import 'utils/dio_client.dart';
+import 'utils/log_generator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ManaPluginManager.instance
-    ..register(ManaLogger())
+    ..register(ManaLogViewer())
     ..register(ManaDeviceInfo())
     ..register(ManaColorSucker())
-    ..register(ManaDio())
+    ..register(ManaDioInspector())
     ..register(ManaWidgetInfoInspector())
     ..register(ManaFpsMonitor())
     ..register(ManaSharedPreferencesViewer())
     ..register(ManaAlignRuler());
 
-  runApp(const ManaWidget(child: MyApp()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Example',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent)),
-      home: MyHomePage(title: 'Mana Example'),
+      home: ManaWidget(child: MyHomePage(title: 'Mana Example')),
     );
   }
 }
@@ -48,6 +50,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool isLandscape = false;
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void toggleOrientation() {
     if (isLandscape) {
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -59,12 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void sendRequest() async {
+  Future<void> sendRequest() async {
     await DioClient().randomRequest();
   }
 
@@ -72,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
     LogGenerator.generateRandomLog();
   }
 
-  void addSharedPreferences() async {
+  Future<void> addSharedPreferences() async {
     await SpClient.insertRandom();
   }
 
@@ -81,36 +83,74 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          spacing: 16,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ElevatedButton(
-              onPressed: toggleOrientation,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, foregroundColor: Colors.white),
-              child: const Text('Toggle Orientation', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
-            ElevatedButton(
-              onPressed: sendRequest,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
-              child: const Text('Send Request', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
-            ElevatedButton(
-              onPressed: addLog,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan, foregroundColor: Colors.white),
-              child: const Text('Add Log', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
-            ElevatedButton(
-              onPressed: addSharedPreferences,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple, foregroundColor: Colors.white),
-              child: const Text('Add SharedPreferences', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            spacing: 16,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomButton(text: 'Toggle Orientation', backgroundColor: Colors.blue, onPressed: toggleOrientation),
+              CustomButton(text: 'Send Request', backgroundColor: Colors.red, onPressed: sendRequest),
+              CustomButton(text: 'Add Log', backgroundColor: Colors.cyan, onPressed: addLog),
+              CustomButton(
+                text: 'Add SharedPreferences',
+                backgroundColor: Colors.deepPurple,
+                onPressed: addSharedPreferences,
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class CustomButton extends StatefulWidget {
+  final String text;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final FutureOr<void> Function()? onPressed;
+
+  const CustomButton({
+    super.key,
+    required this.text,
+    this.backgroundColor,
+    this.foregroundColor = Colors.white,
+    this.onPressed,
+  });
+
+  @override
+  State<CustomButton> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+  bool _isLoading = false;
+
+  Future<void> _handlePress() async {
+    if (_isLoading || widget.onPressed == null) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      final result = widget.onPressed!();
+      if (result is Future) {
+        await result;
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: _isLoading ? null : _handlePress,
+      style: ElevatedButton.styleFrom(backgroundColor: widget.backgroundColor, foregroundColor: widget.foregroundColor),
+      child: Text(widget.text, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
     );
   }
 }

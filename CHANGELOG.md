@@ -1,5 +1,9 @@
+## 1.0.0-beta.6
+
+- refactor
+
 ## 1.0.0-beta.5
-- 
+
 - Add plugin mana_shared_preferences_viewer
 
 ## 1.0.0-beta.4

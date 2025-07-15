@@ -4,12 +4,20 @@ class CheckIconButton extends StatefulWidget {
   final IconData initialIcon;
   final IconData changedIcon;
 
+  final Color? iconColor;
   final double? size;
   final ButtonStyle? style;
   final VoidCallback? onPressed;
 
-  const CheckIconButton(
-      {super.key, required this.initialIcon, this.size, this.style, this.changedIcon = Icons.check, this.onPressed});
+  const CheckIconButton({
+    super.key,
+    required this.initialIcon,
+    this.iconColor,
+    this.size,
+    this.style,
+    this.changedIcon = Icons.check,
+    this.onPressed,
+  });
 
   @override
   State<CheckIconButton> createState() => _CheckIconButtonState();
@@ -39,6 +47,7 @@ class _CheckIconButtonState extends State<CheckIconButton> {
       icon: Icon(
         _check ? widget.changedIcon : widget.initialIcon,
         size: widget.size,
+        color: widget.iconColor,
       ),
       style: widget.style,
       onPressed: _onPressed,

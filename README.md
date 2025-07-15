@@ -23,21 +23,33 @@ flutter pub add flutter_mana
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
-void main() {
-  if (kDebugMode) {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   ManaPluginManager.instance
-    ..register(ManaLogger())
+    ..register(ManaLogViewer())
     ..register(ManaDeviceInfo())
     ..register(ManaColorSucker())
-    ..register(ManaDio())
+    ..register(ManaDioInspector())
     ..register(ManaWidgetInfoInspector())
     ..register(ManaFpsMonitor())
     ..register(ManaSharedPreferencesViewer())
     ..register(ManaAlignRuler());
 
-    runApp(ManaWidget(child: MyApp(), enable: true));
-  } else {
-    runApp(MyApp());
+  runApp(MyApp());
+}
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Example',
+      home: ManaWidget(child: Text('Example')),
+    );
   }
 }
 ```
@@ -55,12 +67,12 @@ void main() {
 
 | 插件                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| 标尺                                                                                                                    | 日志查看器                                                                                                                                              | 设备信息                                                                                                                     |
-| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.png" alt="标尺">    | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_logger.png" alt="日志查看器">                                   | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_device_info.png" alt="设备信息">     |
+| 面板                                                                                                                    | 日志查看器                                                                                                                                              | 设备信息                                                                                                                     |
+| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_preview.png" alt="面板">        | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_log_viewer.png" alt="日志查看器">                               | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_device_info.png" alt="设备信息">     |
 | 颜色吸管                                                                                                                  | Dio网络检查器                                                                                                                                           | Widget详情                                                                                                                 |
-| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_color_sucker.png" alt="颜色吸管"> | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_dio.png" alt="Dio网络检查器">                                   | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_widget_info.png" alt="Widget详情"> |
-| 帧率监控                                                                                                                  | SharedPreferences查看器                                                                                                                               |                                                                                                                          |
-| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_fps_monitor.png" alt="帧率监控">  | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_shared_preferences_viewer.png" alt="SharedPreferences查看器"> |                                                                                                                          |
+| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_color_sucker.png" alt="颜色吸管"> | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_dio_inspector.png" alt="Dio网络检查器">                         | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_widget_info.png" alt="Widget详情"> |
+| 帧率监控                                                                                                                  | SharedPreferences查看器                                                                                                                               | 标尺                                                                                                                       |
+| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_fps_monitor.png" alt="帧率监控">  | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_shared_preferences_viewer.png" alt="SharedPreferences查看器"> | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.png" alt="标尺">       |
 
 ## 插件开发
 
@@ -130,7 +142,20 @@ class Demo extends ManaPluggable {
 void main() {
   ManaPluginManager.instance.register(Demo());
 
-  runApp(const ManaWidget(child: MyApp()));
+  runApp(App());
+}
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Example',
+      home: ManaWidget(child: Text('Example')),
+    );
+  }
 }
 ```
 
@@ -157,3 +182,5 @@ void main() {
 - [do kit](https://github.com/didi/DoKit)
 - [fps monitor](https://github.com/Nayuta403/fps_monitor)
 - [code highlight](https://github.com/toly1994328/FlutterUnit/blob/master/modules/basic_system/toly_ui/lib/code/code_widget.dart)
+- [vConsole](https://wechatfe.github.io/vconsole/demo.html)
+- [debug friend](https://pub.dev/packages/debug_friend)

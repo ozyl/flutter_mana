@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
-import 'color_sucker.dart';
 import 'icon.dart';
-import 'tool_panel.dart';
+import 'widgets/color_sucker.dart';
 
-class ManaColorSucker extends StatefulWidget implements ManaPluggable {
-  const ManaColorSucker({super.key});
-
-  @override
-  State<ManaColorSucker> createState() => _ManaColorSuckerState();
+class ManaColorSucker implements ManaPluggable {
+  const ManaColorSucker();
 
   @override
-  Widget? buildWidget(BuildContext? context) => this;
+  Widget? buildWidget(BuildContext? context) => ColorSucker(name: name);
 
   @override
   String getLocalizedDisplayName(Locale locale) {
@@ -32,27 +28,4 @@ class ManaColorSucker extends StatefulWidget implements ManaPluggable {
 
   @override
   void onTrigger() {}
-}
-
-class _ManaColorSuckerState extends State<ManaColorSucker> {
-  Color _color = Colors.black;
-
-  @override
-  Widget build(BuildContext context) {
-    return ManaFloatingWindow(
-      name: widget.name,
-      modal: ColorSucker(
-        onColorChanged: (color) {
-          _color = color;
-          setState(() {});
-        },
-      ),
-      position: PositionType.top,
-      initialWidth: 300,
-      initialHeight: 100,
-      body: ToolPanel(
-        color: _color,
-      ),
-    );
-  }
 }

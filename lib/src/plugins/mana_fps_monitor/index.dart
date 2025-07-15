@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
@@ -38,11 +39,18 @@ class _ManaFpsMonitorState extends State<ManaFpsMonitor> {
     return ManaFloatingWindow(
       name: widget.name,
       initialHeight: 200,
-      initialWidth: double.infinity,
-      showModal: false,
-      body: SizedBox(
+      initialWidth: kIsWeb ? null : double.infinity,
+      showBarrier: false,
+      content: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: PerformanceOverlay.allEnabled(),
+        child: kIsWeb
+            ? Center(
+                child: Text(
+                  'Web is not supported!',
+                  style: TextStyle(color: Colors.red, fontSize: 20),
+                ),
+              )
+            : PerformanceOverlay.allEnabled(),
       ),
     );
   }

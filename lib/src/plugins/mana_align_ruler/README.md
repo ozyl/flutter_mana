@@ -9,7 +9,8 @@ import 'package:flutter_mana/flutter_mana.dart';
 void main() {
   /// add plugin
   ManaPluginManager.instance.register(ManaAlignRuler());
-  runApp(ManaWidget(child: App(), enable: true));
+  
+  runApp(App());
 }
 
 class App extends StatelessWidget {
@@ -17,8 +18,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Text('Add Log'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'AlignRuler',
+      home: ManaWidget(child: Text('Align Ruler')),
     );
   }
 }

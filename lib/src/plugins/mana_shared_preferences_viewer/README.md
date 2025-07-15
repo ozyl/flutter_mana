@@ -10,7 +10,8 @@ import 'package:flutter_mana/flutter_mana.dart';
 void main() {
   /// add plugin
   ManaPluginManager.instance.register(ManaSharedPreferencesViewer());
-  runApp(ManaWidget(child: App(), enable: true));
+
+  runApp(App());
 }
 
 void addSharedPreferences() async {
@@ -27,10 +28,16 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ElevatedButton(
-        onPressed: addSharedPreferences,
-        child: const Text('Add SharedPreferences'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Shared Preferences Viewer',
+      home: ManaWidget(
+        child: Scaffold(
+          body: ElevatedButton(
+            onPressed: addSharedPreferences,
+            child: const Text('Add SharedPreferences'),
+          ),
+        ),
       ),
     );
   }
