@@ -1,7 +1,7 @@
 # Flutter Mana
 
-[![flutter_mana](https://img.shields.io/pub/v/flutter_mana.svg)](https://pub.dev/packages/flutter_mana)
-[![flutter_mana_kits](https://img.shields.io/pub/v/flutter_mana_kits.svg)](https://pub.dev/packages/flutter_mana_kits)
+[![pub package](https://img.shields.io/pub/v/flutter_mana?label=flutter_mana)](https://pub.dev/packages/flutter_mana)
+[![pub package](https://img.shields.io/pub/v/flutter_mana_kits?label=flutter_mana_kits)](https://pub.dev/packages/flutter_mana_kits)
 
 Flutter 应用内调试工具平台.
 
