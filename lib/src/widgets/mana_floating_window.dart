@@ -381,13 +381,10 @@ class _WindowControls extends StatelessWidget {
                     icon: const Icon(Icons.settings, size: 18, color: Colors.black54),
                     onPressed: onToggleSetting,
                   ),
-                CloseButton(
-                  style: ButtonStyle(
-                    iconSize: WidgetStatePropertyAll(18),
-                    iconColor: WidgetStatePropertyAll(Colors.black54),
-                  ),
+                IconButton(
+                  icon: const Icon(Icons.close, size: 18, color: Colors.black54),
                   onPressed: onClose,
-                )
+                ),
               ],
             ),
           ),

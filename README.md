@@ -9,12 +9,15 @@ Flutter 应用内调试工具平台.
 
 **尽量在开发环境使用，部分插件只在开发环境才能生效！！！**
 
+**还未正式发版，改动可能很大！！！**
+
 ## 使用
 
 - 安装
 
 ```shell
 flutter pub add flutter_mana
+flutter pub add flutter_mana_kits
 ```
 
 - 代码中使用
@@ -22,12 +25,14 @@ flutter pub add flutter_mana
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
+import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ManaPluginManager.instance
+    ..register(ManaShowCode())
     ..register(ManaLogViewer())
     ..register(ManaDeviceInfo())
     ..register(ManaColorSucker())
@@ -37,7 +42,7 @@ void main() async {
     ..register(ManaSharedPreferencesViewer())
     ..register(ManaAlignRuler());
 
-  runApp(MyApp());
+  runApp(ManaWidget(child: MyApp()));
 }
 
 class App extends StatelessWidget {
@@ -48,7 +53,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Example',
-      home: ManaWidget(child: Text('Example')),
+      home: Text('Example'),
     );
   }
 }
@@ -56,14 +61,15 @@ class App extends StatelessWidget {
 
 ## 内置插件
 
-- [x] [标尺 - AlignRuler](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_align_ruler)
-- [x] [日志查看器 - LogViewer](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_logger)
-- [x] [设备信息 - DeviceInfo](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_device_info)
-- [x] [颜色吸管 - ColorSucker](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_color_sucker)
-- [x] [Dio网络检查器 - DioInspector](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_dio)
-- [x] [Widget详情 - WidgetInfoInspector](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_widget_info_inspector)
-- [x] [帧率监控 - FpsMonitor](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_fps_monitor)
-- [x] [SharedPreferences查看器 - SharedPreferencesViewer](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/mana_shared_preferences_viewer)
+- [x] [标尺 - AlignRuler](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_align_ruler)
+- [x] [日志查看器 - LogViewer](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_logger)
+- [x] [设备信息 - DeviceInfo](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_device_info)
+- [x] [颜色吸管 - ColorSucker](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_color_sucker)
+- [x] [Dio网络检查器 - DioInspector](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_dio)
+- [x] [Widget详情 - WidgetInfoInspector](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_widget_info_inspector)
+- [x] [帧率监控 - FpsMonitor](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_fps_monitor)
+- [x] [SharedPreferences查看器 - SharedPreferencesViewer](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_shared_preferences_viewer)
+- [x] [显示代码 - ShowCode](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_show_code)
 
 | 插件                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
@@ -73,10 +79,12 @@ class App extends StatelessWidget {
 | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_color_sucker.png" alt="颜色吸管"> | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_dio_inspector.png" alt="Dio网络检查器">                         | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_widget_info.png" alt="Widget详情"> |
 | 帧率监控                                                                                                                  | SharedPreferences查看器                                                                                                                               | 标尺                                                                                                                       |
 | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_fps_monitor.png" alt="帧率监控">  | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_shared_preferences_viewer.png" alt="SharedPreferences查看器"> | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.png" alt="标尺">       |
+| 显示代码                                                                                                                  |                                                                                                                                                    |                                                                                                                          |
+| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_show_code.png" alt="显示代码">    |                                                                                                                                                    |                                                                                                                          |
 
 ## 插件开发
 
-- [参考](https://github.com/lhlyu/flutter_mana/tree/master/lib/src/plugins/demo)
+- [参考](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/demo)
 
 - 安装依赖
 
@@ -133,6 +141,9 @@ class Demo extends ManaPluggable {
 
   @override
   void onTrigger() {}
+
+  @override
+  Future<void> initialize() async {}
 }
 ```
 
@@ -142,7 +153,7 @@ class Demo extends ManaPluggable {
 void main() {
   ManaPluginManager.instance.register(Demo());
 
-  runApp(App());
+  runApp(ManaWidget(child: MyApp()));
 }
 
 class App extends StatelessWidget {
@@ -153,19 +164,11 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Example',
-      home: ManaWidget(child: Text('Example')),
+      home: Text('Example'),
     );
   }
 }
 ```
-
-## 第三方依赖
-
-| 名字               | 作用   | 最新版本                                                                                                           |
-|------------------|------|----------------------------------------------------------------------------------------------------------------|
-| logger           | 日志记录 | [![pub package](https://img.shields.io/pub/v/logger.svg)](https://pub.dev/packages/logger)                     |
-| device_info_plus | 设备信息 | [![pub package](https://img.shields.io/pub/v/device_info_plus.svg)](https://pub.dev/packages/device_info_plus) |
-| dio              | 网络请求 | [![pub package](https://img.shields.io/pub/v/dio.svg)](https://pub.dev/packages/dio)                           |
 
 ## 工具
 
@@ -184,3 +187,5 @@ class App extends StatelessWidget {
 - [code highlight](https://github.com/toly1994328/FlutterUnit/blob/master/modules/basic_system/toly_ui/lib/code/code_widget.dart)
 - [vConsole](https://wechatfe.github.io/vconsole/demo.html)
 - [debug friend](https://pub.dev/packages/debug_friend)
+- [widget with codeview](https://github.com/X-Wei/widget_with_codeview)
+- [flutter：全局 context 在 navigator 与 overlay 中的运用](https://juejin.cn/post/7200191765516615737)

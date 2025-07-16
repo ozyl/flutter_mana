@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/mana_overlay.dart';
+import 'mana_plugin_manager.dart';
 import 'mana_store.dart';
 
 /// A global key used to access the root node of the ManaWidget.
@@ -34,6 +35,7 @@ class ManaWidget extends StatelessWidget {
   /// 初始化 Mana 存储。
   Future<void> _initialize() async {
     await ManaStore.instance.init();
+    await ManaPluginManager.instance.initialize();
   }
 
   @override
@@ -45,36 +47,40 @@ class ManaWidget extends StatelessWidget {
       return child;
     }
 
-    return Stack(
-      children: [
-        /// Wraps the child widget with RepaintBoundary and assigns `manaRootKey` to it.
-        ///
-        /// 使用 RepaintBoundary 包裹子组件，并为其分配 `manaRootKey`。
-        RepaintBoundary(key: manaRootKey, child: child),
+    /// 在经过多种方案尝试后，只有在这嵌套一层MaterialApp是侵入性最小、功能完善最好的方案，其他方案多多少少有瑕疵。
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Stack(
+        children: [
+          /// Wraps the child widget with RepaintBoundary and assigns `manaRootKey` to it.
+          ///
+          /// 使用 RepaintBoundary 包裹子组件，并为其分配 `manaRootKey`。
+          RepaintBoundary(key: manaRootKey, child: child),
 
-        /// Uses FutureBuilder to display ManaOverlay after the Mana store is initialized.
-        ///
-        /// 使用 FutureBuilder 在 Mana 存储初始化完成后显示 ManaOverlay。
-        FutureBuilder<void>(
-          future: _initialize(),
-          builder: (context, snapshot) {
-            /// If initialization is not complete, return a shrink-wrapped box to avoid displaying content during loading.
-            ///
-            /// 如果初始化未完成，则返回一个空盒子，避免在加载时显示内容。
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const SizedBox.shrink();
-            }
+          /// Uses FutureBuilder to display ManaOverlay after the Mana store is initialized.
+          ///
+          /// 使用 FutureBuilder 在 Mana 存储初始化完成后显示 ManaOverlay。
+          FutureBuilder<void>(
+            future: _initialize(),
+            builder: (context, snapshot) {
+              /// If initialization is not complete, return a shrink-wrapped box to avoid displaying content during loading.
+              ///
+              /// 如果初始化未完成，则返回一个空盒子，避免在加载时显示内容。
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const SizedBox.shrink();
+              }
 
-            /// After initialization is complete, display the ManaOverlay.
-            ///
-            /// 初始化完成后，显示 ManaOverlay。
-            return Material(
-              type: MaterialType.transparency,
-              child: ManaOverlay(),
-            );
-          },
-        ),
-      ],
+              /// After initialization is complete, display the ManaOverlay.
+              ///
+              /// 初始化完成后，显示 ManaOverlay。
+              return Material(
+                type: MaterialType.transparency,
+                child: ManaOverlay(),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

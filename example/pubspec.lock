@@ -110,18 +110,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
-  flutter_localizations:
-    dependency: "direct main"
-    description: flutter
-    source: sdk
-    version: "0.0.0"
   flutter_mana:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
-    version: "1.0.0-beta.5"
+      name: flutter_mana
+      sha256: "429d3cf4de51934583037f9935245d81b915b0835b23f839482671cfccb4348e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-beta.7"
+  flutter_mana_kits:
+    dependency: "direct main"
+    description:
+      name: flutter_mana_kits
+      sha256: bc7b8aee947330abf60fdce6d3303b159f5983d0d9fe01c82170f7db01aaa63a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-beta.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -140,14 +144,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
-  intl:
-    dependency: transitive
-    description:
-      name: intl
-      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.20.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -353,6 +349,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  syntax_highlight:
+    dependency: transitive
+    description:
+      name: syntax_highlight
+      sha256: ee33b6aa82cc722bb9b40152a792181dee222353b486c0255fde666a3e3a4997
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   term_glyph:
     dependency: transitive
     description:

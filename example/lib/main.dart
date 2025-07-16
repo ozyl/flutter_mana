@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:example/detail.dart';
 import 'package:example/utils/sp_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mana/flutter_mana.dart';
+import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
 import 'utils/dio_client.dart';
 import 'utils/log_generator.dart';
@@ -12,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ManaPluginManager.instance
+    ..register(ManaShowCode())
     ..register(ManaLogViewer())
     ..register(ManaDeviceInfo())
     ..register(ManaColorSucker())
@@ -21,7 +24,7 @@ void main() async {
     ..register(ManaSharedPreferencesViewer())
     ..register(ManaAlignRuler());
 
-  runApp(MyApp());
+  runApp(ManaWidget(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -33,21 +36,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Example',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent)),
-      home: ManaWidget(child: MyHomePage(title: 'Mana Example')),
+      home: HomePage(title: 'Mana Example'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   bool isLandscape = false;
 
   @override
@@ -98,6 +101,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 text: 'Add SharedPreferences',
                 backgroundColor: Colors.deepPurple,
                 onPressed: addSharedPreferences,
+              ),
+              CustomButton(
+                text: 'Detail Page',
+                backgroundColor: Colors.amber,
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailPage()));
+                },
               ),
             ],
           ),

@@ -32,4 +32,9 @@ abstract class ManaPluggable {
   ///
   /// 获取插件图标的 [ImageProvider]，用于展示插件图标。
   ImageProvider get iconImageProvider;
+
+  /// Async initialization for the plugin.
+  ///
+  /// 插件的异步初始化方法
+  Future<void> initialize();
 }

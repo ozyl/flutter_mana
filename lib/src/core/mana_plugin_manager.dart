@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
+
 import 'mana_pluggable.dart';
 
 /// Manages the registration and access of Mana pluggable components.
@@ -66,6 +68,20 @@ class ManaPluginManager {
   void registerAll(List<ManaPluggable> plugins) {
     for (final plugin in plugins) {
       register(plugin);
+    }
+  }
+
+  Future<void> initialize() async {
+    final List<Future<void>> initializationFutures = [];
+
+    pluginsMap.forEach((name, plugin) {
+      initializationFutures.add(plugin.initialize());
+    });
+
+    try {
+      await Future.wait(initializationFutures);
+    } catch (e) {
+      debugPrint('Plugin initialization failed: $e');
     }
   }
 }

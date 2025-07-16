@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_mana/flutter_mana.dart';
+import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
 class DioClient {
   static final DioClient _instance = DioClient._internal();

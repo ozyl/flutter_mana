@@ -1,6 +1,11 @@
+## 1.0.0-beta.7
+
+- Extract the plugin into a standalone package.
+- Add plugin mana_show_code.
+
 ## 1.0.0-beta.6
 
-- refactor
+- Refactor
 
 ## 1.0.0-beta.5
 

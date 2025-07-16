@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:example/utils/json_demo.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_mana/flutter_mana.dart';
+import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 import 'package:logger/logger.dart';
 
 class ReleaseFilter extends LogFilter {
