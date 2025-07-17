@@ -113,19 +113,17 @@ packages:
   flutter_mana:
     dependency: "direct main"
     description:
-      name: flutter_mana
-      sha256: "429d3cf4de51934583037f9935245d81b915b0835b23f839482671cfccb4348e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0-beta.7"
+      path: ".."
+      relative: true
+    source: path
+    version: "1.0.0-beta.8"
   flutter_mana_kits:
     dependency: "direct main"
     description:
-      name: flutter_mana_kits
-      sha256: bc7b8aee947330abf60fdce6d3303b159f5983d0d9fe01c82170f7db01aaa63a
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0-beta.1"
+      path: "../flutter_mana_kits"
+      relative: true
+    source: path
+    version: "1.0.0-beta.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter

@@ -36,13 +36,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Example',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent)),
-      home: HomePage(title: 'Mana Example'),
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
+  const HomePage({super.key, this.title = 'Mana Example'});
 
   final String title;
 
@@ -94,6 +94,13 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomButton(
+                text: 'Detail Page',
+                backgroundColor: Colors.amber,
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailPage()));
+                },
+              ),
               CustomButton(text: 'Toggle Orientation', backgroundColor: Colors.blue, onPressed: toggleOrientation),
               CustomButton(text: 'Send Request', backgroundColor: Colors.red, onPressed: sendRequest),
               CustomButton(text: 'Add Log', backgroundColor: Colors.cyan, onPressed: addLog),
@@ -101,13 +108,6 @@ class _HomePageState extends State<HomePage> {
                 text: 'Add SharedPreferences',
                 backgroundColor: Colors.deepPurple,
                 onPressed: addSharedPreferences,
-              ),
-              CustomButton(
-                text: 'Detail Page',
-                backgroundColor: Colors.amber,
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailPage()));
-                },
               ),
             ],
           ),

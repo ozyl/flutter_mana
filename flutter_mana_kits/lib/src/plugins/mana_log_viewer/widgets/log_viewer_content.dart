@@ -160,7 +160,7 @@ class _LogViewerContentState extends State<LogViewerContent> with SingleTickerPr
               padding: const EdgeInsets.only(bottom: 20),
               itemBuilder: (context, index) {
                 final logEvent = filteredLogs[index];
-                return LogItemWidget(index: index, log: logEvent);
+                return LogItemWidget(key: ValueKey(logEvent.origin.time), index: index, log: logEvent);
               },
               separatorBuilder: (BuildContext context, int index) {
                 return Divider(

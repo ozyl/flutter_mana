@@ -1,6 +1,6 @@
 name: flutter_mana_kits
 description: "Flutter Mana Kits"
-version: 1.0.0-beta.1
+version: 1.0.0-beta.2
 homepage: https://github.com/lhlyu/flutter_mana/tree/master/kits
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_mana: ^1.0.0-beta.7
+  flutter_mana: ^1.0.0-beta.8
   dio: ^5.8.0+1
   logger: ^2.5.0
   shared_preferences: ^2.5.3

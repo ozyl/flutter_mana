@@ -161,6 +161,7 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
             itemBuilder: (context, index) {
               final model = filterData[index];
               return ModelTile(
+                key: ValueKey(model.key),
                 model: model,
                 onTap: () {
                   setState(() {

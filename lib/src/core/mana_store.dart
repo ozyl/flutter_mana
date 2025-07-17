@@ -39,8 +39,8 @@ class ManaStore {
   }
 
   Future<void> setManaState(ManaState manaState) async {
-    await prefs.setDouble('mana_float_action_button_size', manaState.floatActionButtonSize);
-    await prefs.setDouble('mana_float_action_button_opacity', manaState.floatActionButtonOpacity);
+    await prefs.setDouble('mana_float_action_button_size', manaState.floatActionButtonSize.value);
+    await prefs.setDouble('mana_float_action_button_opacity', manaState.floatActionButtonOpacity.value);
   }
 
   (double, double) getFloatActionButtonPosition() {

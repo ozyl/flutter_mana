@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
+import 'nil.dart';
+
 enum PositionType {
   normal,
   top,
@@ -149,23 +151,23 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
 
   void _onFullscreen() {
     _isFullscreen = !_isFullscreen;
-    final manaState = ManaManager.of(context);
+    final manaState = ManaScope.of(context);
     if (widget.name != ManaPluginManager.name) {
-      manaState.setFloatActionButtonVisible(!_isFullscreen);
+      manaState.floatActionButtonVisible.value = !_isFullscreen;
     }
-    manaState.setFloatWindowMainFullscreen(_isFullscreen);
+    manaState.floatWindowMainFullscreen.value = _isFullscreen;
     setState(() {});
   }
 
   void _onMinimize() {
     widget.onMinimize?.call();
-    final manaState = ManaManager.of(context);
+    final manaState = ManaScope.of(context);
     if (widget.name == ManaPluginManager.name) {
-      manaState.setPluginManagementPanelVisible(false);
+      manaState.pluginManagementPanelVisible.value = false;
     } else {
-      manaState.setFloatWindowMainVisible(false);
+      manaState.floatWindowMainVisible.value = false;
     }
-    manaState.setFloatActionButtonVisible(true);
+    manaState.floatActionButtonVisible.value = true;
   }
 
   void _onClose() {
@@ -181,19 +183,19 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
     Future.delayed(const Duration(milliseconds: 300), () {
       if (mounted) {
         widget.onClose?.call();
-        final manaState = ManaManager.of(context);
+        final manaState = ManaScope.of(context);
         if (widget.name == ManaPluginManager.name) {
-          manaState.setPluginManagementPanelVisible(false);
+          manaState.pluginManagementPanelVisible.value = false;
         }
-        manaState.setActivePluginName();
-        manaState.setFloatActionButtonVisible(true);
+        manaState.activePluginName.value = '';
+        manaState.floatActionButtonVisible.value = true;
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final manaState = ManaManager.of(context);
+    final manaState = ManaScope.of(context);
     final Size screenSize = MediaQuery.of(context).size;
     final Size windowSize = _getWindowActualSize(screenSize);
 
@@ -218,71 +220,79 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
                   ),
                 ),
               ),
-        if (manaState.floatWindowMainVisible)
-          Positioned(
-            left: currentLeft,
-            top: currentTop,
-            width: currentWidth,
-            height: currentHeight,
-            child: AnimatedOpacity(
-              opacity: _isVisible ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 300),
-              child: AnimatedScale(
-                scale: _isVisible ? 1.0 : _initialScale,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOutBack,
-                alignment: Alignment.center,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(50),
-                        blurRadius: 16,
-                        spreadRadius: 0,
-                        offset: Offset(0, 0),
-                      ),
-                    ],
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: ClipRRect(
-                    borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
-                    child: Container(
-                      color: Colors.white,
-                      child: SafeArea(
-                        left: _isFullscreen,
-                        top: _isFullscreen,
-                        right: _isFullscreen,
-                        bottom: _isFullscreen || widget.position == PositionType.bottom,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (widget.showControls)
-                              _WindowControls(
-                                drag: widget.drag && !_isFullscreen,
-                                isFullscreen: _isFullscreen,
-                                isHandlePressed: _isHandlePressed && !_isFullscreen,
-                                showSettingButton: widget.setting != null,
-                                onHandlePanStart: () => setState(() => _isHandlePressed = true),
-                                onHandlePanEnd: () => setState(() => _isHandlePressed = false),
-                                onToggleSetting: () => setState(() => _showSetting = !_showSetting),
-                                onPanUpdate: _onPanUpdate,
-                                onFullscreen: _onFullscreen,
-                                onMinimize: _onMinimize,
-                                onClose: _onClose,
+        ValueListenableBuilder(
+          valueListenable: manaState.floatWindowMainVisible,
+          builder: (context, value, _) {
+            return value
+                ? Positioned(
+                    left: currentLeft,
+                    top: currentTop,
+                    width: currentWidth,
+                    height: currentHeight,
+                    child: AnimatedOpacity(
+                      opacity: _isVisible ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 300),
+                      child: AnimatedScale(
+                        scale: _isVisible ? 1.0 : _initialScale,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOutBack,
+                        alignment: Alignment.center,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(50),
+                                blurRadius: 16,
+                                spreadRadius: 0,
+                                offset: Offset(0, 0),
                               ),
-                            Expanded(
-                                child: (_showSetting && widget.setting != null) ? widget.setting! : widget.content),
-                          ],
+                            ],
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: ClipRRect(
+                            borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
+                            child: Container(
+                              color: Colors.white,
+                              child: SafeArea(
+                                left: _isFullscreen,
+                                top: _isFullscreen,
+                                right: _isFullscreen,
+                                bottom: _isFullscreen || widget.position == PositionType.bottom,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (widget.showControls)
+                                      _WindowControls(
+                                        drag: widget.drag && !_isFullscreen,
+                                        isFullscreen: _isFullscreen,
+                                        isHandlePressed: _isHandlePressed && !_isFullscreen,
+                                        showSettingButton: widget.setting != null,
+                                        onHandlePanStart: () => setState(() => _isHandlePressed = true),
+                                        onHandlePanEnd: () => setState(() => _isHandlePressed = false),
+                                        onToggleSetting: () => setState(() => _showSetting = !_showSetting),
+                                        onPanUpdate: _onPanUpdate,
+                                        onFullscreen: _onFullscreen,
+                                        onMinimize: _onMinimize,
+                                        onClose: _onClose,
+                                      ),
+                                    Expanded(
+                                        child: (_showSetting && widget.setting != null)
+                                            ? widget.setting!
+                                            : widget.content),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+                  )
+                : nilPosition;
+          },
+        ),
       ],
     );
   }

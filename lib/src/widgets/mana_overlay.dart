@@ -4,6 +4,7 @@ import 'package:flutter_mana/flutter_mana.dart';
 import 'float_button.dart';
 import 'mana_panel.dart';
 import 'mana_setting_panel.dart';
+import 'nil.dart';
 
 /// A widget that manages and displays various Mana components as an overlay.
 /// This includes the active plugin's widget, the plugin management panel, and the float action button.
@@ -26,6 +27,12 @@ class _ManaOverlayState extends State<ManaOverlay> {
   /// Mana 的状态对象，必须使用 StatefulWidget 进行状态保存。
   final ManaState _manaState = ManaStore.instance.getManaState();
 
+  @override
+  void dispose() {
+    _manaState.dispose();
+    super.dispose();
+  }
+
   /// Builds the stack of overlay widgets.
   ///
   /// 构建覆盖层小部件的堆栈。
@@ -34,30 +41,37 @@ class _ManaOverlayState extends State<ManaOverlay> {
       builder: (BuildContext context) {
         // Access the ManaState from the context.
         // 从上下文中获取 ManaState。
-        final manaState = ManaManager.of(context);
-
-        // Get the widget of the currently active plugin, if any.
-        // 获取当前活动插件的部件（如果有）。
-        final currentActivatedPluginWidget =
-            ManaPluginManager.instance.pluginsMap[manaState.activePluginName]?.buildWidget(context);
+        final manaState = ManaScope.of(context);
 
         return Stack(
           alignment: Alignment.center,
           children: [
-            // Display the active plugin's widget if it exists.
-            // 如果存在，显示活动插件的部件。
-            if (currentActivatedPluginWidget != null) currentActivatedPluginWidget,
-            // Display the plugin management panel if it's visible.
-            // 如果插件管理面板可见，则显示它。
-            if (manaState.pluginManagementPanelVisible)
-              const ManaFloatingWindow(
-                name: ManaPluginManager.name,
-                content: ManaPanel(),
-                setting: ManaSettingPanel(),
-              ),
-            // Display the float action button if it's visible.
-            // 如果浮动操作按钮可见，则显示它。
-            if (manaState.floatActionButtonVisible) const FloatButton(),
+            ValueListenableBuilder(
+              valueListenable: manaState.activePluginName,
+              builder: (context, value, _) {
+                final currentActivatedPluginWidget =
+                    ManaPluginManager.instance.pluginsMap[manaState.activePluginName.value]?.buildWidget(context);
+                return currentActivatedPluginWidget ?? nilPosition;
+              },
+            ),
+            ValueListenableBuilder(
+              valueListenable: manaState.pluginManagementPanelVisible,
+              builder: (context, value, _) {
+                return value
+                    ? ManaFloatingWindow(
+                        name: ManaPluginManager.name,
+                        content: ManaPanel(),
+                        setting: ManaSettingPanel(),
+                      )
+                    : nilPosition;
+              },
+            ),
+            ValueListenableBuilder(
+              valueListenable: manaState.floatActionButtonVisible,
+              builder: (context, value, _) {
+                return value ? const FloatButton() : nilPosition;
+              },
+            ),
           ],
         );
       },
@@ -66,8 +80,8 @@ class _ManaOverlayState extends State<ManaOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return ManaManager(
-      notifier: _manaState,
+    return ManaScope(
+      state: _manaState,
       child: _buildStack(),
     );
   }

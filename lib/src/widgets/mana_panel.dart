@@ -28,7 +28,7 @@ class ManaPanel extends StatelessWidget {
       builder: (context, constraints) {
         // Access the ManaState from the context to manage plugin activation.
         // 从上下文中获取 ManaState 以管理插件激活。
-        final manaState = ManaManager.of(context);
+        final manaState = ManaScope.of(context);
 
         // Get the ManaPluginManager instance to access registered plugins.
         // 获取 ManaPluginManager 实例以访问已注册的插件。
@@ -52,18 +52,19 @@ class ManaPanel extends StatelessWidget {
                 onTap: () {
                   // Set the tapped plugin as the active one.
                   // 将点击的插件设置为活动插件。
-                  manaState.setActivePluginName(plugin.name);
-                  // Trigger the main logic of the plugin.
-                  // 触发插件的主要逻辑。
-                  plugin.onTrigger();
+                  manaState.activePluginName.value = plugin.name;
 
                   // Hide the plugin management panel after a plugin is selected.
                   // 选择插件后隐藏插件管理面板。
-                  manaState.setPluginManagementPanelVisible(false);
+                  manaState.pluginManagementPanelVisible.value = false;
+
+                  // Trigger the main logic of the plugin.
+                  // 触发插件的主要逻辑。
+                  plugin.onTrigger();
                 },
                 // Build the visual representation of the plugin item.
                 // 构建插件项的可视化表示。
-                child: _buildPluginItem(plugin, locale, manaState.activePluginName == plugin.name),
+                child: _buildPluginItem(plugin, locale, manaState.activePluginName.value == plugin.name),
               );
             },
           ).toList(),

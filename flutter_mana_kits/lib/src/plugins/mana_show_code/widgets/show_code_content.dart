@@ -54,15 +54,18 @@ class ShowCodeContent extends StatelessWidget {
               }
 
               return Expanded(
-                child: SingleChildScrollView(
-                  physics: const ClampingScrollPhysics(),
+                child: SizedBox(
+                  width: double.infinity,
                   child: SingleChildScrollView(
                     physics: const ClampingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.all(16),
-                    child: SelectableText.rich(
-                      highlighter.highlight(snapshot.data!),
-                      style: TextStyle(fontSize: _fontSize),
+                    child: SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.all(16),
+                      child: SelectableText.rich(
+                        highlighter.highlight(snapshot.data!),
+                        style: TextStyle(fontSize: _fontSize),
+                      ),
                     ),
                   ),
                 ),

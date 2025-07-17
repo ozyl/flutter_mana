@@ -31,6 +31,8 @@ class FloatButton extends StatefulWidget {
 }
 
 class _FloatButtonState extends State<FloatButton> {
+  late ManaState _manaState;
+
   /// Stores the size of the current window.
   ///
   /// 存储当前窗口的大小。
@@ -57,20 +59,19 @@ class _FloatButtonState extends State<FloatButton> {
   double _dy = 0;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _manaState = ManaScope.of(context);
+    _manaState.floatActionButtonSize.addListener(_resetPosition);
+    _manaState.floatActionButtonOpacity.addListener(_resetPosition);
+    _resetPosition();
   }
 
   @override
   void dispose() {
+    _manaState.floatActionButtonSize.removeListener(_resetPosition);
+    _manaState.floatActionButtonOpacity.removeListener(_resetPosition);
     super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _resetPosition();
   }
 
   /// Resets the position of the float button based on window size and stored preferences.
@@ -83,11 +84,11 @@ class _FloatButtonState extends State<FloatButton> {
 
     _windowSize = MediaQuery.sizeOf(context);
 
-    final size = ManaManager.of(context).floatActionButtonSize;
+    final size = _manaState.floatActionButtonSize.value;
 
     _dotSize = Size(size, size);
 
-    _opacity = ManaManager.of(context).floatActionButtonOpacity;
+    _opacity = _manaState.floatActionButtonOpacity.value;
 
     final position = ManaStore.instance.getFloatActionButtonPosition();
 
@@ -150,24 +151,21 @@ class _FloatButtonState extends State<FloatButton> {
 
   @override
   Widget build(BuildContext context) {
-    final manaState = ManaManager.of(context);
-
-    final icon = ManaPluginManager.instance.pluginsMap[manaState.activePluginName]?.iconImageProvider;
-
     return Positioned(
       left: _dx,
       top: _dy,
       child: GestureDetector(
         onTap: () {
-          if (manaState.activePluginName.isNotEmpty && !manaState.floatWindowMainVisible) {
-            manaState.setFloatWindowMainVisible(true);
-            if (manaState.floatWindowMainFullscreen) {
-              manaState.setFloatActionButtonVisible(false);
+          if (_manaState.activePluginName.value.isNotEmpty && !_manaState.floatWindowMainVisible.value) {
+            _manaState.floatWindowMainVisible.value = true;
+
+            if (_manaState.floatWindowMainFullscreen.value) {
+              _manaState.floatActionButtonVisible.value = false;
             }
             return;
           }
 
-          manaState.setPluginManagementPanelVisible(null, true);
+          _manaState.pluginManagementPanelVisible.value = !_manaState.pluginManagementPanelVisible.value;
         },
         onVerticalDragEnd: dragEnd,
         onHorizontalDragEnd: dragEnd,
@@ -193,7 +191,13 @@ class _FloatButtonState extends State<FloatButton> {
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: Image(image: icon ?? iconImage),
+                child: ValueListenableBuilder(
+                  valueListenable: _manaState.activePluginName,
+                  builder: (context, name, child) {
+                    final icon = ManaPluginManager.instance.pluginsMap[name]?.iconImageProvider;
+                    return Image(image: icon ?? iconImage);
+                  },
+                ),
               ),
             ),
           ),

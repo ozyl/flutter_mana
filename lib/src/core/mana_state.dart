@@ -1,105 +1,51 @@
 import 'package:flutter/cupertino.dart';
 
-class ManaState with ChangeNotifier {
+class ManaState {
   /// 激活的插件名
-  String _activePluginName = '';
-
-  String get activePluginName => _activePluginName;
+  final ValueNotifier<String> activePluginName;
 
   /// 插件管理面板是否可见
-  bool _pluginManagementPanelVisible = false;
-
-  bool get pluginManagementPanelVisible => _pluginManagementPanelVisible;
+  final ValueNotifier<bool> pluginManagementPanelVisible;
 
   /// 浮动窗口主体是否可见
-  bool _floatWindowMainVisible = true;
-
-  bool get floatWindowMainVisible => _floatWindowMainVisible;
+  final ValueNotifier<bool> floatWindowMainVisible;
 
   /// 浮动窗口主体是否全屏
-  bool _floatWindowMainFullscreen = false;
-
-  bool get floatWindowMainFullscreen => _floatWindowMainFullscreen;
+  final ValueNotifier<bool> floatWindowMainFullscreen;
 
   /// 浮动按钮是否可见
-  bool _floatActionButtonVisible = true;
-
-  bool get floatActionButtonVisible => _floatActionButtonVisible;
+  final ValueNotifier<bool> floatActionButtonVisible;
 
   /// 浮动按钮的大小
-  double _floatActionButtonSize = 50;
-
-  double get floatActionButtonSize => _floatActionButtonSize;
+  final ValueNotifier<double> floatActionButtonSize;
 
   /// 浮动按钮的透明度
-  double _floatActionButtonOpacity = 1;
-
-  double get floatActionButtonOpacity => _floatActionButtonOpacity;
+  final ValueNotifier<double> floatActionButtonOpacity;
 
   ManaState({
-    String? initialActivePluginName = '',
-    bool? initialPluginManagementPanelVisible = false,
-    bool? initialFloatWindowMainVisible = true,
-    bool? floatWindowMainFullscreen = false,
-    bool? initialFloatActionButtonVisible = true,
-    double? initialFloatActionButtonSize = 50,
-    double? initialFloatActionButtonOpacity = 1,
-  })  : _activePluginName = initialActivePluginName ?? '',
-        _pluginManagementPanelVisible = initialPluginManagementPanelVisible ?? false,
-        _floatWindowMainVisible = initialFloatWindowMainVisible ?? true,
-        _floatWindowMainFullscreen = floatWindowMainFullscreen ?? false,
-        _floatActionButtonVisible = initialFloatActionButtonVisible ?? true,
-        _floatActionButtonSize = initialFloatActionButtonSize ?? 50,
-        _floatActionButtonOpacity = initialFloatActionButtonOpacity ?? 1;
+    String? initialActivePluginName,
+    bool? initialPluginManagementPanelVisible,
+    bool? initialFloatWindowMainVisible,
+    bool? floatWindowMainFullscreen,
+    bool? initialFloatActionButtonVisible,
+    double? initialFloatActionButtonSize,
+    double? initialFloatActionButtonOpacity,
+  })  : activePluginName = ValueNotifier(initialActivePluginName ?? ''),
+        pluginManagementPanelVisible = ValueNotifier(initialPluginManagementPanelVisible ?? false),
+        floatWindowMainVisible = ValueNotifier(initialFloatWindowMainVisible ?? true),
+        floatWindowMainFullscreen = ValueNotifier(floatWindowMainFullscreen ?? false),
+        floatActionButtonVisible = ValueNotifier(initialFloatActionButtonVisible ?? true),
+        floatActionButtonSize = ValueNotifier(initialFloatActionButtonSize ?? 50),
+        floatActionButtonOpacity = ValueNotifier(initialFloatActionButtonOpacity ?? 1);
 
-  void setActivePluginName([String pluginName = '']) {
-    _activePluginName = pluginName;
-    notifyListeners();
-  }
-
-  void setPluginManagementPanelVisible(bool? visible, [bool toggle = false]) {
-    if (visible == null && toggle) {
-      _pluginManagementPanelVisible = !_pluginManagementPanelVisible;
-    } else {
-      _pluginManagementPanelVisible = visible ?? true;
-    }
-    notifyListeners();
-  }
-
-  void setFloatWindowMainVisible(bool? visible, [bool toggle = false]) {
-    if (visible == null && toggle) {
-      _floatWindowMainVisible = !_floatWindowMainVisible;
-    } else {
-      _floatWindowMainVisible = visible ?? true;
-    }
-    notifyListeners();
-  }
-
-  void setFloatWindowMainFullscreen(bool? fullscreen, [bool toggle = false]) {
-    if (fullscreen == null && toggle) {
-      _floatWindowMainFullscreen = !_floatWindowMainFullscreen;
-    } else {
-      _floatWindowMainFullscreen = fullscreen ?? true;
-    }
-    notifyListeners();
-  }
-
-  void setFloatActionButtonVisible(bool? visible, [bool toggle = false]) {
-    if (visible == null && toggle) {
-      _floatActionButtonVisible = !_floatActionButtonVisible;
-    } else {
-      _floatActionButtonVisible = visible ?? true;
-    }
-    notifyListeners();
-  }
-
-  void setFloatActionButtonSize([double size = 50]) {
-    _floatActionButtonSize = size;
-    notifyListeners();
-  }
-
-  void setFloatActionButtonOpacity([double opacity = 1]) {
-    _floatActionButtonOpacity = opacity;
-    notifyListeners();
+  // 释放资源
+  void dispose() {
+    activePluginName.dispose();
+    pluginManagementPanelVisible.dispose();
+    floatWindowMainVisible.dispose();
+    floatWindowMainFullscreen.dispose();
+    floatActionButtonVisible.dispose();
+    floatActionButtonSize.dispose();
+    floatActionButtonOpacity.dispose();
   }
 }

@@ -73,7 +73,7 @@ class ManaWidget extends StatelessWidget {
               /// After initialization is complete, display the ManaOverlay.
               ///
               /// 初始化完成后，显示 ManaOverlay。
-              return Material(
+              return const Material(
                 type: MaterialType.transparency,
                 child: ManaOverlay(),
               );

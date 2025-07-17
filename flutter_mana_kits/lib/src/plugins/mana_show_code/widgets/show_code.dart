@@ -17,6 +17,7 @@ class ShowCode extends StatelessWidget {
       name: name,
       position: PositionType.bottom,
       initialWidth: double.infinity,
+      initialHeight: double.infinity,
       drag: false,
       showBarrier: false,
       content: ShowCodeContent(theme: theme),

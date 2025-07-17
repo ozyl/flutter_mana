@@ -1,3 +1,7 @@
+## 1.0.0-beta.8
+
+- Perf.
+
 ## 1.0.0-beta.7
 
 - Extract the plugin into a standalone package.
