@@ -17,6 +17,9 @@ void main() {
   runApp(ManaWidget(child: App()));
 }
 
+/// use logger to set output
+final logger = Logger(output: ManaLoggerCollector());
+
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -28,8 +31,6 @@ class App extends StatelessWidget {
       home: Scaffold(
           body: ElevatedButton(
             onPressed: () {
-              /// use logger to set output
-              final logger = Logger(output: ManaLoggerCollector());
               logger.e('error');
 
               /// use debugPrint

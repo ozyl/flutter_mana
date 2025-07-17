@@ -60,7 +60,7 @@ class App extends StatelessWidget {
 }
 ```
 
-## 内置插件
+## 内置插件&具体使用
 
 - [x] [标尺 - AlignRuler](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_align_ruler)
 - [x] [日志查看器 - LogViewer](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_logger)

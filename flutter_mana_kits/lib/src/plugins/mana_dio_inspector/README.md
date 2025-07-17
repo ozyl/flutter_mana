@@ -11,12 +11,13 @@ import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
 
+Dio dio = Dio();
+
+/// add interceptor
+dio.interceptors.add(ManaDioCollector());
+
 void sendRequest() {
-  Dio dio = Dio();
-
-  /// add interceptor
-  dio.interceptors.add(ManaDioCollector());
-
+  
   dio.get('https://jsonplaceholder.typicode.com/posts/1').then((response) {}).catchError((
       error) {});
 }
