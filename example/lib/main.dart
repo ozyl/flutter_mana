@@ -14,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ManaPluginManager.instance
+    ..register(ManaMemoryInfo())
     ..register(ManaShowCode())
     ..register(ManaLogViewer())
     ..register(ManaDeviceInfo())

@@ -1,3 +1,8 @@
+## 1.0.0-beta.9
+
+- Fix Bug.
+- Add I18n.
+
 ## 1.0.0-beta.8
 
 - Perf.

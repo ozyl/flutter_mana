@@ -9,6 +9,8 @@ import 'mana_store.dart';
 /// 全局 Key，用于获取 ManaWidget 的根节点。
 final GlobalKey manaRootKey = GlobalKey();
 
+Locale manaLocale = Locale('en');
+
 /// Provides the entry point and basic structure for the Mana plugin system.
 ///
 /// 提供了 Mana 插件体系的入口和基础结构。
@@ -46,6 +48,13 @@ class ManaWidget extends StatelessWidget {
     if (!enable) {
       return child;
     }
+
+    // Get the platform dispatcher to access locale information for internationalization.
+    // 获取平台调度器以访问国际化所需的区域设置信息。
+    final platformDispatcher = View.of(context).platformDispatcher;
+    // Get the first preferred locale for displaying localized plugin names.
+    // 获取第一个首选区域设置，用于显示本地化的插件名称。
+    manaLocale = platformDispatcher.locales.first;
 
     /// 在经过多种方案尝试后，只有在这嵌套一层MaterialApp是侵入性最小、功能完善最好的方案，其他方案多多少少有瑕疵。
     return MaterialApp(

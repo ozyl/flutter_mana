@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 
 import 'model.dart' show Model;
 
@@ -15,7 +16,7 @@ class ModelDetail extends StatefulWidget {
   State<ModelDetail> createState() => _ModelDetailState();
 }
 
-class _ModelDetailState extends State<ModelDetail> {
+class _ModelDetailState extends State<ModelDetail> with I18nMixin {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _keyController;
   late final TextEditingController _valueController;
@@ -77,8 +78,8 @@ class _ModelDetailState extends State<ModelDetail> {
             DropdownButtonFormField<String>(
               value: _selectedKind,
               isExpanded: true,
-              decoration: const InputDecoration(
-                labelText: 'Type',
+              decoration: InputDecoration(
+                labelText: t('shared_preferences_viewer.type'),
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
@@ -110,8 +111,8 @@ class _ModelDetailState extends State<ModelDetail> {
             const SizedBox(height: 8),
             TextFormField(
               controller: _keyController,
-              decoration: const InputDecoration(
-                labelText: 'Key',
+              decoration: InputDecoration(
+                labelText: t('shared_preferences_viewer.key'),
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
@@ -121,7 +122,7 @@ class _ModelDetailState extends State<ModelDetail> {
               style: const TextStyle(fontSize: 14),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Key Required';
+                  return t('shared_preferences_viewer.key_required');
                 }
                 return null;
               },
@@ -129,8 +130,8 @@ class _ModelDetailState extends State<ModelDetail> {
             const SizedBox(height: 8),
             TextFormField(
               controller: _valueController,
-              decoration: const InputDecoration(
-                labelText: 'Value',
+              decoration: InputDecoration(
+                labelText: t('shared_preferences_viewer.value'),
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
@@ -142,29 +143,29 @@ class _ModelDetailState extends State<ModelDetail> {
               minLines: 2,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Value Required';
+                  return t('shared_preferences_viewer.value_required');
                 }
                 switch (_selectedKind) {
                   case 'double':
                     if (isDouble(value)) {
                       return null;
                     }
-                    return 'Value Must Double';
+                    return t('shared_preferences_viewer.value_must_double');
                   case 'bool':
                     if (isBool(value)) {
                       return null;
                     }
-                    return 'Value Must Bool';
+                    return t('shared_preferences_viewer.value_must_bool');
                   case 'int':
                     if (isInt(value)) {
                       return null;
                     }
-                    return 'Value Must Int';
+                    return t('shared_preferences_viewer.value_must_int');
                   case 'List<String>':
                     if (isListOfString(value)) {
                       return null;
                     }
-                    return 'Value Must List<String>';
+                    return t('shared_preferences_viewer.value_must_list_of_string');
                   default:
                     return null;
                 }
@@ -183,7 +184,7 @@ class _ModelDetailState extends State<ModelDetail> {
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: const Text('Save', style: TextStyle(fontSize: 14)),
+                    child: Text(t('shared_preferences_viewer.save'), style: TextStyle(fontSize: 14)),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -196,7 +197,7 @@ class _ModelDetailState extends State<ModelDetail> {
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: const Text('Cancel', style: TextStyle(fontSize: 14)),
+                    child: Text(t('shared_preferences_viewer.cancel'), style: TextStyle(fontSize: 14)),
                   ),
                 ),
               ],

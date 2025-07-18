@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
+import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 
 import 'icon.dart';
 
@@ -36,7 +37,7 @@ class ManaFpsMonitor extends StatefulWidget implements ManaPluggable {
   Future<void> initialize() async {}
 }
 
-class _ManaFpsMonitorState extends State<ManaFpsMonitor> {
+class _ManaFpsMonitorState extends State<ManaFpsMonitor> with I18nMixin {
   @override
   Widget build(BuildContext context) {
     return ManaFloatingWindow(
@@ -49,7 +50,7 @@ class _ManaFpsMonitorState extends State<ManaFpsMonitor> {
         child: kIsWeb
             ? Center(
                 child: Text(
-                  'Web is not supported!',
+                  t('fps_monitor.tip'),
                   style: TextStyle(color: Colors.red, fontSize: 20),
                 ),
               )

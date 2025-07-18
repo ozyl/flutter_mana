@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
-class ManaSettingPanel extends StatelessWidget {
+import '../core/mana_i18n_mixin.dart';
+
+class ManaSettingPanel extends StatelessWidget with ManaI18n {
   const ManaSettingPanel({
     super.key,
   });
@@ -36,7 +38,7 @@ class ManaSettingPanel extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '浮动按钮大小',
+                  t('float_button_size'),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
@@ -77,7 +79,7 @@ class ManaSettingPanel extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '浮动按钮透明度',
+                  t('float_button_opacity'),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(

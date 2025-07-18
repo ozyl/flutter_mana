@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'model.dart';
@@ -16,7 +17,7 @@ class SharedPreferencesViewerContent extends StatefulWidget {
   State<SharedPreferencesViewerContent> createState() => _SharedPreferencesViewerContentState();
 }
 
-class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewerContent> {
+class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewerContent> with I18nMixin {
   final TextEditingController _filterController = TextEditingController();
   Timer? _debounceTimer;
 
@@ -218,7 +219,7 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
               controller: _filterController,
               style: const TextStyle(fontSize: _fontSize),
               decoration: InputDecoration(
-                hintText: 'filter keywords...',
+                hintText: t('shared_preferences_viewer.filter_keywords'),
                 hintStyle: TextStyle(fontSize: _fontSize, color: Colors.black54),
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
@@ -259,10 +260,13 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
                   }
                 },
                 children: [
-                  Center(child: Text('Clear')),
-                  Center(child: Text('Add')),
-                  Center(child: Text('Refresh')),
-                  Center(child: Text(_filter ? 'Filter(on)' : 'Filter(off)')),
+                  Center(child: Text(t('shared_preferences_viewer.clear'))),
+                  Center(child: Text(t('shared_preferences_viewer.add'))),
+                  Center(child: Text(t('shared_preferences_viewer.refresh'))),
+                  Center(
+                      child: Text(_filter
+                          ? t('shared_preferences_viewer.filter_on')
+                          : t('shared_preferences_viewer.filter_off'))),
                 ],
               );
             },

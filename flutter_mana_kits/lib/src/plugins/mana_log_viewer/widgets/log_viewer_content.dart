@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 import 'package:logger/logger.dart';
 
 import '../mana_log_collector.dart';
@@ -13,7 +14,7 @@ class LogViewerContent extends StatefulWidget {
   State<LogViewerContent> createState() => _LogViewerContentState();
 }
 
-class _LogViewerContentState extends State<LogViewerContent> with SingleTickerProviderStateMixin {
+class _LogViewerContentState extends State<LogViewerContent> with SingleTickerProviderStateMixin, I18nMixin {
   late TabController _tabController;
 
   final TextEditingController _filterController = TextEditingController();
@@ -186,7 +187,7 @@ class _LogViewerContentState extends State<LogViewerContent> with SingleTickerPr
               controller: _filterController,
               style: const TextStyle(fontSize: _fontSize),
               decoration: InputDecoration(
-                hintText: 'filter keywords...',
+                hintText: t('log_viewer.filter_keywords'),
                 hintStyle: TextStyle(fontSize: _fontSize, color: Colors.black54),
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
@@ -225,10 +226,10 @@ class _LogViewerContentState extends State<LogViewerContent> with SingleTickerPr
                   }
                 },
                 children: [
-                  Center(child: Text('Clear')),
-                  Center(child: Text('Top')),
-                  Center(child: Text('Bottom')),
-                  Center(child: Text(_filter ? 'Filter(on)' : 'Filter(off)')),
+                  Center(child: Text(t('log_viewer.clear'))),
+                  Center(child: Text(t('log_viewer.top'))),
+                  Center(child: Text(t('log_viewer.bottom'))),
+                  Center(child: Text(_filter ? t('log_viewer.filter_on') : t('log_viewer.filter_off'))),
                 ],
               );
             },

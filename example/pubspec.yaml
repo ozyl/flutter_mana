@@ -13,8 +13,8 @@ dependencies:
   dio: ^5.8.0+1
   logger: ^2.5.0
   shared_preferences: ^2.5.3
-  flutter_mana: ^1.0.0-beta.8
-  flutter_mana_kits: ^1.0.0-beta.2
+  flutter_mana: ^1.0.0-beta.9
+  flutter_mana_kits: ^1.0.0-beta.3
 
 dependency_overrides:
   flutter_mana:

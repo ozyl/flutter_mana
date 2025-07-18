@@ -4,8 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mana/flutter_mana.dart';
+import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 
-class ResponseDetail extends StatelessWidget {
+class ResponseDetail extends StatelessWidget with I18nMixin {
   final Response response;
 
   final VoidCallback? onClose;
@@ -100,13 +101,13 @@ class ResponseDetail extends StatelessWidget {
           ),
           Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
           TabBar(
-            tabs: const [
+            tabs: [
               Tab(
-                text: 'Detail',
+                text: t('dio_inspector.detail'),
                 height: 36,
               ),
-              Tab(text: 'Request', height: 36),
-              Tab(text: 'Response', height: 36),
+              Tab(text: t('dio_inspector.request'), height: 36),
+              Tab(text: t('dio_inspector.response'), height: 36),
             ],
             unselectedLabelColor: Colors.black45,
             indicatorSize: TabBarIndicatorSize.tab,
@@ -194,7 +195,8 @@ class ResponseDetail extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text('Request Details', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child:
+                Text(t('dio_inspector.request_details'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildTable(details),
         ],
@@ -211,12 +213,12 @@ class ResponseDetail extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text('Request Header', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: Text(t('dio_inspector.request_header'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildTable(requestHeaders),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text('Request Body', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: Text(t('dio_inspector.request_body'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildCodeBlock(requestBody),
         ],
@@ -233,12 +235,13 @@ class ResponseDetail extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text('Response Header', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child:
+                Text(t('dio_inspector.response_header'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildTable(responseHeaders),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text('Response Body', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: Text(t('dio_inspector.response_body'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildCodeBlock(responseBody),
         ],

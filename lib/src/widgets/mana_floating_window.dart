@@ -240,7 +240,9 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
+                            borderRadius: (_isFullscreen || widget.initialHeight == double.infinity)
+                                ? BorderRadius.zero
+                                : BorderRadius.circular(8),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withAlpha(50),
@@ -252,12 +254,14 @@ class _ManaFloatingWindowState extends State<ManaFloatingWindow> {
                           ),
                           clipBehavior: Clip.antiAlias,
                           child: ClipRRect(
-                            borderRadius: _isFullscreen ? BorderRadius.zero : BorderRadius.circular(8),
+                            borderRadius: (_isFullscreen || widget.initialHeight == double.infinity)
+                                ? BorderRadius.zero
+                                : BorderRadius.circular(8),
                             child: Container(
                               color: Colors.white,
                               child: SafeArea(
                                 left: _isFullscreen,
-                                top: _isFullscreen,
+                                top: _isFullscreen || widget.initialHeight == double.infinity,
                                 right: _isFullscreen,
                                 bottom: _isFullscreen || widget.position == PositionType.bottom,
                                 child: Column(

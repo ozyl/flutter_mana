@@ -116,14 +116,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0-beta.8"
+    version: "1.0.0-beta.9"
   flutter_mana_kits:
     dependency: "direct main"
     description:
       path: "../flutter_mana_kits"
       relative: true
     source: path
-    version: "1.0.0-beta.2"
+    version: "1.0.0-beta.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter

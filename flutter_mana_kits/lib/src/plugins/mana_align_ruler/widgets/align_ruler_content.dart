@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 
-class AlignRulerContent extends StatelessWidget {
+class AlignRulerContent extends StatelessWidget with I18nMixin {
   final Offset dotPosition;
 
   final Size windowSize;
@@ -56,11 +57,6 @@ class AlignRulerContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final platformDispatcher = View.of(context).platformDispatcher;
-    final locale = platformDispatcher.locales.first;
-
-    final tip = locale.languageCode == 'zh' ? '开启后松手将会自动吸附至最近部件边缘' : 'Snap to nearest widget edge on release';
-
     return GestureDetector(
       onVerticalDragUpdate: onVerticalDragUpdate,
       child: Container(
@@ -84,7 +80,7 @@ class AlignRulerContent extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    tip,
+                    t('align_ruler.tip'),
                     style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,

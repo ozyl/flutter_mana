@@ -33,6 +33,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ManaPluginManager.instance
+    ..register(ManaMemoryInfo())
     ..register(ManaShowCode())
     ..register(ManaLogViewer())
     ..register(ManaDeviceInfo())
@@ -60,7 +61,7 @@ class App extends StatelessWidget {
 }
 ```
 
-## 内置插件&具体使用
+## 插件&使用
 
 - [x] [标尺 - AlignRuler](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_align_ruler)
 - [x] [日志查看器 - LogViewer](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_logger)
@@ -71,6 +72,7 @@ class App extends StatelessWidget {
 - [x] [帧率监控 - FpsMonitor](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_fps_monitor)
 - [x] [SharedPreferences查看器 - SharedPreferencesViewer](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_shared_preferences_viewer)
 - [x] [显示代码 - ShowCode](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_show_code)
+- [x] [内存信息 - MemoryInfo](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_memory_info)
 
 | 插件                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
@@ -80,8 +82,8 @@ class App extends StatelessWidget {
 | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_color_sucker.png" alt="颜色吸管"> | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_dio_inspector.png" alt="Dio网络检查器">                         | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_widget_info.png" alt="Widget详情"> |
 | 帧率监控                                                                                                                  | SharedPreferences查看器                                                                                                                               | 标尺                                                                                                                       |
 | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_fps_monitor.png" alt="帧率监控">  | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_shared_preferences_viewer.png" alt="SharedPreferences查看器"> | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.png" alt="标尺">       |
-| 显示代码                                                                                                                  |                                                                                                                                                    |                                                                                                                          |
-| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_show_code.png" alt="显示代码">    |                                                                                                                                                    |                                                                                                                          |
+| 显示代码                                                                                                                  | 内存信息                                                                                                                                               |                                                                                                                          |
+| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_show_code.png" alt="显示代码">    | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_memory_info.png" alt="内存信息">                               |                                                                                                                          |
 
 ## 插件开发
 

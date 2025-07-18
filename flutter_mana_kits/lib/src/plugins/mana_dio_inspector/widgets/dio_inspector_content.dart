@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 
 import '../mana_dio_collector.dart';
 import 'response_detail.dart';
@@ -14,7 +15,7 @@ class DioInspectorContent extends StatefulWidget {
   State<DioInspectorContent> createState() => _DioInspectorContentState();
 }
 
-class _DioInspectorContentState extends State<DioInspectorContent> with SingleTickerProviderStateMixin {
+class _DioInspectorContentState extends State<DioInspectorContent> with SingleTickerProviderStateMixin, I18nMixin {
   late TabController _tabController;
 
   final TextEditingController _filterController = TextEditingController();
@@ -224,7 +225,7 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
               controller: _filterController,
               style: const TextStyle(fontSize: _fontSize),
               decoration: InputDecoration(
-                hintText: 'filter keywords...',
+                hintText: t('dio_inspector.filter_keywords'),
                 hintStyle: TextStyle(fontSize: _fontSize, color: Colors.black54),
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
@@ -263,10 +264,10 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
                   }
                 },
                 children: [
-                  Center(child: Text('Clear')),
-                  Center(child: Text('Top')),
-                  Center(child: Text('Bottom')),
-                  Center(child: Text(_filter ? 'Filter(on)' : 'Filter(off)')),
+                  Center(child: Text(t('dio_inspector.clear'))),
+                  Center(child: Text(t('dio_inspector.top'))),
+                  Center(child: Text(t('dio_inspector.bottom'))),
+                  Center(child: Text(_filter ? t('dio_inspector.filter_on') : t('dio_inspector.filter_off'))),
                 ],
               );
             },

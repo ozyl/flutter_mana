@@ -17,13 +17,6 @@ class ManaPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the platform dispatcher to access locale information for internationalization.
-    // 获取平台调度器以访问国际化所需的区域设置信息。
-    final platformDispatcher = View.of(context).platformDispatcher;
-    // Get the first preferred locale for displaying localized plugin names.
-    // 获取第一个首选区域设置，用于显示本地化的插件名称。
-    final locale = platformDispatcher.locales.first;
-
     return LayoutBuilder(
       builder: (context, constraints) {
         // Access the ManaState from the context to manage plugin activation.
@@ -64,7 +57,7 @@ class ManaPanel extends StatelessWidget {
                 },
                 // Build the visual representation of the plugin item.
                 // 构建插件项的可视化表示。
-                child: _buildPluginItem(plugin, locale, manaState.activePluginName.value == plugin.name),
+                child: _buildPluginItem(plugin, manaState.activePluginName.value == plugin.name),
               );
             },
           ).toList(),
@@ -79,11 +72,9 @@ class ManaPanel extends StatelessWidget {
   ///
   /// [plugin]: The [ManaPluggable] instance to display.
   /// [plugin]: 要显示的 [ManaPluggable] 实例。
-  /// [locale]: The current locale for localized display names.
-  /// [locale]: 当前区域设置，用于本地化显示名称。
   /// [active]: A boolean indicating if this plugin is currently active.
   /// [active]: 指示此插件当前是否活动的布尔值。
-  Widget _buildPluginItem(ManaPluggable plugin, Locale locale, bool active) {
+  Widget _buildPluginItem(ManaPluggable plugin, bool active) {
     var style = const TextStyle(fontSize: 10);
 
     // Apply a different style if the plugin is active.
@@ -95,11 +86,7 @@ class ManaPanel extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      // 'spacing' is not a valid property for Column, consider using SizedBox for spacing.
-      // 'spacing' 不是 Column 的有效属性，可以考虑使用 SizedBox 进行间距。
-      // Note: There's a typo in the original code. 'spacing' should be replaced with SizedBox between children or similar.
-      // 注意：原始代码中存在一个拼写错误。'spacing' 应该替换为子元素之间的 SizedBox 或类似方式。
-      // spacing: 4, // This line causes an error. Removed or replaced with SizedBox for correctness.
+      spacing: 4,
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
@@ -113,11 +100,8 @@ class ManaPanel extends StatelessWidget {
             ),
           ),
         ),
-        // Adding a SizedBox for spacing between the icon and text.
-        // 在图标和文本之间添加一个 SizedBox 用于间距。
-        const SizedBox(height: 4),
         Text(
-          plugin.getLocalizedDisplayName(locale),
+          plugin.getLocalizedDisplayName(manaLocale),
           style: style,
           maxLines: 2,
           textAlign: TextAlign.center,
