@@ -237,7 +237,7 @@ class _MemoryInfoContentState extends State<MemoryInfoContent> with I18nMixin {
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: 5),
-                              child: Text('当前项目'),
+                              child: Text(t('memory_info.current_app')),
                             ),
                           ],
                         ),

@@ -40,6 +40,7 @@ mixin I18nMixin {
     'memory_info.version': ['Version:', '版本:'],
     'memory_info.memory_info': ['Memory Info', '内存信息'],
     'memory_info.hide_private_classes': ['hide private classes', '隐藏私有类'],
+    'memory_info.current_app': ['Current App', '当前应用'],
     'memory_info.size': ['Size', '大小'],
     'memory_info.number': ['Number', '数量'],
     'memory_info.class_name': ['Class', '类名'],
