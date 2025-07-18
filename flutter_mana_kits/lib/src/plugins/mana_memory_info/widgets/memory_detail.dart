@@ -95,8 +95,21 @@ class _MemoryDetailState extends State<MemoryDetail> with I18nMixin {
                     Padding(
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
+                        t('memory_info.location'),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Text(
+                      widget.detail.classRef?.location?.script?.uri ?? 'N/A',
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 40),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Text(
                         t('memory_info.property'),
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Text(
@@ -109,7 +122,7 @@ class _MemoryDetailState extends State<MemoryDetail> with I18nMixin {
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
                         t('memory_info.function'),
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../utils/memory_service.dart';
 import 'memory_detail.dart';
@@ -14,6 +15,8 @@ class MemoryInfoContent extends StatefulWidget {
 class _MemoryInfoContentState extends State<MemoryInfoContent> with I18nMixin {
   final MemoryService _memoryService = MemoryService();
 
+  String _pkg = '';
+
   // 当前的排序字段和排序方向
   String _currentSortField = 'accumulatedSize'; // 默认按大小排序
   bool _isAscending = false;
@@ -21,13 +24,23 @@ class _MemoryInfoContentState extends State<MemoryInfoContent> with I18nMixin {
   /// 控制是否隐藏私有类的复选框状态。
   bool _hidePrivateClasses = true;
 
+  /// 是否只展示当前项目的
+  bool _onlyCurrentPackage = false;
+
   @override
   void initState() {
     super.initState();
+
     // 初始加载数据
     _memoryService.getInfos(() {
       _sortClassHeapStats(); // 初始数据加载后进行排序
       setState(() {}); // 数据加载完成后刷新UI
+    });
+
+    PackageInfo.fromPlatform().then((info) {
+      final packageName = info.packageName;
+
+      _pkg = 'package:${packageName.split('.').last}/';
     });
   }
 
@@ -126,9 +139,13 @@ class _MemoryInfoContentState extends State<MemoryInfoContent> with I18nMixin {
     final memoryInfo = _memoryService.memoryUsageInfo;
     final classHeapStatsList = _memoryService.classHeapStatsList;
 
-    final items = _hidePrivateClasses
+    var items = _hidePrivateClasses
         ? classHeapStatsList.where((v) => !(v.classRef?.name?.startsWith('_') ?? false)).toList()
         : classHeapStatsList;
+
+    items = _onlyCurrentPackage && _pkg.isNotEmpty
+        ? items.where((v) => (v.classRef?.location?.script?.uri?.contains(_pkg) ?? false)).toList()
+        : items;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -179,24 +196,50 @@ class _MemoryInfoContentState extends State<MemoryInfoContent> with I18nMixin {
                         _buildTableRow('External Usage:', memoryInfo?.externalUsageFormatted ?? 'N/A'),
                       ],
                     ),
-                    Row(
+                    Column(
+                      spacing: 4,
                       children: [
-                        SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: Checkbox(
-                            materialTapTargetSize: MaterialTapTargetSize.padded,
-                            value: _hidePrivateClasses,
-                            onChanged: (value) {
-                              setState(() {
-                                _hidePrivateClasses = !_hidePrivateClasses;
-                              });
-                            },
-                          ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: Checkbox(
+                                materialTapTargetSize: MaterialTapTargetSize.padded,
+                                value: _hidePrivateClasses,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _hidePrivateClasses = !_hidePrivateClasses;
+                                  });
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5),
+                              child: Text(t('memory_info.hide_private_classes')),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Text(t('memory_info.hide_private_classes')),
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: Checkbox(
+                                materialTapTargetSize: MaterialTapTargetSize.padded,
+                                value: _onlyCurrentPackage,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _onlyCurrentPackage = !_onlyCurrentPackage;
+                                  });
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5),
+                              child: Text('当前项目'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -238,15 +281,11 @@ class _MemoryInfoContentState extends State<MemoryInfoContent> with I18nMixin {
                       children: [
                         Expanded(
                           flex: 1,
-                          child: Text(
-                            item.accumulatedSizeFormatted,
-                          ),
+                          child: Text(item.accumulatedSizeFormatted),
                         ),
                         Expanded(
                           flex: 1,
-                          child: Text(
-                            '${item.instancesCurrent ?? 'N/A'}',
-                          ),
+                          child: Text('${item.instancesCurrent ?? 'N/A'}'),
                         ),
                         Expanded(
                           flex: 3,

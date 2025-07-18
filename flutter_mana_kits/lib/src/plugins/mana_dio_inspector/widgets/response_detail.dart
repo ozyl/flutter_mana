@@ -189,6 +189,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
   // 构建详情
   Widget _buildDetails(Map<String, String> details) {
     return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
       padding: EdgeInsets.only(bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,6 +208,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
   // 构建请求详情
   Widget _buildRequestDetails(Map<String, String> requestHeaders, String requestBody) {
     return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
       padding: EdgeInsets.only(bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,6 +231,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
   // 构建响应详情
   Widget _buildResponseDetails(Map<String, String> responseHeaders, String responseBody) {
     return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
       padding: EdgeInsets.only(bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

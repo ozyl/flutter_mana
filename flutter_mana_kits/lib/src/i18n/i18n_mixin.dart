@@ -47,6 +47,7 @@ mixin I18nMixin {
       'The object is a Sentinel or lacks detailed information',
       '该对象是一个 Sentinel 或没有详细信息'
     ],
+    'memory_info.location': ['Location:', '位置:'],
     'memory_info.property': ['Property:', '属性:'],
     'memory_info.function': ['Function:', '方法:'],
 

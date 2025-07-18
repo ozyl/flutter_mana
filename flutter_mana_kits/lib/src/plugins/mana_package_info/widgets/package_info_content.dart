@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
-import '../utils/get_device_info.dart';
-
-class DeviceInfoContent extends StatefulWidget {
-  const DeviceInfoContent({super.key});
+class PackageInfoContent extends StatefulWidget {
+  const PackageInfoContent({super.key});
 
   @override
-  State<DeviceInfoContent> createState() => _DeviceInfoContentState();
+  State<PackageInfoContent> createState() => _PackageInfoContentState();
 }
 
-class _DeviceInfoContentState extends State<DeviceInfoContent> {
+class _PackageInfoContentState extends State<PackageInfoContent> {
   Map<String, dynamic> _data = {};
 
   @override
   void initState() {
     super.initState();
-    _getDeviceInfo();
+    _initPackageInfo();
   }
 
-  void _getDeviceInfo() async {
-    _data = await getDeviceInfo();
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+
+    _data = {
+      'appName': info.appName,
+      'packageName': info.packageName,
+      'version': info.version,
+      'buildNumber': info.buildNumber,
+      'buildSignature': info.buildSignature,
+      'installerStore': info.installerStore,
+      'installTime': info.installTime,
+      'updateTime': info.updateTime,
+    };
+
     setState(() {});
   }
 
