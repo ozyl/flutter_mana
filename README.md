@@ -63,17 +63,17 @@ class App extends StatelessWidget {
 
 ## 插件&使用
 
-- [x] [标尺 - AlignRuler](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_align_ruler)
-- [x] [日志查看器 - LogViewer](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_logger)
-- [x] [设备信息 - DeviceInfo](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_device_info)
-- [x] [颜色吸管 - ColorSucker](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_color_sucker)
-- [x] [Dio网络检查器 - DioInspector](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_dio)
-- [x] [Widget详情 - WidgetInfoInspector](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_widget_info_inspector)
-- [x] [帧率监控 - FpsMonitor](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_fps_monitor)
-- [x] [SharedPreferences查看器 - SharedPreferencesViewer](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_shared_preferences_viewer)
-- [x] [显示代码 - ShowCode](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_show_code)
-- [x] [内存信息 - MemoryInfo](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_memory_info)
-- [x] [包信息 - PackageInfo](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_package_info)
+- [x] [标尺 - AlignRuler](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_align_ruler)
+- [x] [日志查看器 - LogViewer](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_logger)
+- [x] [设备信息 - DeviceInfo](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_device_info)
+- [x] [颜色吸管 - ColorSucker](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_color_sucker)
+- [x] [Dio网络检查器 - DioInspector](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_dio)
+- [x] [Widget详情 - WidgetInfoInspector](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_widget_info_inspector)
+- [x] [帧率监控 - FpsMonitor](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_fps_monitor)
+- [x] [SharedPreferences查看器 - SharedPreferencesViewer](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_shared_preferences_viewer)
+- [x] [显示代码 - ShowCode](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_show_code)
+- [x] [内存信息 - MemoryInfo](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_memory_info)
+- [x] [包信息 - PackageInfo](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_package_info)
 
 | 插件                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
@@ -194,4 +194,4 @@ class App extends StatelessWidget {
 - [widget with codeview](https://github.com/X-Wei/widget_with_codeview)
 - [flutter：全局 context 在 navigator 与 overlay 中的运用](https://juejin.cn/post/7200191765516615737)
 - [内存泄漏检测原理](https://juejin.cn/post/6922625442323103758)
-- [leak_detector](https://github.com/liujiakuoyx/leak_detector) 内存泄漏检测库
+- [内存泄漏检测库](https://github.com/liujiakuoyx/leak_detector)
