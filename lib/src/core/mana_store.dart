@@ -33,14 +33,14 @@ class ManaStore {
     final floatActionButtonOpacity = prefs.getDouble('mana_float_action_button_opacity');
 
     return ManaState(
-      initialFloatActionButtonSize: floatActionButtonSize,
-      initialFloatActionButtonOpacity: floatActionButtonOpacity,
+      initialFloatingButtonSize: floatActionButtonSize,
+      initialFloatingButtonOpacity: floatActionButtonOpacity,
     );
   }
 
   Future<void> setManaState(ManaState manaState) async {
-    await prefs.setDouble('mana_float_action_button_size', manaState.floatActionButtonSize.value);
-    await prefs.setDouble('mana_float_action_button_opacity', manaState.floatActionButtonOpacity.value);
+    await prefs.setDouble('mana_float_action_button_size', manaState.floatingButtonSize.value);
+    await prefs.setDouble('mana_float_action_button_opacity', manaState.floatingButtonOpacity.value);
   }
 
   (double, double) getFloatActionButtonPosition() {

@@ -28,7 +28,7 @@ class ManaSettingPanel extends StatelessWidget with ManaI18n {
     final manaState = ManaScope.of(context);
 
     return ValueListenableBuilder(
-      valueListenable: manaState.floatActionButtonSize,
+      valueListenable: manaState.floatingButtonSize,
       builder: (context, size, child) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +55,7 @@ class ManaSettingPanel extends StatelessWidget with ManaI18n {
               padding: EdgeInsets.zero,
               label: size.toStringAsFixed(0),
               onChanged: (value) async {
-                manaState.floatActionButtonSize.value = value;
+                manaState.floatingButtonSize.value = value;
                 await ManaStore.instance.setManaState(manaState);
               },
             ),
@@ -69,7 +69,7 @@ class ManaSettingPanel extends StatelessWidget with ManaI18n {
     final manaState = ManaScope.of(context);
 
     return ValueListenableBuilder(
-      valueListenable: manaState.floatActionButtonOpacity,
+      valueListenable: manaState.floatingButtonOpacity,
       builder: (context, opacity, child) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +96,7 @@ class ManaSettingPanel extends StatelessWidget with ManaI18n {
               padding: EdgeInsets.zero,
               label: (opacity * 100).toStringAsFixed(0),
               onChanged: (value) async {
-                manaState.floatActionButtonOpacity.value = value;
+                manaState.floatingButtonOpacity.value = value;
                 await ManaStore.instance.setManaState(manaState);
               },
             ),

@@ -307,10 +307,10 @@ class _InspectorOverlayLayer extends Layer {
       ..style = PaintingStyle.stroke
       ..strokeWidth = InspectorConstants.strokeWidth;
 
-    final selectedRect = state.selected.rect.deflate(0.5); // Shrink the rectangle slightly to avoid aliasing.
+    final selectedRect = state.selected.rect.deflate(0.5);
     canvas
       ..save()
-      ..transform(state.selected.transform.storage) // Apply the transformation matrix for the selected widget.
+      ..transform(state.selected.transform.storage)
       ..drawRect(selectedRect, fillPaint)
       ..drawRect(selectedRect, borderPaint)
       ..restore();
@@ -321,7 +321,7 @@ class _InspectorOverlayLayer extends Layer {
       for (final r in state.candidates) {
         canvas
           ..save()
-          ..transform(r.transform.storage) // Apply the transformation matrix for each candidate.
+          ..transform(r.transform.storage)
           ..drawRect(r.rect.deflate(0.5), borderPaint)
           ..restore();
       }

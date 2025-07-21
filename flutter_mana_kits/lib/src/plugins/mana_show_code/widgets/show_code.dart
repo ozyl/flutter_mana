@@ -7,9 +7,9 @@ import 'show_code_content.dart';
 class ShowCode extends StatelessWidget {
   final String name;
 
-  final HighlighterTheme theme;
+  final Highlighter highlighter;
 
-  const ShowCode({super.key, required this.name, required this.theme});
+  const ShowCode({super.key, required this.name, required this.highlighter});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class ShowCode extends StatelessWidget {
       initialHeight: double.infinity,
       drag: false,
       showBarrier: false,
-      content: ShowCodeContent(theme: theme),
+      content: ShowCodeContent(highlighter: highlighter),
     );
   }
 }

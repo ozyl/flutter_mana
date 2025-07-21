@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
+import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 
 class ResponseDetail extends StatelessWidget with I18nMixin {
   final Response response;
@@ -12,6 +13,8 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
   final VoidCallback? onClose;
 
   const ResponseDetail({super.key, required this.response, this.onClose});
+
+  static final _divider = Divider(height: 1, color: Colors.grey.shade200);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +78,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
             children: [
               IconButton(
                 icon: Icon(
-                  Icons.close,
+                  KitIcons.close,
                   color: Colors.grey,
                   size: 16,
                 ),
@@ -90,7 +93,8 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
                 ),
               ),
               CheckIconButton(
-                initialIcon: Icons.copy,
+                initialIcon: KitIcons.copy,
+                changedIcon: KitIcons.copy_success,
                 size: 16,
                 iconColor: Colors.grey,
                 onPressed: () {
@@ -99,8 +103,14 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
               )
             ],
           ),
-          Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
+          _divider,
           TabBar(
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: Colors.transparent,
+            dividerHeight: 0,
+            isScrollable: false,
+            labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             tabs: [
               Tab(
                 text: t('dio_inspector.detail'),
@@ -109,16 +119,8 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
               Tab(text: t('dio_inspector.request'), height: 36),
               Tab(text: t('dio_inspector.response'), height: 36),
             ],
-            unselectedLabelColor: Colors.black45,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorWeight: 1.0,
-            dividerHeight: 0,
-            indicatorColor: Colors.transparent,
-            labelPadding: EdgeInsets.zero,
-            padding: EdgeInsets.zero,
-            labelStyle: const TextStyle(fontSize: 12),
           ),
-          Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
+          _divider,
           Expanded(
             child: TabBarView(
               children: [

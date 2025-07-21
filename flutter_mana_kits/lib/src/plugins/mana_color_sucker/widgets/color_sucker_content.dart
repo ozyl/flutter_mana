@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
+import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 
 class ColorSuckerContent extends StatefulWidget {
   final Color color;
@@ -47,8 +48,8 @@ class _ColorSuckerContentState extends State<ColorSuckerContent> with I18nMixin 
     Clipboard.setData(ClipboardData(text: colorHex));
   }
 
-  double _zoomLevel = 10.0;
-  final List<double> _zoomOptions = [10.0, 15.0, 20.0, 25.0, 30.0];
+  double _zoomLevel = 10;
+  final List<double> _zoomOptions = [5, 10, 15, 20, 25, 30];
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +82,8 @@ class _ColorSuckerContentState extends State<ColorSuckerContent> with I18nMixin 
                 ),
               ),
               CheckIconButton(
-                initialIcon: Icons.copy,
+                initialIcon: KitIcons.copy,
+                changedIcon: KitIcons.copy_success,
                 onPressed: _copyToClipboard,
               )
             ],
@@ -90,14 +92,14 @@ class _ColorSuckerContentState extends State<ColorSuckerContent> with I18nMixin 
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 8,
             children: [
-              Text('${t('color_sucker.magnification')}: ${_zoomLevel}x', style: TextStyle(fontSize: 16)),
+              Text('${t('color_sucker.magnification')}: ${_zoomLevel.toInt()}x', style: TextStyle(fontSize: 16)),
               Slider(
                 padding: EdgeInsets.zero,
                 value: _zoomLevel,
                 min: _zoomOptions.first,
                 max: _zoomOptions.last,
-                divisions: _zoomOptions.length - 1, // 离散分段
-                label: '${_zoomLevel}x',
+                divisions: _zoomOptions.length - 1,
+                label: '${_zoomLevel.toInt()}x',
                 onChanged: (value) {
                   // 吸附到最近的预设值（可选）
                   _zoomLevel = _zoomOptions.reduce((a, b) => (value - a).abs() < (value - b).abs() ? a : b);

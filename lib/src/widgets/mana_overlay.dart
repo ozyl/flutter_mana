@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
-import 'float_button.dart';
+import 'floating_button/index.dart';
 import 'mana_panel.dart';
 import 'mana_setting_panel.dart';
 import 'nil.dart';
@@ -67,9 +67,9 @@ class _ManaOverlayState extends State<ManaOverlay> {
               },
             ),
             ValueListenableBuilder(
-              valueListenable: manaState.floatActionButtonVisible,
+              valueListenable: manaState.floatingButtonVisible,
               builder: (context, value, _) {
-                return value ? const FloatButton() : nilPosition;
+                return value ? const FloatingButton() : nilPosition;
               },
             ),
           ],

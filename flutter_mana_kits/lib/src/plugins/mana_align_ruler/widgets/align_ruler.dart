@@ -22,7 +22,11 @@ class _AlignRulerState extends State<AlignRuler> {
 
   late Offset _dotCenterOffset;
 
-  static const TextStyle _coordinateTextStyle = TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.bold);
+  static final TextStyle _coordinateTextStyle = TextStyle(
+    color: Colors.red,
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+  );
 
   Size _coordinateTextSize = Size.zero;
 

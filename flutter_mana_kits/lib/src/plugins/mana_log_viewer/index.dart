@@ -6,8 +6,9 @@ import 'mana_log_collector.dart';
 import 'widgets/log_viewer.dart';
 
 class ManaLogViewer implements ManaPluggable {
-  ManaLogViewer() {
-    ManaLogCollector.redirectDebugPrint();
+  ManaLogViewer({bool enableRedirectDebugPrint = true}) {
+    // 启用debugPrint重定向
+    if (enableRedirectDebugPrint) ManaLogCollector.redirectDebugPrint();
   }
 
   @override

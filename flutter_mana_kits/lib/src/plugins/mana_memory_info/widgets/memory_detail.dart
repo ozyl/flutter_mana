@@ -1,11 +1,12 @@
-// memory_detail.dart
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 
 import '../utils/memory_service.dart';
 
 /// 显示特定类的详细信息，包括属性和函数。
-class MemoryDetail extends StatefulWidget {
+class MemoryDetail extends StatelessWidget with I18nMixin {
   final FormattedClassHeapStats detail;
 
   /// 内存服务实例。
@@ -18,48 +19,11 @@ class MemoryDetail extends StatefulWidget {
     required this.service,
   });
 
-  @override
-  State<MemoryDetail> createState() => _MemoryDetailState();
-}
-
-class _MemoryDetailState extends State<MemoryDetail> with I18nMixin {
-  /// 类的属性信息字符串。
-  String _propertiesInfo = "";
-
-  /// 类的函数信息字符串。
-  String _functionsInfo = "";
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchClassDetails();
-  }
-
   /// 从 MemoryService 获取类的详细信息。
-  Future<void> _fetchClassDetails() async {
-    widget.service.getClassDetailInfo(widget.detail.classRef?.id ?? '', (info) {
-      if (info != null) {
-        // 构建属性信息字符串。
-        final propertiesBuffer = StringBuffer();
-        for (final prop in info.properties) {
-          propertiesBuffer.writeln(prop.propertyStr);
-        }
-        _propertiesInfo = propertiesBuffer.toString();
-
-        // 构建函数信息字符串。
-        final functionsBuffer = StringBuffer();
-        for (final func in info.functions) {
-          functionsBuffer.writeln(func);
-        }
-        _functionsInfo = functionsBuffer.toString();
-      } else {
-        _propertiesInfo = '';
-        _functionsInfo = '';
-      }
-      setState(() {
-        // 更新UI显示详情。
-      });
-    });
+  Future<ClsModel?> _fetchClassDetails() async {
+    final completer = Completer<ClsModel?>();
+    service.getClassDetailInfo(detail.classRef?.id ?? '', (info) => completer.complete(info));
+    return completer.future;
   }
 
   @override
@@ -73,25 +37,43 @@ class _MemoryDetailState extends State<MemoryDetail> with I18nMixin {
           scrolledUnderElevation: 0,
           shadowColor: Colors.transparent,
           backgroundColor: Colors.white,
-          title: Text(widget.detail.classRef?.name ?? 'N/A'),
+          title: Text(detail.classRef?.name ?? ''),
         ),
       ),
       body: Container(
         color: Colors.white,
         width: double.infinity,
-        child: _propertiesInfo.isEmpty && _functionsInfo.isEmpty
-            ? Center(
-                child: Text(
-                  t('memory_info.class_no_detail'),
-                  style: TextStyle(fontSize: 20),
-                ),
-              )
-            : SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.all(16),
+        child: FutureBuilder<ClsModel?>(
+          future: _fetchClassDetails(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData || snapshot.data == null) {
+              return Center(child: Text(t('memory_info.class_no_detail'), style: TextStyle(fontSize: 20)));
+            }
+
+            final info = snapshot.data!;
+            final propertiesText = info.properties.map((e) => e.propertyStr).join('\n');
+            final functionsText = info.functions.join('\n');
+
+            return SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              padding: EdgeInsets.all(16),
+              child: SelectionArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        t('memory_info.class_name'),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Text(
+                      detail.classRef?.name ?? '',
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 20),
                     Padding(
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
@@ -100,11 +82,11 @@ class _MemoryDetailState extends State<MemoryDetail> with I18nMixin {
                       ),
                     ),
                     Text(
-                      widget.detail.classRef?.location?.script?.uri ?? 'N/A',
+                      detail.classRef?.location?.script?.uri ?? '',
                       textAlign: TextAlign.left,
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 14),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 20),
                     Padding(
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
@@ -113,9 +95,9 @@ class _MemoryDetailState extends State<MemoryDetail> with I18nMixin {
                       ),
                     ),
                     Text(
-                      _propertiesInfo,
+                      propertiesText,
                       textAlign: TextAlign.left,
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 14),
                     ),
                     const SizedBox(height: 20),
                     Padding(
@@ -126,13 +108,16 @@ class _MemoryDetailState extends State<MemoryDetail> with I18nMixin {
                       ),
                     ),
                     Text(
-                      _functionsInfo,
+                      functionsText,
                       textAlign: TextAlign.left,
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ],
                 ),
               ),
+            );
+          },
+        ),
       ),
     );
   }

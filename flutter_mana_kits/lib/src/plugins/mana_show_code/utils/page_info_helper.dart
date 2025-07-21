@@ -182,13 +182,11 @@ class PageInfoHelper {
   /// 根据当前选中 Widget 的文件路径，获取其源代码。
   ///
   /// 返回：源代码字符串，如果获取失败则为 `null`。
-  Future<String?> getCode() async {
+  Future<String?> getCode(String packagePath) async {
     if (filePath == null || filePath!.isEmpty) {
       debugPrint('Error: filePath is null or empty for current selection.');
       return null;
     }
-
-    final packagePath = packagePathConvertFromFilePath(filePath);
 
     try {
       String? scriptId = await _codeDisplayService.getScriptIdByPackagePath(packagePath);

@@ -1,16 +1,21 @@
+## 1.0.0-beta.10
+
+- Refactor
+- Perf
+
 ## 1.0.0-beta.9
 
-- Fix Bug.
-- Add I18n.
+- Fix Bug
+- Add I18n
 
 ## 1.0.0-beta.8
 
-- Perf.
+- Perf
 
 ## 1.0.0-beta.7
 
-- Extract the plugin into a standalone package.
-- Add plugin mana_show_code.
+- Extract the plugin into a standalone package
+- Add plugin mana_show_code
 
 ## 1.0.0-beta.6
 

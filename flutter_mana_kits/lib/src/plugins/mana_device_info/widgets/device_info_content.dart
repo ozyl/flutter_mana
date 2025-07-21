@@ -2,64 +2,66 @@ import 'package:flutter/material.dart';
 
 import '../utils/get_device_info.dart';
 
-class DeviceInfoContent extends StatefulWidget {
+class DeviceInfoContent extends StatelessWidget {
   const DeviceInfoContent({super.key});
 
-  @override
-  State<DeviceInfoContent> createState() => _DeviceInfoContentState();
-}
+  static const _borderSide = BorderSide(width: 1, color: Color(0xFFE0E0E0));
 
-class _DeviceInfoContentState extends State<DeviceInfoContent> {
-  Map<String, dynamic> _data = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _getDeviceInfo();
-  }
-
-  void _getDeviceInfo() async {
-    _data = await getDeviceInfo();
-    setState(() {});
-  }
+  static const _tableBorder = TableBorder(
+    top: _borderSide,
+    bottom: _borderSide,
+    horizontalInside: _borderSide,
+    verticalInside: _borderSide,
+  );
 
   @override
   Widget build(BuildContext context) {
-    Widget body;
-    if (_data.isEmpty) {
-      body = const Center(child: CircularProgressIndicator());
-    } else {
-      body = SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        child: Table(
-          columnWidths: const {
-            0: IntrinsicColumnWidth(),
-            1: FlexColumnWidth(),
-          },
-          border: TableBorder(
-            horizontalInside: BorderSide(width: 1, color: Colors.grey.shade200),
-            verticalInside: BorderSide(width: 1, color: Colors.grey.shade200),
-            top: BorderSide(width: 1, color: Colors.grey.shade200),
-            bottom: BorderSide(width: 1, color: Colors.grey.shade200),
-          ),
-          children: _data.entries.map((entry) {
-            return TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SelectableText(entry.key, style: const TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SelectableText('${entry.value}'),
-                ),
-              ],
-            );
-          }).toList(),
-        ),
-      );
-    }
+    return FutureBuilder<Map<String, dynamic>>(
+      future: getDeviceInfo(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-    return body;
+        final data = snapshot.data!;
+        return SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Table(
+            border: _tableBorder,
+            columnWidths: const {
+              0: IntrinsicColumnWidth(),
+              1: FlexColumnWidth(),
+            },
+            children: data.entries
+                .map(
+                  (e) => TableRow(
+                    children: [
+                      _Cell(e.key, bold: true),
+                      _Cell('${e.value}'),
+                    ],
+                  ),
+                )
+                .toList(),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _Cell extends StatelessWidget {
+  const _Cell(this.text, {this.bold = false});
+  final String text;
+  final bool bold;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: SelectableText(
+        text,
+        style: TextStyle(fontWeight: bold ? FontWeight.bold : FontWeight.normal),
+      ),
+    );
   }
 }

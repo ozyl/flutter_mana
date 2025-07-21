@@ -14,29 +14,29 @@ class ManaState {
   final ValueNotifier<bool> floatWindowMainFullscreen;
 
   /// 浮动按钮是否可见
-  final ValueNotifier<bool> floatActionButtonVisible;
+  final ValueNotifier<bool> floatingButtonVisible;
 
   /// 浮动按钮的大小
-  final ValueNotifier<double> floatActionButtonSize;
+  final ValueNotifier<double> floatingButtonSize;
 
   /// 浮动按钮的透明度
-  final ValueNotifier<double> floatActionButtonOpacity;
+  final ValueNotifier<double> floatingButtonOpacity;
 
   ManaState({
     String? initialActivePluginName,
     bool? initialPluginManagementPanelVisible,
     bool? initialFloatWindowMainVisible,
     bool? floatWindowMainFullscreen,
-    bool? initialFloatActionButtonVisible,
-    double? initialFloatActionButtonSize,
-    double? initialFloatActionButtonOpacity,
+    bool? initialFloatingButtonVisible,
+    double? initialFloatingButtonSize,
+    double? initialFloatingButtonOpacity,
   })  : activePluginName = ValueNotifier(initialActivePluginName ?? ''),
         pluginManagementPanelVisible = ValueNotifier(initialPluginManagementPanelVisible ?? false),
         floatWindowMainVisible = ValueNotifier(initialFloatWindowMainVisible ?? true),
         floatWindowMainFullscreen = ValueNotifier(floatWindowMainFullscreen ?? false),
-        floatActionButtonVisible = ValueNotifier(initialFloatActionButtonVisible ?? true),
-        floatActionButtonSize = ValueNotifier(initialFloatActionButtonSize ?? 50),
-        floatActionButtonOpacity = ValueNotifier(initialFloatActionButtonOpacity ?? 1);
+        floatingButtonVisible = ValueNotifier(initialFloatingButtonVisible ?? true),
+        floatingButtonSize = ValueNotifier(initialFloatingButtonSize ?? 50),
+        floatingButtonOpacity = ValueNotifier(initialFloatingButtonOpacity ?? 1);
 
   // 释放资源
   void dispose() {
@@ -44,8 +44,8 @@ class ManaState {
     pluginManagementPanelVisible.dispose();
     floatWindowMainVisible.dispose();
     floatWindowMainFullscreen.dispose();
-    floatActionButtonVisible.dispose();
-    floatActionButtonSize.dispose();
-    floatActionButtonOpacity.dispose();
+    floatingButtonVisible.dispose();
+    floatingButtonSize.dispose();
+    floatingButtonOpacity.dispose();
   }
 }

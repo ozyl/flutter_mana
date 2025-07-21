@@ -1,56 +1,51 @@
 import 'package:flutter/material.dart';
 
-class CheckIconButton extends StatefulWidget {
+/// 轻量级“点击后显示 √，N 秒后自动恢复”的 IconButton
+/// [onPressed] 返回 Future 时，按钮会等待 Future 完成再复位
+class CheckIconButton extends StatelessWidget {
   final IconData initialIcon;
   final IconData changedIcon;
-
   final Color? iconColor;
   final double? size;
   final ButtonStyle? style;
+  final Duration resetDuration;
   final VoidCallback? onPressed;
 
   const CheckIconButton({
     super.key,
     required this.initialIcon,
+    this.changedIcon = Icons.check,
     this.iconColor,
     this.size,
     this.style,
-    this.changedIcon = Icons.check,
+    this.resetDuration = const Duration(seconds: 2),
     this.onPressed,
   });
 
   @override
-  State<CheckIconButton> createState() => _CheckIconButtonState();
-}
-
-class _CheckIconButtonState extends State<CheckIconButton> {
-  bool _check = false;
-
-  void _onPressed() {
-    if (_check) {
-      return;
-    }
-    setState(() {
-      _check = true;
-      widget.onPressed?.call();
-    });
-    Future.delayed(Duration(seconds: 2), () {
-      if (mounted && _check) {
-        setState(() => _check = false);
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        _check ? widget.changedIcon : widget.initialIcon,
-        size: widget.size,
-        color: widget.iconColor,
+    final notifier = ValueNotifier<bool>(false);
+    return ValueListenableBuilder<bool>(
+      valueListenable: notifier,
+      builder: (_, checked, __) => IconButton(
+        icon: Icon(
+          checked ? changedIcon : initialIcon,
+          size: size,
+          color: iconColor,
+        ),
+        style: style,
+        onPressed: () async {
+          if (checked) return;
+          notifier.value = true;
+          try {
+            onPressed?.call();
+          } finally {
+            Future.delayed(resetDuration, () {
+              notifier.value = false;
+            });
+          }
+        },
       ),
-      style: widget.style,
-      onPressed: _onPressed,
     );
   }
 }

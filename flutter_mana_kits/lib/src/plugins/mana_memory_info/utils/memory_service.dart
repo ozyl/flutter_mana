@@ -134,37 +134,41 @@ class MemoryService with VMServiceWrapper {
   ///
   /// [completion] 回调函数，在所有信息获取并处理完毕后调用。
   Future<void> getInfos(void Function() completion) async {
-    final results = await Future.wait([
-      serviceWrapper.getClassHeapStats(), // 获取类堆统计信息
-      serviceWrapper.getMemoryUsage(), // 获取内存使用情况
-      serviceWrapper.getVM(), // 获取 VM 详细信息
-    ]);
+    try {
+      final results = await Future.wait([
+        serviceWrapper.getClassHeapStats(), // 获取类堆统计信息
+        serviceWrapper.getMemoryUsage(), // 获取内存使用情况
+        serviceWrapper.getVM(), // 获取 VM 详细信息
+      ]);
 
-    // 使用模式匹配解构 results 列表，并进行类型安全检查。
-    if (results case [List<ClassHeapStats> heapStats, MemoryUsage memoryUsage, VM vm]) {
-      // 处理并存储格式化后的类堆统计信息
-      classHeapStatsList = heapStats.map((stats) => FormattedClassHeapStats.fromClassHeapStats(stats)).toList()
-        ..sort((a, b) => b.accumulatedSize?.compareTo(a.accumulatedSize ?? 0) ?? 0); // 默认按累积大小降序排序
+      // 使用模式匹配解构 results 列表，并进行类型安全检查。
+      if (results case [List<ClassHeapStats> heapStats, MemoryUsage memoryUsage, VM vm]) {
+        // 处理并存储格式化后的类堆统计信息
+        classHeapStatsList = heapStats.map((stats) => FormattedClassHeapStats.fromClassHeapStats(stats)).toList()
+          ..sort((a, b) => b.accumulatedSize?.compareTo(a.accumulatedSize ?? 0) ?? 0); // 默认按累积大小降序排序
 
-      vmInfo = VmInfo(
-        pid: vm.pid,
-        hostCPU: vm.hostCPU,
-        version: vm.version,
-      );
+        vmInfo = VmInfo(
+          pid: vm.pid,
+          hostCPU: vm.hostCPU,
+          version: vm.version,
+        );
 
-      memoryUsageInfo = MemoryInfo(
-        externalUsageBytes: memoryUsage.externalUsage ?? 0,
-        externalUsageFormatted: byteToString(memoryUsage.externalUsage ?? 0),
-        heapCapacityBytes: memoryUsage.heapCapacity ?? 0,
-        heapCapacityFormatted: byteToString(memoryUsage.heapCapacity ?? 0),
-        heapUsageBytes: memoryUsage.heapUsage ?? 0,
-        heapUsageFormatted: byteToString(memoryUsage.heapUsage ?? 0),
-      );
+        memoryUsageInfo = MemoryInfo(
+          externalUsageBytes: memoryUsage.externalUsage ?? 0,
+          externalUsageFormatted: byteToString(memoryUsage.externalUsage ?? 0),
+          heapCapacityBytes: memoryUsage.heapCapacity ?? 0,
+          heapCapacityFormatted: byteToString(memoryUsage.heapCapacity ?? 0),
+          heapUsageBytes: memoryUsage.heapUsage ?? 0,
+          heapUsageFormatted: byteToString(memoryUsage.heapUsage ?? 0),
+        );
 
-      completion();
-    } else {
-      debugPrint("Get vm info failed or unexpected result type.");
-      // 在实际应用中，你可能需要更健壮的错误处理，例如抛出异常。
+        completion();
+      } else {
+        debugPrint("Get vm info failed or unexpected result type.");
+        // 在实际应用中，你可能需要更健壮的错误处理，例如抛出异常。
+      }
+    } catch (e) {
+      debugPrint('Get vm info error: $e');
     }
   }
 

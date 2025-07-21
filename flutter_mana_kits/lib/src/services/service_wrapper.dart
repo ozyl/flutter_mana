@@ -9,60 +9,63 @@ import 'package:vm_service/vm_service_io.dart';
 /// `ServiceWrapper` 类封装了与 Dart VM 服务交互的各种操作。
 /// 它提供了一系列方法来获取 VM 信息、内存使用情况、类列表、快照等。
 class ServiceWrapper {
-  vm.VmService? _service; // VM 服务实例，用于与 Dart VM 进行通信
-  String? _isolateId; // 当前协程（Isolate）的 ID
-
-  /// 构造函数，在创建实例时初始化 Isolate ID。
-  /// 这样可以确保 Isolate ID 在后续方法调用之前可用。
-  ServiceWrapper() {
+  static final ServiceWrapper _instance = ServiceWrapper._internal();
+  factory ServiceWrapper() => _instance;
+  ServiceWrapper._internal() {
     _isolateId = Service.getIsolateId(Isolate.current);
   }
 
-  /// 获取当前协程的 ID。
-  /// 此值在构造函数中已初始化。
+  vm.VmService? _service;
+  String? _isolateId;
+
+  // 是否已有连接正在创建中
+  Future<vm.VmService>? _connectingFuture;
+
   String get isolateId {
-    // 确保 isolateId 不为空，如果为空则抛出状态错误，表示初始化问题。
     if (_isolateId == null) {
       throw StateError('Isolate ID has not been initialized.');
     }
     return _isolateId!;
   }
 
-  /// 获取 VM 服务实例。
-  /// 如果 [_service] 为空，则尝试建立与 VM 服务的连接并返回实例。
-  /// 包含错误处理，以应对连接失败的情况。
   Future<vm.VmService> getVMService() async {
-    if (_service != null) {
-      return _service!;
-    }
+    // 已连接，直接返回
+    if (_service != null) return _service!;
+
+    // 如果正在连接中，复用正在进行的 future
+    if (_connectingFuture != null) return _connectingFuture!;
+
+    // 否则新建连接并缓存 future，确保并发时只走一次连接逻辑
+    _connectingFuture = _connect();
     try {
-      // 获取服务协议信息，其中包含 VM 服务的 URI
-      ServiceProtocolInfo info = await Service.getInfo();
-      String url = info.serverUri.toString();
-      Uri uri = Uri.parse(url);
-      // 将服务协议 URI 转换为 WebSocket URL
-      Uri socketUri = convertToWebSocketUrl(serviceProtocolUrl: uri);
-      // 连接到 VM 服务
-      _service = await vmServiceConnectUri(socketUri.toString());
-      debugPrint('Successfully connected to VM Service at: $socketUri');
+      _service = await _connectingFuture!;
       return _service!;
-    } catch (e) {
-      debugPrint('Failed to connect to VM Service: $e');
-      rethrow; // 重新抛出异常，以便调用方可以处理
+    } finally {
+      _connectingFuture = null; // 清理
     }
   }
 
-  /// 断开与 VM 服务的连接。
-  /// 可以在应用程序关闭或不再需要服务时调用。
+  Future<vm.VmService> _connect() async {
+    try {
+      final info = await Service.getInfo();
+      final wsUri = convertToWebSocketUrl(serviceProtocolUrl: info.serverUri!);
+      final service = await vmServiceConnectUri(wsUri.toString());
+      debugPrint('Connected to VM Service at $wsUri');
+      return service;
+    } catch (e) {
+      debugPrint('Failed to connect to VM Service: $e');
+      rethrow;
+    }
+  }
+
   Future<void> disconnect() async {
     if (_service != null) {
       try {
         await _service!.dispose();
-        _service = null;
-        debugPrint('Disconnected from VM Service.');
       } catch (e) {
-        debugPrint('Error during VM Service disconnection: $e');
+        debugPrint('Error while disconnecting: $e');
       }
+      _service = null;
     }
   }
 

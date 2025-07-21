@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
+import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 
 import 'model.dart' show Model;
+
+// 颜色表，编译期常量
+const Map<String, Color> _colorMap = {
+  'double': Colors.blue,
+  'bool': Colors.green,
+  'int': Colors.orange,
+  'string': Colors.purple,
+};
 
 class ModelTile extends StatelessWidget {
   final Model model;
@@ -13,21 +22,7 @@ class ModelTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 根据kind类型设置不同的文字颜色
-    Color getTextColorByKind(String kind) {
-      switch (kind.toLowerCase()) {
-        case 'double':
-          return Colors.blue;
-        case 'bool':
-          return Colors.green;
-        case 'int':
-          return Colors.orange;
-        case 'string':
-          return Colors.purple;
-        default:
-          return Colors.red;
-      }
-    }
+    final color = _colorMap[model.kind.toLowerCase()] ?? Colors.red;
 
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
@@ -37,7 +32,7 @@ class ModelTile extends StatelessWidget {
         model.kind.substring(0, 1).toUpperCase(),
         style: TextStyle(
           fontSize: 12,
-          color: getTextColorByKind(model.kind),
+          color: color,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -58,12 +53,14 @@ class ModelTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CheckIconButton(
-            initialIcon: Icons.copy,
+            initialIcon: KitIcons.copy,
+            changedIcon: KitIcons.copy_success,
             size: 14,
             onPressed: onCopy,
           ),
           CheckIconButton(
-            initialIcon: Icons.delete_outline,
+            initialIcon: KitIcons.clear,
+            changedIcon: KitIcons.copy_success,
             size: 16,
             onPressed: onDelete,
           ),

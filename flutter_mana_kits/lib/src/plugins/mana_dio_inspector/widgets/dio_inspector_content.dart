@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
+import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 
 import '../mana_dio_collector.dart';
 import 'response_detail.dart';
@@ -18,7 +19,7 @@ class DioInspectorContent extends StatefulWidget {
 class _DioInspectorContentState extends State<DioInspectorContent> with SingleTickerProviderStateMixin, I18nMixin {
   late TabController _tabController;
 
-  final TextEditingController _filterController = TextEditingController();
+  late final TextEditingController _filterController;
   Timer? _debounceTimer;
 
   final ScrollController _scrollController = ScrollController();
@@ -33,91 +34,112 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
   /// 过滤关键字词
   String _filterKeywords = '';
 
+  bool _lock = false;
+
+  List<Response> _filteredData = [];
+
   /// 当前需要查看的response详情
   Response? _response;
 
   // 统一的字体大小
   static const double _fontSize = 12.0;
-  // 分割线颜色
-  static final Color _dividerColor = Colors.grey.shade200;
+
+  static final _divider = Divider(height: 1, color: Colors.grey.shade200);
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
-    _tabController.addListener(_handleTabSelection);
-    _filterController.addListener(_onTextChanged);
+    _tabController = TabController(length: _tabs.length, vsync: this)..addListener(_handleTabSelection);
+    _filterController = TextEditingController()..addListener(_onTextChanged);
+    ManaDioCollector().addListener(_onDataChanged);
+    _onDataChanged();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _filterController.dispose();
+    _debounceTimer?.cancel();
+    _scrollController.dispose();
+    ManaDioCollector().removeListener(_onDataChanged);
     super.dispose();
   }
 
-  void _handleTabSelection() {
-    if (_tabController.indexIsChanging) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _currentTab = _tabs[_tabController.index];
-      });
+  void _onDataChanged() {
+    _updateFilteredData(ManaDioCollector().data);
+    if (_lock) {
+      return;
     }
+    _scrollToBottom();
+  }
+
+  void _handleTabSelection() {
+    if (_tabController.indexIsChanging) return;
+    setState(() => _currentTab = _tabs[_tabController.index]);
+    _updateFilteredData(ManaDioCollector().data);
   }
 
   void _onTextChanged() {
-    if (_debounceTimer?.isActive ?? false) {
-      _debounceTimer?.cancel();
-    }
-
+    _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _filterKeywords = _filterController.text;
-      });
+      setState(() => _filterKeywords = _filterController.text);
+      _updateFilteredData(ManaDioCollector().data);
     });
   }
 
-  void _clear() {
-    ManaDioCollector().clear();
-  }
+  void _updateFilteredData(Iterable<Response> data) {
+    final filtered = data.where((d) {
+      final matchLevel = _currentTab == 'All' || d.requestOptions.method.toLowerCase() == _currentTab.toLowerCase();
+      final matchKeyword = !_filter ||
+          _filterKeywords.isEmpty ||
+          (_filter && _filterKeywords.isNotEmpty && d.requestOptions.uri.toString().contains(_filterKeywords));
+      return matchLevel && matchKeyword;
+    });
 
-  /// 滚动到底部
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      final double threshold = 140;
-      if (_scrollController.position.pixels + threshold < _scrollController.position.maxScrollExtent) {
-        // 滚动条未在底部，则不进行滚动
-        return;
-      }
-
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
-  }
-
-  /// 滚动到顶部
-  void _scrollToTop() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.minScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
-  }
-
-  /// 开关过滤
-  void _toggleFilter() {
     setState(() {
-      _filter = !_filter;
+      _filteredData = filtered.toList();
+    });
+  }
+
+  void _scrollToBottom([bool animate = true]) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+
+      final offset = _scrollController.position.maxScrollExtent;
+
+      if (animate) {
+        _scrollController.animateTo(
+          offset,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
+      } else {
+        _scrollController.jumpTo(offset);
+      }
+    });
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
+  }
+
+  // 允许/锁住滚动
+  void _toggleLock() {
+    setState(() {
+      _lock = !_lock;
+    });
+  }
+
+  void _clear() => ManaDioCollector().clear();
+
+  void _toggleFilter() {
+    _filter = !_filter;
+    setState(() {
+      _onDataChanged();
     });
   }
 
@@ -127,21 +149,13 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
       color: Colors.white,
       child: TabBar(
         controller: _tabController,
-        isScrollable: false,
         labelColor: Colors.black,
-        unselectedLabelColor: Colors.black45,
-        indicatorSize: TabBarIndicatorSize.tab,
+        unselectedLabelColor: Colors.grey,
         indicatorColor: Colors.transparent,
-        indicatorWeight: 1.0,
         dividerHeight: 0,
-        labelPadding: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        labelStyle: const TextStyle(fontSize: _fontSize),
-        tabs: _tabs
-            .map(
-              (tab) => Tab(text: tab, height: 36),
-            )
-            .toList(),
+        isScrollable: false,
+        labelStyle: const TextStyle(fontSize: _fontSize, fontWeight: FontWeight.bold),
+        tabs: _tabs.map((tab) => Tab(text: tab, height: 36)).toList(),
       ),
     );
   }
@@ -151,46 +165,24 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
     return Expanded(
       child: Stack(
         children: [
-          ValueListenableBuilder(
-            valueListenable: ManaDioCollector().responses,
-            builder: (context, responses, child) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _scrollToBottom();
-              });
-
-              Iterable<Response> filteredByTab = _currentTab == 'All'
-                  ? responses
-                  : responses
-                      .where((response) => response.requestOptions.method.toLowerCase() == _currentTab.toLowerCase());
-
-              final filteredResponses = (_filterKeywords.isEmpty || !_filter)
-                  ? filteredByTab.toList()
-                  : filteredByTab
-                      .where((response) => response.requestOptions.uri.toString().contains(_filterKeywords))
-                      .toList();
-
-              return ListView.separated(
-                controller: _scrollController,
-                itemCount: filteredResponses.length,
-                padding: const EdgeInsets.only(bottom: 20),
-                itemBuilder: (context, index) {
-                  final response = filteredResponses[index];
-                  return ResponseTile(
-                    response: response,
-                    onTap: () {
-                      setState(() {
-                        _response = response;
-                      });
-                    },
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider(
-                    height: 1,
-                    color: Colors.grey[200],
-                  );
+          ListView.separated(
+            controller: _scrollController,
+            itemCount: _filteredData.length,
+            physics: const ClampingScrollPhysics(),
+            padding: const EdgeInsets.only(bottom: 20),
+            itemBuilder: (context, index) {
+              final d = _filteredData[index];
+              return ResponseTile(
+                response: d,
+                onTap: () {
+                  setState(() {
+                    _response = d;
+                  });
                 },
               );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return _divider;
             },
           ),
           if (_response != null)
@@ -236,14 +228,16 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
                 fillColor: Colors.grey.shade200,
               ),
             ),
-            Divider(height: 1, color: _dividerColor),
+            _divider,
           ],
           LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              double buttonWidth = constraints.maxWidth / 4;
+              const selects = [false, false, false, false, false];
+
+              double buttonWidth = constraints.maxWidth / selects.length;
 
               return ToggleButtons(
-                isSelected: [false, false, false, false],
+                isSelected: selects,
                 renderBorder: false,
                 constraints: BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
                 textStyle: const TextStyle(fontSize: _fontSize),
@@ -259,15 +253,34 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
                       _scrollToBottom();
                       return;
                     case 3:
+                      _toggleLock();
+                      break;
+                    case 4:
                       _toggleFilter();
-                      return;
+                      break;
                   }
                 },
                 children: [
-                  Center(child: Text(t('dio_inspector.clear'))),
-                  Center(child: Text(t('dio_inspector.top'))),
-                  Center(child: Text(t('dio_inspector.bottom'))),
-                  Center(child: Text(_filter ? t('dio_inspector.filter_on') : t('dio_inspector.filter_off'))),
+                  Icon(
+                    KitIcons.clear,
+                    size: 16,
+                  ),
+                  Icon(
+                    KitIcons.top,
+                    size: 16,
+                  ),
+                  Icon(
+                    KitIcons.down,
+                    size: 16,
+                  ),
+                  Icon(
+                    _lock ? KitIcons.lock : KitIcons.lock_open,
+                    size: 16,
+                  ),
+                  Icon(
+                    _filter ? KitIcons.filter_off : KitIcons.filter_on,
+                    size: 16,
+                  ),
                 ],
               );
             },
@@ -282,13 +295,13 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
     return Column(
       children: [
         if (_response == null) ...[
-          Divider(height: 1, color: _dividerColor),
+          _divider,
           _buildHeader(),
         ],
-        Divider(height: 1, color: _dividerColor),
+        _divider,
         _buildCenter(),
         if (_response == null) ...[
-          Divider(height: 1, color: _dividerColor),
+          _divider,
           _buildBottom(),
         ],
       ],

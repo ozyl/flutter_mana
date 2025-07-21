@@ -1,22 +1,20 @@
+import 'dart:collection';
+
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
-class ManaLogCollector implements LogOutput {
+class ManaLogCollector extends ChangeNotifier implements LogOutput {
   static final ManaLogCollector _instance = ManaLogCollector._internal();
 
   factory ManaLogCollector() => _instance;
 
   ManaLogCollector._internal();
 
-  static const int _maxLogs = 2500;
+  static const int _max = 1000;
 
-  @override
-  Future<void> init() => Future.value();
+  final ListQueue<OutputEvent> _data = ListQueue();
 
-  @override
-  Future<void> destroy() => Future.value();
-
-  final ValueNotifier<List<OutputEvent>> logs = ValueNotifier(<OutputEvent>[]);
+  UnmodifiableListView<OutputEvent> get data => UnmodifiableListView(_data);
 
   static DebugPrintCallback? _originalDebugPrint;
 
@@ -38,15 +36,22 @@ class ManaLogCollector implements LogOutput {
   }
 
   @override
+  Future<void> init() => Future.value();
+
+  @override
+  Future<void> destroy() => Future.value();
+
+  @override
   void output(OutputEvent event) {
-    final updated = List<OutputEvent>.from(logs.value)..add(event);
-    if (updated.length > _maxLogs) {
-      updated.removeAt(0);
+    _data.add(event);
+    if (_data.length > _max) {
+      _data.removeFirst();
     }
-    logs.value = updated;
+    notifyListeners();
   }
 
   void clear() {
-    logs.value = <OutputEvent>[];
+    _data.clear();
+    notifyListeners();
   }
 }

@@ -74,6 +74,7 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 16,
           children: [
             DropdownButtonFormField<String>(
               value: _selectedKind,
@@ -108,7 +109,6 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
                 });
               },
             ),
-            const SizedBox(height: 8),
             TextFormField(
               controller: _keyController,
               decoration: InputDecoration(
@@ -127,7 +127,6 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
                 return null;
               },
             ),
-            const SizedBox(height: 8),
             TextFormField(
               controller: _valueController,
               decoration: InputDecoration(
@@ -171,7 +170,6 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
                 }
               },
             ),
-            const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

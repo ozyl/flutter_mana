@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
+import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 import 'package:logger/logger.dart';
 
 import '../mana_log_collector.dart';
@@ -14,172 +15,167 @@ class LogViewerContent extends StatefulWidget {
   State<LogViewerContent> createState() => _LogViewerContentState();
 }
 
-class _LogViewerContentState extends State<LogViewerContent> with SingleTickerProviderStateMixin, I18nMixin {
+class _LogViewerContentState extends State<LogViewerContent>
+    with SingleTickerProviderStateMixin, I18nMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
-
-  final TextEditingController _filterController = TextEditingController();
-  Timer? _debounceTimer;
-
+  late final TextEditingController _filterController;
   final ScrollController _scrollController = ScrollController();
 
   final List<String> _tabs = ['All', 'Debug', 'Info', 'Warning', 'Error'];
 
   String _currentTab = 'All';
-
-  /// 是否启用过滤
   bool _filter = false;
-
-  /// 过滤关键字词
   String _filterKeywords = '';
 
-  // 统一的字体大小
+  bool _lock = false;
+
+  List<OutputEvent> _filteredData = [];
+  Timer? _debounceTimer;
+
   static const double _fontSize = 12.0;
-  // 分割线颜色
-  static final Color _dividerColor = Colors.grey.shade200;
+
+  static final _divider = Divider(height: 1, color: Colors.grey.shade200);
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
-    _tabController.addListener(_handleTabSelection);
-    _filterController.addListener(_onTextChanged);
+    _tabController = TabController(length: _tabs.length, vsync: this)..addListener(_handleTabSelection);
+    _filterController = TextEditingController()..addListener(_onTextChanged);
+    ManaLogCollector().addListener(_onDataChanged);
+    _onDataChanged();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _filterController.dispose();
+    _debounceTimer?.cancel();
+    _scrollController.dispose();
+    ManaLogCollector().removeListener(_onDataChanged);
     super.dispose();
   }
 
-  void _handleTabSelection() {
-    if (_tabController.indexIsChanging) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _currentTab = _tabs[_tabController.index];
-      });
+  void _onDataChanged() {
+    _updateFilteredData(ManaLogCollector().data);
+    if (_lock) {
+      return;
     }
+    _scrollToBottom();
+  }
+
+  void _handleTabSelection() {
+    if (_tabController.indexIsChanging) return;
+    setState(() => _currentTab = _tabs[_tabController.index]);
+    _updateFilteredData(ManaLogCollector().data);
   }
 
   void _onTextChanged() {
-    if (_debounceTimer?.isActive ?? false) {
-      _debounceTimer?.cancel();
-    }
-
+    _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _filterKeywords = _filterController.text;
-      });
+      setState(() => _filterKeywords = _filterController.text);
+      _updateFilteredData(ManaLogCollector().data);
     });
   }
 
-  /// 清空
-  void _clear() {
-    ManaLogCollector().clear();
-  }
+  void _updateFilteredData(Iterable<OutputEvent> data) {
+    final filtered = data.where((d) {
+      final matchLevel = _currentTab == 'All' || d.level.name.toLowerCase() == _currentTab.toLowerCase();
+      final matchKeyword = !_filter ||
+          _filterKeywords.isEmpty ||
+          (_filter && _filterKeywords.isNotEmpty && d.origin.message.toString().contains(_filterKeywords));
+      return matchLevel && matchKeyword;
+    });
 
-  /// 滚动到底部
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
-  }
-
-  /// 滚动到顶部
-  void _scrollToTop() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.minScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
-  }
-
-  /// 开关过滤
-  void _toggleFilter() {
     setState(() {
-      _filter = !_filter;
+      _filteredData = filtered.toList();
     });
   }
 
-  /// 创建顶部区域
+  void _scrollToBottom([bool animate = true]) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+
+      final offset = _scrollController.position.maxScrollExtent;
+
+      if (animate) {
+        _scrollController.animateTo(
+          offset,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
+      } else {
+        _scrollController.jumpTo(offset);
+      }
+    });
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
+  }
+
+  // 允许/锁住滚动
+  void _toggleLock() {
+    setState(() {
+      _lock = !_lock;
+    });
+  }
+
+  void _clear() => ManaLogCollector().clear();
+
+  void _toggleFilter() {
+    _filter = !_filter;
+    setState(() {
+      _onDataChanged();
+    });
+  }
+
   Widget _buildHeader() {
     return Container(
       color: Colors.white,
       child: TabBar(
         controller: _tabController,
-        isScrollable: false,
         labelColor: Colors.black,
-        unselectedLabelColor: Colors.black45,
-        indicatorSize: TabBarIndicatorSize.tab,
-        indicatorWeight: 1.0,
+        unselectedLabelColor: Colors.grey,
         indicatorColor: Colors.transparent,
         dividerHeight: 0,
-        labelPadding: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        labelStyle: const TextStyle(fontSize: _fontSize),
-        tabs: _tabs
-            .map(
-              (tab) => Tab(text: tab, height: 36),
-            )
-            .toList(),
+        isScrollable: false,
+        tabs: _tabs.map((tab) => Tab(text: tab, height: 36)).toList(),
+        labelStyle: const TextStyle(fontSize: _fontSize, fontWeight: FontWeight.bold),
       ),
     );
   }
 
-  /// 创建中间内容区域
   Widget _buildCenter() {
     return Expanded(
-      child: ValueListenableBuilder(
-          valueListenable: ManaLogCollector().logs,
-          builder: (context, logs, child) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _scrollToBottom();
-            });
-
-            Iterable<OutputEvent> filteredByTab = _currentTab == 'All'
-                ? logs
-                : logs.where((log) => log.level.name.toLowerCase() == _currentTab.toLowerCase());
-
-            final filteredLogs = (_filterKeywords.isEmpty || !_filter)
-                ? filteredByTab.toList()
-                : filteredByTab.where((log) => log.origin.message.toString().contains(_filterKeywords)).toList();
-
-            return ListView.separated(
-              controller: _scrollController,
-              itemCount: filteredLogs.length,
-              padding: const EdgeInsets.only(bottom: 20),
-              itemBuilder: (context, index) {
-                final logEvent = filteredLogs[index];
-                return LogItemWidget(key: ValueKey(logEvent.origin.time), index: index, log: logEvent);
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider(
-                  height: 1,
-                  color: Colors.grey[200],
-                );
-              },
-            );
-          }),
+      child: ListView.separated(
+        controller: _scrollController,
+        itemCount: _filteredData.length,
+        physics: const ClampingScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: 20),
+        shrinkWrap: true,
+        cacheExtent: 1000,
+        itemBuilder: (context, index) {
+          final d = _filteredData[index];
+          return LogItemWidget(
+            key: ValueKey(d.origin.time),
+            log: d,
+          );
+        },
+        separatorBuilder: (_, __) => _divider,
+      ),
     );
   }
 
-  /// 创建底部操作栏
   Widget _buildBottom() {
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         children: [
           if (_filter) ...[
@@ -188,49 +184,67 @@ class _LogViewerContentState extends State<LogViewerContent> with SingleTickerPr
               style: const TextStyle(fontSize: _fontSize),
               decoration: InputDecoration(
                 hintText: t('log_viewer.filter_keywords'),
-                hintStyle: TextStyle(fontSize: _fontSize, color: Colors.black54),
+                hintStyle: const TextStyle(fontSize: _fontSize, color: Colors.black54),
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                ),
                 filled: true,
                 fillColor: Colors.grey.shade200,
+                border: InputBorder.none,
               ),
             ),
-            Divider(height: 1, color: _dividerColor),
+            _divider,
           ],
           LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              double buttonWidth = constraints.maxWidth / 4;
+            builder: (context, constraints) {
+              const selects = [false, false, false, false, false];
 
+              final buttonWidth = constraints.maxWidth / selects.length;
               return ToggleButtons(
-                isSelected: [false, false, false, false],
+                isSelected: selects,
                 renderBorder: false,
                 constraints: BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
                 textStyle: const TextStyle(fontSize: _fontSize),
-                onPressed: (int index) {
+                onPressed: (index) {
                   switch (index) {
                     case 0:
                       _clear();
-                      return;
+                      break;
                     case 1:
                       _scrollToTop();
-                      return;
+                      break;
                     case 2:
-                      _scrollToBottom();
-                      return;
+                      _scrollToBottom(true);
+                      break;
                     case 3:
+                      _toggleLock();
+                      break;
+                    case 4:
                       _toggleFilter();
-                      return;
+                      break;
                   }
                 },
                 children: [
-                  Center(child: Text(t('log_viewer.clear'))),
-                  Center(child: Text(t('log_viewer.top'))),
-                  Center(child: Text(t('log_viewer.bottom'))),
-                  Center(child: Text(_filter ? t('log_viewer.filter_on') : t('log_viewer.filter_off'))),
-                ],
+                  Icon(
+                    KitIcons.clear,
+                    size: 16,
+                  ),
+                  Icon(
+                    KitIcons.top,
+                    size: 16,
+                  ),
+                  Icon(
+                    KitIcons.down,
+                    size: 16,
+                  ),
+                  Icon(
+                    _lock ? KitIcons.lock : KitIcons.lock_open,
+                    size: 16,
+                  ),
+                  Icon(
+                    _filter ? KitIcons.filter_off : KitIcons.filter_on,
+                    size: 16,
+                  ),
+                ].map((e) => Center(child: e)).toList(),
               );
             },
           ),
@@ -241,13 +255,14 @@ class _LogViewerContentState extends State<LogViewerContent> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
-        Divider(height: 1, color: _dividerColor),
+        _divider,
         _buildHeader(),
-        Divider(height: 1, color: _dividerColor),
+        _divider,
         _buildCenter(),
-        Divider(height: 1, color: _dividerColor),
+        _divider,
         _buildBottom(),
       ],
     );

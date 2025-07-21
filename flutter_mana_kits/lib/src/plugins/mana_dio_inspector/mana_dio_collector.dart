@@ -1,16 +1,20 @@
+import 'dart:collection';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-class ManaDioCollector implements Interceptor {
+class ManaDioCollector extends ChangeNotifier implements Interceptor {
   static final ManaDioCollector _instance = ManaDioCollector._internal();
 
   factory ManaDioCollector() => _instance;
 
   ManaDioCollector._internal();
 
-  static const int _maxResponses = 1000;
+  static const int _max = 1000;
 
-  final ValueNotifier<List<Response>> responses = ValueNotifier(<Response>[]);
+  final ListQueue<Response> _data = ListQueue();
+
+  UnmodifiableListView<Response> get data => UnmodifiableListView(_data);
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -34,14 +38,15 @@ class ManaDioCollector implements Interceptor {
 
   void addResponse(Response response) {
     response.extra['manaDioRequestEndTime'] = DateTime.now();
-    final updated = List<Response>.from(responses.value)..add(response);
-    if (updated.length > _maxResponses) {
-      updated.removeAt(0);
+    _data.add(response);
+    if (_data.length > _max) {
+      _data.removeFirst();
     }
-    responses.value = updated;
+    notifyListeners();
   }
 
   void clear() {
-    responses.value = <Response>[];
+    _data.clear();
+    notifyListeners();
   }
 }

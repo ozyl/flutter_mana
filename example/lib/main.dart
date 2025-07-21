@@ -52,8 +52,13 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool isLandscape = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -91,14 +96,13 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          child: Column(
+          child: Wrap(
             spacing: 16,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            runSpacing: 16,
             children: [
               CustomButton(
                 text: 'Detail Page',
-                backgroundColor: Colors.amber,
+                backgroundColor: Colors.orange,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailPage()));
                 },
@@ -162,7 +166,7 @@ class _CustomButtonState extends State<CustomButton> {
     return ElevatedButton(
       onPressed: _isLoading ? null : _handlePress,
       style: ElevatedButton.styleFrom(backgroundColor: widget.backgroundColor, foregroundColor: widget.foregroundColor),
-      child: Text(widget.text, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      child: Text(widget.text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
     );
   }
 }

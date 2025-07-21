@@ -29,11 +29,6 @@ mixin I18nMixin {
 
     // Log Viewer
     'log_viewer.filter_keywords': ['filter keywords...', '筛选字词...'],
-    'log_viewer.clear': ['Clear', '清理'],
-    'log_viewer.top': ['Top', '顶部'],
-    'log_viewer.bottom': ['Bottom', '底部'],
-    'log_viewer.filter_on': ['Filter(on)', '筛选(开)'],
-    'log_viewer.filter_off': ['Filter(off)', '筛选(关)'],
 
     // Memory Info
     'memory_info.vm_info': ['VM Info', 'VM 信息'],
@@ -41,6 +36,7 @@ mixin I18nMixin {
     'memory_info.memory_info': ['Memory Info', '内存信息'],
     'memory_info.hide_private_classes': ['hide private classes', '隐藏私有类'],
     'memory_info.current_app': ['Current App', '当前应用'],
+    'memory_info.total': ['Total:', '总数:'],
     'memory_info.size': ['Size', '大小'],
     'memory_info.number': ['Number', '数量'],
     'memory_info.class_name': ['Class', '类名'],

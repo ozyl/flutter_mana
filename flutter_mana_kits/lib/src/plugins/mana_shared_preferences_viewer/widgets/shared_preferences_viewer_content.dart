@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
+import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'model.dart';
@@ -36,8 +37,8 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
 
   // 统一的字体大小
   static const double _fontSize = 12.0;
-  // 分割线颜色
-  static final Color _dividerColor = Colors.grey.shade200;
+
+  static final _divider = Divider(height: 1, color: Colors.grey.shade200);
 
   @override
   void initState() {
@@ -68,7 +69,12 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
           kind = 'List<String>';
         }
 
-        data.add(Model(index, key, value.toString(), kind));
+        var v = value.toString();
+        if (kind == 'List<String>') {
+          v = jsonEncode(value);
+        }
+
+        data.add(Model(index, key, v, kind));
       }
     }
     setState(() => _data = data);
@@ -100,8 +106,8 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
         await prefs.setString(newModel.key, newModel.value);
         break;
       default:
-        final decoded = jsonDecode(newModel.value);
-        await prefs.setStringList(newModel.key, decoded as List<String>);
+        final decoded = jsonDecode(newModel.value) as List<dynamic>;
+        await prefs.setStringList(newModel.key, decoded.cast<String>());
         break;
     }
     await _loadPrefs();
@@ -123,17 +129,9 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
   }
 
   void _onTextChanged() {
-    if (_debounceTimer?.isActive ?? false) {
-      _debounceTimer?.cancel();
-    }
-
+    _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _filterKeywords = _filterController.text;
-      });
+      setState(() => _filterKeywords = _filterController.text);
     });
   }
 
@@ -158,6 +156,7 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
           ListView.separated(
             controller: _scrollController,
             itemCount: filterData.length,
+            physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.only(bottom: 20),
             itemBuilder: (context, index) {
               final model = filterData[index];
@@ -230,14 +229,16 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
                 fillColor: Colors.grey.shade200,
               ),
             ),
-            Divider(height: 1, color: _dividerColor),
+            _divider,
           ],
           LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              double buttonWidth = constraints.maxWidth / 4;
+              const selects = [false, false, false, false];
+
+              double buttonWidth = constraints.maxWidth / selects.length;
 
               return ToggleButtons(
-                isSelected: [false, false, false, false],
+                isSelected: selects,
                 renderBorder: false,
                 constraints: BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
                 textStyle: const TextStyle(fontSize: _fontSize),
@@ -260,13 +261,22 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
                   }
                 },
                 children: [
-                  Center(child: Text(t('shared_preferences_viewer.clear'))),
-                  Center(child: Text(t('shared_preferences_viewer.add'))),
-                  Center(child: Text(t('shared_preferences_viewer.refresh'))),
-                  Center(
-                      child: Text(_filter
-                          ? t('shared_preferences_viewer.filter_on')
-                          : t('shared_preferences_viewer.filter_off'))),
+                  Icon(
+                    KitIcons.clear,
+                    size: 16,
+                  ),
+                  Icon(
+                    KitIcons.add,
+                    size: 16,
+                  ),
+                  Icon(
+                    KitIcons.refresh,
+                    size: 16,
+                  ),
+                  Icon(
+                    _filter ? KitIcons.filter_off : KitIcons.filter_on,
+                    size: 16,
+                  ),
                 ],
               );
             },
@@ -280,10 +290,10 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Divider(height: 1, color: _dividerColor),
+        _divider,
         _buildCenter(),
         if (_model == null) ...[
-          Divider(height: 1, color: _dividerColor),
+          _divider,
           _buildBottom(),
         ],
       ],

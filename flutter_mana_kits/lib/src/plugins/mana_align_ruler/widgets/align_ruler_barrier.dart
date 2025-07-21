@@ -148,9 +148,10 @@ class _AlignRulerBarrierState extends State<AlignRulerBarrier> {
           ),
         ),
         Positioned(
-            top: horizontalTopOffset,
-            left: _dotPosition.dx / 2 - widget.coordinateTextSize.width / 2,
-            child: Text(_dotPosition.dx.toStringAsFixed(1), style: widget.coordinateTextStyle)),
+          top: horizontalTopOffset,
+          left: _dotPosition.dx / 2 - widget.coordinateTextSize.width / 2,
+          child: Text(_dotPosition.dx.toStringAsFixed(1), style: widget.coordinateTextStyle),
+        ),
         Positioned(
             left: verticalLeftOffset,
             top: _dotPosition.dy / 2 - widget.coordinateTextSize.height / 2,

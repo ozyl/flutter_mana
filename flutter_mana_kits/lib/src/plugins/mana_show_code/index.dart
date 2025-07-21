@@ -5,13 +5,13 @@ import 'package:syntax_highlight/syntax_highlight.dart';
 import 'icon.dart';
 import 'widgets/show_code.dart';
 
-late HighlighterTheme theme;
+late Highlighter highlighter;
 
 class ManaShowCode implements ManaPluggable {
   const ManaShowCode();
 
   @override
-  Widget? buildWidget(BuildContext? context) => ShowCode(name: name, theme: theme);
+  Widget? buildWidget(BuildContext? context) => ShowCode(name: name, highlighter: highlighter);
 
   @override
   String getLocalizedDisplayName(Locale locale) {
@@ -35,6 +35,10 @@ class ManaShowCode implements ManaPluggable {
   @override
   Future<void> initialize() async {
     await Highlighter.initialize(['dart']);
-    theme = await HighlighterTheme.loadLightTheme();
+    final theme = await HighlighterTheme.loadLightTheme();
+    highlighter = Highlighter(
+      language: 'dart',
+      theme: theme,
+    );
   }
 }

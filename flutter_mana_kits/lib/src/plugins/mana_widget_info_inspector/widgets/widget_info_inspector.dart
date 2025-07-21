@@ -20,8 +20,6 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
 
   final InspectorSelection selection;
 
-  Offset? _lastPointerLocation;
-
   /// 强制整个渲染树所有节点调用 markNeedsPaint()
   void markWholeRenderTreeNeedsPaint() {
     late RenderObjectVisitor visitor;
@@ -38,36 +36,18 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
 
   void _inspectAt(Offset? position) {
     if (position == null) return;
-    final List<RenderObject> selected = HitTestUtils.hitTest(position);
+
+    final List<RenderObject> renderObjects = HitTestUtils.hitTest(position);
 
     setState(() {
-      selection.candidates = selected;
+      selection.candidates = renderObjects;
 
       markWholeRenderTreeNeedsPaint();
     });
   }
 
-  void _handleTap() {
-    if (_lastPointerLocation != null) {
-      _inspectAt(_lastPointerLocation);
-    }
-  }
-
   void _handlePanDown(DragDownDetails event) {
-    _lastPointerLocation = event.globalPosition;
     _inspectAt(event.globalPosition);
-  }
-
-  void _handlePanEnd(DragEndDetails details) {
-    // 计算屏幕的物理尺寸并转换为逻辑像素，然后缩小 1.0 像素
-    final Rect bounds =
-        (Offset.zero & (View.of(context).physicalSize / View.of(context).devicePixelRatio)).deflate(1.0);
-    // 如果最后指针位置不在屏幕边界内，则清除选择
-    if (_lastPointerLocation != null && !bounds.contains(_lastPointerLocation!)) {
-      setState(() {
-        selection.clear();
-      });
-    }
   }
 
   @override
@@ -100,9 +80,7 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
       initialHeight: 100,
       barrier: WidgetInfoInspectorBarrier(
         selection: selection,
-        onTap: _handleTap,
         onPanDown: _handlePanDown,
-        onPanEnd: _handlePanEnd,
       ),
       content: WidgetInfoInspectorContent(
         onChanged: (value) {
