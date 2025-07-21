@@ -10,7 +10,6 @@ Flutter 应用内调试工具平台.
 
 **尽量在开发环境使用，部分插件只在开发环境才能生效！！！**
 
-**还未正式发版，改动可能很大！！！**
 
 ## 使用
 
@@ -74,7 +73,7 @@ class App extends StatelessWidget {
 - [x] [SharedPreferences查看器 - SharedPreferencesViewer](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_shared_preferences_viewer)
 - [x] [显示代码 - ShowCode](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_show_code)
 - [x] [内存信息 - MemoryInfo](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_memory_info)
-- [x] [包信息 - MemoryInfo](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_package_info)
+- [x] [包信息 - PackageInfo](https://github.com/lhlyu/flutter_mana/tree/master/kits/lib/src/plugins/mana_package_info)
 
 | 插件                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
@@ -194,3 +193,5 @@ class App extends StatelessWidget {
 - [debug friend](https://pub.dev/packages/debug_friend)
 - [widget with codeview](https://github.com/X-Wei/widget_with_codeview)
 - [flutter：全局 context 在 navigator 与 overlay 中的运用](https://juejin.cn/post/7200191765516615737)
+- [内存泄漏检测原理](https://juejin.cn/post/6922625442323103758)
+- [leak_detector](https://github.com/liujiakuoyx/leak_detector) 内存泄漏检测库

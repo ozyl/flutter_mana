@@ -10,11 +10,6 @@ mixin I18nMixin {
 
     // Dio Inspector
     'dio_inspector.filter_keywords': ['filter keywords...', '筛选字词...'],
-    'dio_inspector.clear': ['Clear', '清理'],
-    'dio_inspector.top': ['Top', '顶部'],
-    'dio_inspector.bottom': ['Bottom', '底部'],
-    'dio_inspector.filter_on': ['Filter(on)', '筛选(开)'],
-    'dio_inspector.filter_off': ['Filter(off)', '筛选(关)'],
     'dio_inspector.detail': ['Detail', '详情'],
     'dio_inspector.request': ['Request', '请求'],
     'dio_inspector.response': ['Response', '响应'],
@@ -50,11 +45,6 @@ mixin I18nMixin {
 
     // Shared Preferences Viewer
     'shared_preferences_viewer.filter_keywords': ['filter keywords...', '筛选字词...'],
-    'shared_preferences_viewer.clear': ['Clear', '清理'],
-    'shared_preferences_viewer.add': ['Add', '新增'],
-    'shared_preferences_viewer.refresh': ['Refresh', '刷新'],
-    'shared_preferences_viewer.filter_on': ['Filter(on)', '筛选(开)'],
-    'shared_preferences_viewer.filter_off': ['Filter(off)', '筛选(关)'],
     'shared_preferences_viewer.type': ['Type', '类型'],
     'shared_preferences_viewer.key': ['Key', '键'],
     'shared_preferences_viewer.key_required': ['Key Required', '键必填'],
