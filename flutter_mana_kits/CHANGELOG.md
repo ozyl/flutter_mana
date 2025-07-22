@@ -1,3 +1,7 @@
+## 1.0.0-beta.6
+
+- Update
+
 ## 1.0.0-beta.5
 
 - Refactor
