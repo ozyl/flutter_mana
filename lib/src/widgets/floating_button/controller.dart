@@ -49,10 +49,9 @@ class FloatingButtonController extends ChangeNotifier {
     final maxX = _windowSize.width - _buttonSize;
     final maxY = _windowSize.height - _buttonSize;
 
-    offset.value = (x >= 0 && y >= 0 && x < _windowSize.width && y < _windowSize.height)
+    offset.value = (x > 0 && y > 0 && x < _windowSize.width && y < _windowSize.height)
         ? Offset(x, y)
         : Offset(maxX - _minMarginH, maxY - _bottomSafe);
-
     _clampAndUpdate();
   }
 
@@ -66,8 +65,6 @@ class FloatingButtonController extends ChangeNotifier {
     double y = offset.value.dy.clamp(_minMarginV, maxY - _minMarginV);
 
     offset.value = Offset(x, y);
-
-    notifyListeners();
   }
 
   // 拖拽
@@ -76,7 +73,6 @@ class FloatingButtonController extends ChangeNotifier {
       d.globalPosition.dx - _buttonSize / 2,
       d.globalPosition.dy - _buttonSize / 2,
     );
-    notifyListeners();
   }
 
   void handleDragEnd(DragEndDetails _) {
