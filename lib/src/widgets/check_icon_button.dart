@@ -36,9 +36,9 @@ class CheckIconButton extends StatelessWidget {
         style: style,
         onPressed: () async {
           if (checked) return;
-          notifier.value = true;
           try {
             onPressed?.call();
+            notifier.value = true;
           } finally {
             Future.delayed(resetDuration, () {
               notifier.value = false;

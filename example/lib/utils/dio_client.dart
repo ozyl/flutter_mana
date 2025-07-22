@@ -19,19 +19,26 @@ class DioClient {
   factory DioClient() => _instance;
 
   Future<Response> _getRequest() async {
-    return await _dio.get('/posts/1');
+    return await _dio.get('/posts/${Random().nextInt(100) + 1}');
   }
 
   Future<Response> _postRequest() async {
-    return await _dio.post('/posts', data: {'title': 'foo', 'body': 'bar', 'userId': 1});
+    return await _dio.post(
+      '/posts',
+      data: {'title': 'add post', 'body': 'this is ${Random().nextInt(100) + 1}', 'userId': Random().nextInt(10) + 1},
+    );
   }
 
   Future<Response> _putRequest() async {
-    return await _dio.put('/posts/1', data: {'id': 1, 'title': 'updated title', 'body': 'updated body', 'userId': 1});
+    final id = Random().nextInt(100) + 1;
+    return await _dio.put(
+      '/posts/$id',
+      data: {'id': id, 'title': 'updated post', 'body': 'this is $id', 'userId': Random().nextInt(10) + 1},
+    );
   }
 
   Future<Response> _deleteRequest() async {
-    return await _dio.delete('/posts/1');
+    return await _dio.delete('/posts/${Random().nextInt(100) + 1}');
   }
 
   Future<Response> randomRequest() async {

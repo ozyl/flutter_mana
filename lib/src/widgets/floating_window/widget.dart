@@ -66,7 +66,7 @@ class FloatingWindow extends StatefulWidget {
   State<FloatingWindow> createState() => _FloatingWindowState();
 }
 
-class _FloatingWindowState extends State<FloatingWindow> with TickerProviderStateMixin {
+class _FloatingWindowState extends State<FloatingWindow> {
   late final FloatingWindowController _controller;
 
   bool _initialized = false;
@@ -80,7 +80,6 @@ class _FloatingWindowState extends State<FloatingWindow> with TickerProviderStat
     }
     _controller = FloatingWindowController(
       context,
-      this,
       name: widget.name,
       position: widget.position,
       initialPosition: widget.initialPosition,
@@ -99,23 +98,18 @@ class _FloatingWindowState extends State<FloatingWindow> with TickerProviderStat
   /// 构建barrier
   Widget _buildBarrier() {
     return widget.barrier ??
-        RepaintBoundary(
-          child: FadeTransition(
-            opacity: _controller.animation,
-            child: GestureDetector(
-              onTap: () => _controller.onMinimize(widget.onMinimize),
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                color: Colors.transparent,
-                width: double.infinity,
-                height: double.infinity,
-              ),
-            ),
+        GestureDetector(
+          onTap: () => _controller.onMinimize(widget.onMinimize),
+          behavior: HitTestBehavior.opaque,
+          child: Container(
+            color: Colors.transparent,
+            width: double.infinity,
+            height: double.infinity,
           ),
         );
   }
 
-  Widget _buildWindowContent(Size screenSize, Size windowSize, bool fullscreen) {
+  Widget _buildContent(Size screenSize, Size windowSize, bool fullscreen) {
     final radius =
         (fullscreen || widget.initialHeight == double.infinity) ? BorderRadius.zero : BorderRadius.circular(8);
 
@@ -164,24 +158,6 @@ class _FloatingWindowState extends State<FloatingWindow> with TickerProviderStat
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildContent(Size screenSize, Size windowSize, bool fullscreen) {
-    return RepaintBoundary(
-      child: AnimatedBuilder(
-        animation: _controller.animation,
-        builder: (_, child) {
-          return Transform.scale(
-            scale: 0.8 + 0.2 * _controller.animation.value,
-            child: FadeTransition(
-              opacity: _controller.animation,
-              child: child,
-            ),
-          );
-        },
-        child: _buildWindowContent(screenSize, windowSize, fullscreen),
       ),
     );
   }

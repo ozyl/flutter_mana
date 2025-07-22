@@ -29,8 +29,8 @@ class ManaStore {
   }
 
   ManaState getManaState() {
-    final floatActionButtonSize = prefs.getDouble('mana_float_action_button_size');
-    final floatActionButtonOpacity = prefs.getDouble('mana_float_action_button_opacity');
+    final floatActionButtonSize = prefs.getDouble('mana_floating_button_size');
+    final floatActionButtonOpacity = prefs.getDouble('mana_floating_button_opacity');
 
     return ManaState(
       initialFloatingButtonSize: floatActionButtonSize,
@@ -39,18 +39,18 @@ class ManaStore {
   }
 
   Future<void> setManaState(ManaState manaState) async {
-    await prefs.setDouble('mana_float_action_button_size', manaState.floatingButtonSize.value);
-    await prefs.setDouble('mana_float_action_button_opacity', manaState.floatingButtonOpacity.value);
+    await prefs.setDouble('mana_floating_button_size', manaState.floatingButtonSize.value);
+    await prefs.setDouble('mana_floating_button_opacity', manaState.floatingButtonOpacity.value);
   }
 
   (double, double) getFloatActionButtonPosition() {
-    final x = prefs.getDouble('mana_float_action_button_x') ?? 0;
-    final y = prefs.getDouble('mana_float_action_button_y') ?? 0;
+    final x = prefs.getDouble('mana_floating_button_x') ?? 0;
+    final y = prefs.getDouble('mana_floating_button_y') ?? 0;
     return (x, y);
   }
 
   Future<void> setFloatActionButtonPosition(double x, double y) async {
-    await prefs.setDouble('mana_float_action_button_x', x);
-    await prefs.setDouble('mana_float_action_button_y', y);
+    await prefs.setDouble('mana_floating_button_x', x);
+    await prefs.setDouble('mana_floating_button_y', y);
   }
 }

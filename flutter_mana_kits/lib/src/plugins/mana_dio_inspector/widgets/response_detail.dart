@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 
@@ -47,7 +46,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
         requestOptions.headers.map((key, value) => MapEntry(key, value.toString()));
 
     // 请求体
-    var requestBody = 'N/A';
+    var requestBody = '';
     if (requestOptions.data != null) {
       try {
         requestBody = JsonEncoder.withIndent('  ').convert(requestOptions.data);
@@ -61,7 +60,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
         response.headers.map.map((key, value) => MapEntry(key, value.join(';')));
 
     // 响应体
-    var responseBody = 'N/A';
+    var responseBody = '';
     if (response.data != null) {
       try {
         responseBody = JsonEncoder.withIndent('  ').convert(response.data);
@@ -82,6 +81,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
                   color: Colors.grey,
                   size: 16,
                 ),
+                style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                 onPressed: onClose,
               ),
               Expanded(
@@ -92,15 +92,9 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
                   maxLines: 1,
                 ),
               ),
-              CheckIconButton(
-                initialIcon: KitIcons.copy,
-                changedIcon: KitIcons.copy_success,
-                size: 16,
-                iconColor: Colors.grey,
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: requestOptions.uri.toString()));
-                },
-              )
+              MorePopupMenu(
+                response: response,
+              ),
             ],
           ),
           _divider,
@@ -251,6 +245,93 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
           _buildCodeBlock(responseBody),
         ],
       ),
+    );
+  }
+}
+
+/// 通用“更多”弹出菜单
+class MorePopupMenu extends StatelessWidget {
+  final Response response;
+
+  const MorePopupMenu({
+    super.key,
+    required this.response,
+  });
+
+  static const List<String> items = ['复制URL', '复制cURL', '复制HTTP', '复制响应'];
+
+  @override
+  Widget build(BuildContext context) {
+    final request = response.requestOptions;
+    final method = request.method;
+    final url = request.uri.toString();
+
+    // 请求头
+    final Map<String, String> requestHeaders = request.headers.map((key, value) => MapEntry(key, value.toString()));
+
+    requestHeaders.remove('content-length');
+
+    // 请求体
+    var requestBody = '';
+    if (request.data != null) {
+      try {
+        requestBody = jsonEncode(request.data);
+      } catch (e) {
+        requestBody = request.data.toString();
+      }
+    }
+
+    // 响应体
+    var responseBody = '';
+    if (response.data != null) {
+      try {
+        responseBody = JsonEncoder.withIndent('  ').convert(response.data);
+      } catch (e) {
+        responseBody = response.data.toString();
+      }
+    }
+
+    /// 如果下拉框存在的时候，热更新会报错
+    /// https://github.com/flutter/flutter/pull/171970
+    return PopupMenuButton<int>(
+      icon: const Icon(KitIcons.more, size: 16, color: Colors.grey),
+      color: Colors.white,
+      elevation: 2,
+      padding: EdgeInsets.zero,
+      menuPadding: EdgeInsets.zero,
+      popUpAnimationStyle: AnimationStyle.noAnimation,
+      style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      itemBuilder: (_) => List.generate(
+        items.length,
+        (index) => PopupMenuItem<int>(
+          value: index,
+          height: 34,
+          child: Text(items[index], style: const TextStyle(fontSize: 12)),
+        ),
+      ),
+      onSelected: (index) {
+        String textToCopy = '';
+
+        switch (index) {
+          case 0:
+            textToCopy = request.uri.toString();
+            break;
+          case 1:
+            final headers = requestHeaders.entries.map((e) => '\t-H "${e.key}: ${e.value}"').join(' \\\n');
+            textToCopy = 'curl -X $method "$url" \\\n$headers \\\n\t-d \'$requestBody\'';
+            break;
+          case 2:
+            final headers = requestHeaders.entries.map((e) => '${e.key}: ${e.value}').join('\n');
+            textToCopy = '$method $url\n$headers\n\n$requestBody';
+            break;
+          case 3:
+            textToCopy = responseBody;
+            break;
+        }
+
+        Clipboard.setData(ClipboardData(text: textToCopy));
+      },
     );
   }
 }

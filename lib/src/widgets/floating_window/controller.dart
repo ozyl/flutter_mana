@@ -3,33 +3,19 @@ import 'package:flutter_mana/flutter_mana.dart';
 
 class FloatingWindowController extends ChangeNotifier {
   FloatingWindowController(
-    BuildContext context,
-    TickerProvider vsync, {
+    BuildContext context, {
     String name = '',
     PositionType position = PositionType.normal,
     Offset? initialPosition,
     double? initialWidth,
     double? initialHeight,
   }) {
-    _ac = AnimationController(vsync: vsync, duration: const Duration(milliseconds: 200));
     _name = name;
     _position = position;
     _initialPosition = initialPosition;
     _initialWidth = initialWidth;
     _initialHeight = initialHeight;
     _init(context);
-  }
-
-  late final AnimationController _ac;
-
-  Animation<double> get animation => _ac.view;
-
-  Future<void> show() async {
-    if (!_ac.isCompleted) await _ac.forward();
-  }
-
-  Future<void> hide() async {
-    if (!_ac.isDismissed) await _ac.reverse();
   }
 
   late ManaState _manaState;
@@ -65,8 +51,6 @@ class FloatingWindowController extends ChangeNotifier {
   void _init(BuildContext context) {
     _manaState = ManaScope.of(context);
     _calculateInitialPosition(context);
-    _ac.addListener(notifyListeners);
-    show();
   }
 
   void update(BuildContext context) {
@@ -75,8 +59,6 @@ class FloatingWindowController extends ChangeNotifier {
 
   @override
   void dispose() {
-    _ac.removeListener(notifyListeners);
-    _ac.dispose();
     offset.dispose();
     fullscreen.dispose();
     closing.dispose();
@@ -156,7 +138,6 @@ class FloatingWindowController extends ChangeNotifier {
       return;
     }
     closing.value = true;
-    await hide();
     callback?.call();
     if (_name == ManaPluginManager.name) {
       _manaState.pluginManagementPanelVisible.value = false;
