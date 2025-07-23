@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 
 /// 用于封装每个 Element 及其随机颜色信息
 class _ElementDetail {
@@ -150,8 +151,8 @@ class _InfoPageState extends State<InfoPage> {
               decoration: InputDecoration(
                 hintText: 'Search widget',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: InkWell(onTap: _clear, child: const Icon(Icons.close)),
+                prefixIcon: const Icon(KitIcons.search),
+                suffixIcon: InkWell(onTap: _clear, child: const Icon(KitIcons.close)),
                 isDense: true,
               ),
             ),
@@ -209,30 +210,29 @@ class _ElementDetailPage extends StatelessWidget {
             ),
           );
         } else if (snapshot.hasData) {
+          final text = snapshot.data!.join('\n');
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildTitle("Widget Description"),
               Container(
                 constraints: const BoxConstraints(maxHeight: 200),
-                padding: const EdgeInsets.all(12),
                 child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  padding: const EdgeInsets.all(16),
                   child: Text(element.widget.toStringDeep()),
                 ),
               ),
               _buildTitle("RenderObject Description"),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (_, index) {
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Text(snapshot.data![index]),
-                      );
-                    },
+                child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  child: SingleChildScrollView(
+                    physics: const ClampingScrollPhysics(),
+                    padding: const EdgeInsets.all(16),
+                    child: Text(text),
                   ),
                 ),
               ),

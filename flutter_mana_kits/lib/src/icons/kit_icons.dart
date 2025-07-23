@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 abstract final class KitIcons {
   static const copy = Icons.copy;
   static const copy_success = Icons.check;
+  static const search = Icons.search;
   static const more = Icons.more_horiz;
   static const close = Icons.close;
   static const refresh = Icons.refresh;
