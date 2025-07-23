@@ -1,3 +1,11 @@
+## 1.0.0-beta.13
+
+- Add utils
+
+## 1.0.0-beta.12
+
+- Add services
+
 ## 1.0.0-beta.11
 
 - Remove floating window animate

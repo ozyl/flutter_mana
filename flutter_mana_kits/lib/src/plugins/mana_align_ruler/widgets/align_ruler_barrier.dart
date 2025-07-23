@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mana/flutter_mana.dart';
 
-import '../../../utils/hit_test_utils.dart';
 import 'selected_rect_painter.dart';
 
 class AlignRulerBarrier extends StatefulWidget {

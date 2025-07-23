@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
-import '../../../utils/hit_test_utils.dart';
 import 'widget_info_inspector_barrier.dart';
 import 'widget_info_inspector_content.dart';
 
@@ -46,8 +45,8 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
     });
   }
 
-  void _handlePanDown(DragDownDetails event) {
-    _inspectAt(event.globalPosition);
+  void _handleTapDown(TapDownDetails details) {
+    _inspectAt(details.globalPosition);
   }
 
   @override
@@ -78,11 +77,14 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
       position: PositionType.top,
       initialWidth: 300,
       initialHeight: 100,
-      barrier: WidgetInfoInspectorBarrier(
-        selection: selection,
-        onPanDown: _handlePanDown,
+      barrier: RepaintBoundary(
+        child: WidgetInfoInspectorBarrier(
+          selection: selection,
+          onTapDown: _handleTapDown,
+        ),
       ),
       content: WidgetInfoInspectorContent(
+        element: selection.currentElement,
         onChanged: (value) {
           selection.clear();
           _showAllSize();

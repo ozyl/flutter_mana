@@ -50,7 +50,7 @@ class ManaStore {
   }
 
   Future<void> setFloatActionButtonPosition(double x, double y) async {
-    await prefs.setDouble('mana_floating_button_x', x);
-    await prefs.setDouble('mana_floating_button_y', y);
+    await prefs.setDouble('mana_floating_button_x', double.parse(x.toStringAsFixed(1)));
+    await prefs.setDouble('mana_floating_button_y', double.parse(y.toStringAsFixed(1)));
   }
 }

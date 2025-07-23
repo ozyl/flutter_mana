@@ -49,9 +49,9 @@ class ManaSettingPanel extends StatelessWidget with ManaI18n {
             ),
             Slider(
               value: size,
-              min: 40.0,
+              min: 30.0,
               max: 100.0,
-              divisions: 6,
+              divisions: 7,
               padding: EdgeInsets.zero,
               label: size.toStringAsFixed(0),
               onChanged: (value) async {

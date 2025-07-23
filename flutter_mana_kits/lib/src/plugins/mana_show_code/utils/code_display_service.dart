@@ -1,18 +1,17 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_mana/flutter_mana.dart';
 import 'package:vm_service/vm_service.dart';
 
-import '../../../services/service_mixin.dart';
-
-/// `CodeDisplayService` 类利用 `VMServiceWrapper` 提供的服务，
+/// `CodeDisplayService` 类利用 `VMvmInspector` 提供的服务，
 /// 专注于获取和显示 Dart VM 中与代码相关的信息，例如类ID、脚本ID和源代码。
-class CodeDisplayService with VMServiceWrapper {
+class CodeDisplayService with VmInspectorMixin {
   /// 根据类名获取对应的类 ID。
   ///
   /// [className]：要查找的类的名称。
   /// 返回：如果找到匹配的类，则返回其 ID；否则返回 `null`。
   Future<String?> getClassIdByName(String className) async {
     try {
-      final classList = await serviceWrapper.getClassList();
+      final classList = await vmInspector.getClassList();
       final classes = classList.classes;
 
       // 显式检查 classes 是否为空或没有元素
@@ -41,7 +40,7 @@ class CodeDisplayService with VMServiceWrapper {
   /// 返回：如果找到包含该文件名的脚本，则返回其 ID；否则返回 `null`。
   Future<String?> getScriptIdByPackagePath(String packagePath) async {
     try {
-      ScriptList scriptList = await serviceWrapper.getScripts();
+      ScriptList scriptList = await vmInspector.getScripts();
       final scripts = scriptList.scripts;
 
       // 显式检查 scripts 是否为空或没有元素
@@ -71,7 +70,7 @@ class CodeDisplayService with VMServiceWrapper {
   Future<Map<String?, String?>> findScriptUrisByKeyword(String keyword) async {
     final result = <String?, String?>{};
     try {
-      ScriptList scriptList = await serviceWrapper.getScripts();
+      ScriptList scriptList = await vmInspector.getScripts();
       final scripts = scriptList.scripts;
 
       // 显式检查 scripts 是否为空或没有元素
@@ -99,7 +98,7 @@ class CodeDisplayService with VMServiceWrapper {
   /// 返回：如果成功获取到脚本源代码，则返回源代码字符串；否则返回 `null`。
   Future<String?> getSourceCodeByScriptId(String scriptId) async {
     try {
-      Obj scriptObject = await serviceWrapper.getObject(scriptId);
+      Obj scriptObject = await vmInspector.getObject(scriptId);
       // 检查获取到的对象是否是 `Script` 类型，并且其 source 属性非空
       if (scriptObject is Script) {
         if (scriptObject.source != null) {

@@ -9,7 +9,7 @@ import 'package:flutter/rendering.dart';
 /// Defines constants used for the inspector overlay, such as colors, sizes, and spacing.
 ///
 /// 定义检查器覆盖层使用的常量，例如颜色、大小和间距。
-class InspectorConstants {
+abstract final class _InspectorConstants {
   /// Maximum number of lines for the tooltip text.
   ///
   /// 工具提示文本的最大行数。
@@ -23,7 +23,7 @@ class InspectorConstants {
   /// Padding inside the tooltip background.
   ///
   /// 工具提示背景内部的填充。
-  static const double tooltipPadding = 5.0;
+  static const double tooltipPadding = 8.0;
 
   /// Vertical offset from the selected widget to the tooltip.
   ///
@@ -268,7 +268,7 @@ class _InspectorOverlayLayer extends Layer {
       overlayRect: overlayRect,
       selected: selected,
       candidates: candidates,
-      textDirection: TextDirection.ltr, // Assuming left-to-right text direction for simplicity in this example.
+      textDirection: TextDirection.ltr,
       selectionInfo: info,
     );
 
@@ -301,11 +301,11 @@ class _InspectorOverlayLayer extends Layer {
 
     // Draw the selection box.
     // 绘制选中框。
-    final fillPaint = Paint()..color = InspectorConstants.selectionFill;
+    final fillPaint = Paint()..color = _InspectorConstants.selectionFill;
     final borderPaint = Paint()
-      ..color = InspectorConstants.selectionBorder
+      ..color = _InspectorConstants.selectionBorder
       ..style = PaintingStyle.stroke
-      ..strokeWidth = InspectorConstants.strokeWidth;
+      ..strokeWidth = _InspectorConstants.strokeWidth;
 
     final selectedRect = state.selected.rect.deflate(0.5);
     canvas
@@ -332,8 +332,7 @@ class _InspectorOverlayLayer extends Layer {
     if (needDescription) {
       final globalRect = MatrixUtils.transformRect(state.selected.transform, state.selected.rect);
       final target = Offset(globalRect.left, globalRect.center.dy);
-      final verticalOffset = globalRect.height / 2 + InspectorConstants.offsetFromWidget;
-
+      final verticalOffset = globalRect.height / 2 + _InspectorConstants.offsetFromWidget;
       _paintDescription(
         canvas,
         state.selectionInfo.message,
@@ -375,7 +374,7 @@ class _InspectorOverlayLayer extends Layer {
 
     // Calculate the maximum width for the tooltip text to fit within screen margins.
     // 计算工具提示文本的最大宽度，以适应屏幕边距。
-    final maxWidth = size.width - 2 * (InspectorConstants.screenMargin + InspectorConstants.tooltipPadding);
+    final maxWidth = size.width - 2 * (_InspectorConstants.screenMargin + _InspectorConstants.tooltipPadding);
 
     /// If the text content or max width has changed, re-layout the text painter.
     ///
@@ -383,15 +382,15 @@ class _InspectorOverlayLayer extends Layer {
     if (_textPainter == null || _textPainter!.text?.toPlainText() != message || _lastMaxWidth != maxWidth) {
       _lastMaxWidth = maxWidth;
       _textPainter = TextPainter(
-        maxLines: InspectorConstants.maxTooltipLines,
+        maxLines: _InspectorConstants.maxTooltipLines,
         ellipsis: '...', // Ellipsis for text overflow.
         textDirection: textDirection,
         text: TextSpan(
           text: message,
           style: const TextStyle(
-            color: InspectorConstants.tooltipTextColor,
-            fontSize: InspectorConstants.tooltipFontSize,
-            height: 1.2, // Line height for better readability.
+            color: _InspectorConstants.tooltipTextColor,
+            fontSize: _InspectorConstants.tooltipFontSize,
+            height: 1.5,
           ),
         ),
       )..layout(maxWidth: maxWidth);
@@ -402,8 +401,8 @@ class _InspectorOverlayLayer extends Layer {
     /// 计算包含填充在内的工具提示的总大小。
     final tooltipSize = _textPainter!.size +
         Offset(
-          InspectorConstants.tooltipPadding * 2,
-          InspectorConstants.tooltipPadding * 2,
+          _InspectorConstants.tooltipPadding * 2,
+          _InspectorConstants.tooltipPadding * 2,
         );
 
     // First, attempt to position the tooltip above the target widget.
@@ -419,7 +418,7 @@ class _InspectorOverlayLayer extends Layer {
     /// Check if the tooltip fits above the target, considering safe areas and screen margins.
     ///
     /// 检查工具提示是否适合目标上方，同时考虑安全区域和屏幕边距。
-    final aboveFits = (tipOffset.dy - safeArea.top) >= InspectorConstants.screenMargin;
+    final aboveFits = (tipOffset.dy - safeArea.top) >= _InspectorConstants.screenMargin;
 
     // If it doesn't fit above, try placing it below.
     // 如果上方空间不足，改为下方。
@@ -442,19 +441,19 @@ class _InspectorOverlayLayer extends Layer {
     // 限制工具提示偏移量，确保它停留在屏幕安全区域和边距内。
     tipOffset = Offset(
       tipOffset.dx.clamp(
-        safeArea.left + InspectorConstants.screenMargin,
-        size.width - safeArea.right - InspectorConstants.screenMargin - tooltipSize.width,
+        safeArea.left + _InspectorConstants.screenMargin,
+        size.width - safeArea.right - _InspectorConstants.screenMargin - tooltipSize.width,
       ),
       tipOffset.dy.clamp(
-        safeArea.top + InspectorConstants.screenMargin,
-        size.height - safeArea.bottom - InspectorConstants.screenMargin - tooltipSize.height,
+        safeArea.top + _InspectorConstants.screenMargin,
+        size.height - safeArea.bottom - _InspectorConstants.screenMargin - tooltipSize.height,
       ),
     );
 
     /// Draw the background rectangle for the tooltip.
     ///
     /// 绘制工具提示的背景矩形。
-    final bgPaint = Paint()..color = InspectorConstants.tooltipBackground;
+    final bgPaint = Paint()..color = _InspectorConstants.tooltipBackground;
     canvas.drawRect(tipOffset & tooltipSize, bgPaint);
 
     /// Draw the arrow connecting the tooltip to the selected widget.
@@ -467,7 +466,7 @@ class _InspectorOverlayLayer extends Layer {
     /// 绘制工具提示的文本内容。
     _textPainter!.paint(
       canvas,
-      tipOffset + Offset(InspectorConstants.tooltipPadding, InspectorConstants.tooltipPadding),
+      tipOffset + Offset(_InspectorConstants.tooltipPadding, _InspectorConstants.tooltipPadding),
     );
     canvas.restore();
   }
@@ -483,7 +482,7 @@ class _InspectorOverlayLayer extends Layer {
     bool isBelow,
     Paint paint,
   ) {
-    final size = InspectorConstants.tooltipPadding * 2;
+    final size = _InspectorConstants.tooltipPadding * 2;
     double y = isBelow ? tipOffset.dy : tipOffset.dy + tooltipSize.height;
     double x = target.dx.clamp(
       tipOffset.dx + size * 2,
@@ -604,13 +603,20 @@ class _SelectionInfo {
     if (element == null || renderObject == null) {
       return 'No widget selected or information unavailable.';
     }
+    final box = renderObject as RenderBox;
+
+    // 左上角坐标
+    final globalOffset = box.localToGlobal(Offset.zero);
+
+    // 元素尺寸
+    final size = box.size;
+
     return [
       description,
-      'size: ${renderObject!.paintBounds.size}',
-      'filePath: ${filePath ?? 'N/A'}',
-      'line: ${line ?? 'N/A'}',
-      'column: ${column ?? 'N/A'}',
-    ].whereType<String>().join('\n');
+      '$size',
+      '$globalOffset',
+      '${filePath ?? 'N/A'}:${line ?? 'N/A'}:${column ?? 'N/A'}',
+    ].join('\n');
   }
 }
 

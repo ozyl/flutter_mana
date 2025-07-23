@@ -6,12 +6,14 @@ import 'package:vm_service/utils.dart';
 import 'package:vm_service/vm_service.dart' as vm;
 import 'package:vm_service/vm_service_io.dart';
 
-/// `ServiceWrapper` 类封装了与 Dart VM 服务交互的各种操作。
+const _logPrefix = '[VmInspector]';
+
+/// `VmInspector` 类封装了与 Dart VM 服务交互的各种操作。
 /// 它提供了一系列方法来获取 VM 信息、内存使用情况、类列表、快照等。
-class ServiceWrapper {
-  static final ServiceWrapper _instance = ServiceWrapper._internal();
-  factory ServiceWrapper() => _instance;
-  ServiceWrapper._internal() {
+class VmInspector {
+  static final VmInspector _instance = VmInspector._internal();
+  factory VmInspector() => _instance;
+  VmInspector._internal() {
     _isolateId = Service.getIsolateId(Isolate.current);
   }
 
@@ -23,7 +25,7 @@ class ServiceWrapper {
 
   String get isolateId {
     if (_isolateId == null) {
-      throw StateError('Isolate ID has not been initialized.');
+      throw StateError('$_logPrefix Isolate ID has not been initialized.');
     }
     return _isolateId!;
   }
@@ -50,10 +52,10 @@ class ServiceWrapper {
       final info = await Service.getInfo();
       final wsUri = convertToWebSocketUrl(serviceProtocolUrl: info.serverUri!);
       final service = await vmServiceConnectUri(wsUri.toString());
-      debugPrint('Connected to VM Service at $wsUri');
+      debugPrint('$_logPrefix Connected to VM Service at $wsUri');
       return service;
     } catch (e) {
-      debugPrint('Failed to connect to VM Service: $e');
+      debugPrint('$_logPrefix Failed to connect to VM Service: $e');
       rethrow;
     }
   }
@@ -63,7 +65,7 @@ class ServiceWrapper {
       try {
         await _service!.dispose();
       } catch (e) {
-        debugPrint('Error while disconnecting: $e');
+        debugPrint('$_logPrefix Error while disconnecting: $e');
       }
       _service = null;
     }
@@ -122,7 +124,7 @@ class ServiceWrapper {
     try {
       return virtualMachine.getInstances(isolateId, objectId, limit);
     } catch (e) {
-      debugPrint('Error getting instances for $objectId: $e');
+      debugPrint('$_logPrefix Error getting instances for $objectId: $e');
       rethrow;
     }
   }
@@ -175,7 +177,7 @@ class ServiceWrapper {
     try {
       return virtualMachine.evaluate(isolateId, targetId, expression);
     } catch (e) {
-      debugPrint('Error evaluating expression "$expression" on $targetId: $e');
+      debugPrint('$_logPrefix Error evaluating expression "$expression" on $targetId: $e');
       rethrow;
     }
   }

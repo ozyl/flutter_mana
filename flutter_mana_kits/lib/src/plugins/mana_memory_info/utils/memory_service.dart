@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_mana_kits/src/services/service_mixin.dart';
+import 'package:flutter_mana/flutter_mana.dart';
 import 'package:vm_service/vm_service.dart';
 
 /// 表示一个类的属性信息。
@@ -119,8 +119,8 @@ class FormattedClassHeapStats extends ClassHeapStats {
 }
 
 /// 内存服务类，用于与 Dart VM 服务交互，获取内存和类信息。
-/// 混入 [VMServiceWrapper] 提供 VM 服务相关的方法。
-class MemoryService with VMServiceWrapper {
+/// 混入 [VmInspectorMixin] 提供 VM 服务相关的方法。
+class MemoryService with VmInspectorMixin {
   /// 存储所有类的堆统计信息列表。
   List<FormattedClassHeapStats> classHeapStatsList = [];
 
@@ -136,9 +136,9 @@ class MemoryService with VMServiceWrapper {
   Future<void> getInfos(void Function() completion) async {
     try {
       final results = await Future.wait([
-        serviceWrapper.getClassHeapStats(), // 获取类堆统计信息
-        serviceWrapper.getMemoryUsage(), // 获取内存使用情况
-        serviceWrapper.getVM(), // 获取 VM 详细信息
+        vmInspector.getClassHeapStats(), // 获取类堆统计信息
+        vmInspector.getMemoryUsage(), // 获取内存使用情况
+        vmInspector.getVM(), // 获取 VM 详细信息
       ]);
 
       // 使用模式匹配解构 results 列表，并进行类型安全检查。
@@ -182,7 +182,7 @@ class MemoryService with VMServiceWrapper {
     int limit,
     void Function(List<String>?) completion,
   ) async {
-    final instanceSet = await serviceWrapper.getInstances(classId, limit);
+    final instanceSet = await vmInspector.getInstances(classId, limit);
     // 使用 null-aware 操作符和 map 转换列表，确保安全。
     // 如果 instances 为 null，则返回一个空列表。
     final instanceIds = instanceSet.instances?.map((e) => e.id).whereType<String>().toList();
@@ -202,7 +202,7 @@ class MemoryService with VMServiceWrapper {
       return;
     }
 
-    final obj = await serviceWrapper.getObject(classId);
+    final obj = await vmInspector.getObject(classId);
 
     // 如果不是 Class 类型，则直接返回 null
     if (obj is! Class) {
@@ -232,7 +232,7 @@ class MemoryService with VMServiceWrapper {
     for (final funcRef in cls.functions ?? []) {
       if (funcRef.id == null) continue; // 跳过没有ID的函数
 
-      final funcObj = await serviceWrapper.getObject(funcRef.id!);
+      final funcObj = await vmInspector.getObject(funcRef.id!);
       if (funcObj is Func) {
         // 过滤掉 [Stub] 函数，并清理名称中的 [Unoptimized] 和 [Optimized]
         if (funcObj.code?.name != null && !funcObj.code!.name!.contains("[Stub]")) {

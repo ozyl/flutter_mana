@@ -69,7 +69,7 @@ class _FloatingButtonState extends State<FloatingButton> {
                         ),
                         child: Center(
                           child: Padding(
-                            padding: const EdgeInsets.all(8),
+                            padding: EdgeInsets.all((size / 6).truncateToDouble()),
                             child: ValueListenableBuilder<String>(
                               valueListenable: _controller.state.activePluginName,
                               builder: (context, name, _) {
