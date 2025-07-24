@@ -77,11 +77,9 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
       position: PositionType.top,
       initialWidth: 300,
       initialHeight: 100,
-      barrier: RepaintBoundary(
-        child: WidgetInfoInspectorBarrier(
-          selection: selection,
-          onTapDown: _handleTapDown,
-        ),
+      barrier: WidgetInfoInspectorBarrier(
+        selection: selection,
+        onTapDown: _handleTapDown,
       ),
       content: WidgetInfoInspectorContent(
         element: selection.currentElement,

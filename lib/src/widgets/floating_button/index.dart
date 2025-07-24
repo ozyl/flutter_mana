@@ -57,7 +57,7 @@ class _FloatingButtonState extends State<FloatingButton> {
                         height: size,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular((size / 7).truncateToDouble()),
                           boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,

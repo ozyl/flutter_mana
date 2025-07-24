@@ -24,4 +24,6 @@ abstract final class KitIcons {
   static const sort_desc = Icons.arrow_drop_down;
   // 自动
   static const sort_auto = Icons.unfold_more;
+
+  static const eye = Icons.remove_red_eye_outlined;
 }

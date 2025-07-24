@@ -24,7 +24,7 @@ class WidgetInfoInspectorBarrier extends StatelessWidget {
     );
     children.add(gesture);
 
-    children.add(InspectorOverlay(selection: selection));
+    children.add(RepaintBoundary(child: InspectorOverlay(selection: selection)));
 
     return Stack(textDirection: TextDirection.ltr, children: children);
   }
