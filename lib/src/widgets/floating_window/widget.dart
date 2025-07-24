@@ -173,6 +173,7 @@ class _FloatingWindowState extends State<FloatingWindow> {
             return;
           }
           _controller.manaState.floatWindowMainVisible.value = false;
+          _controller.manaState.floatingButtonVisible.value = true;
         }
       },
       child: Stack(
