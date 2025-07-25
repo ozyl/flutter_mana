@@ -4,9 +4,7 @@ import 'package:flutter_mana/flutter_mana.dart';
 import 'icon.dart';
 
 class Demo extends ManaPluggable {
-  final String customName;
-
-  Demo({this.customName = 'mana_demo'});
+  Demo();
 
   @override
   Widget? buildWidget(BuildContext? context) {
@@ -14,7 +12,7 @@ class Demo extends ManaPluggable {
       color: Colors.white,
       width: double.infinity,
       height: double.infinity,
-      child: Center(child: Text('当前的插件是: $customName')),
+      child: Center(child: Text('Demo')),
     );
   }
 
@@ -22,9 +20,9 @@ class Demo extends ManaPluggable {
   String getLocalizedDisplayName(Locale locale) {
     switch (locale.languageCode) {
       case 'zh':
-        return '例子_$customName';
+        return '例子';
       default:
-        return 'Demo_$customName';
+        return 'Demo';
     }
   }
 
@@ -32,7 +30,7 @@ class Demo extends ManaPluggable {
   ImageProvider<Object> get iconImageProvider => iconImage;
 
   @override
-  String get name => customName;
+  String get name => 'demo';
 
   @override
   void onTrigger() {}
