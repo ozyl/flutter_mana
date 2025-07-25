@@ -82,7 +82,7 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
         onTapDown: _handleTapDown,
       ),
       content: WidgetInfoInspectorContent(
-        element: selection.currentElement,
+        selection: selection,
         onChanged: (value) {
           selection.clear();
           _showAllSize();

@@ -5,11 +5,11 @@ import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 import 'widget_info_inspector_detail.dart';
 
 class WidgetInfoInspectorContent extends StatefulWidget {
-  final Element? element;
+  final InspectorSelection selection;
 
   final ValueChanged<bool>? onChanged;
 
-  const WidgetInfoInspectorContent({super.key, this.element, this.onChanged});
+  const WidgetInfoInspectorContent({super.key, required this.selection, this.onChanged});
 
   @override
   State<WidgetInfoInspectorContent> createState() => _WidgetInfoInspectorContentState();
@@ -52,13 +52,13 @@ class _WidgetInfoInspectorContentState extends State<WidgetInfoInspectorContent>
           Row(
             children: [
               IconButton(
-                onPressed: widget.element == null
+                onPressed: widget.selection.currentElement == null
                     ? null
                     : () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) {
-                              return InfoPage(elements: widget.element!.debugGetDiagnosticChain());
+                              return InfoPage(elements: widget.selection.currentElement!.debugGetDiagnosticChain());
                             },
                           ),
                         );
