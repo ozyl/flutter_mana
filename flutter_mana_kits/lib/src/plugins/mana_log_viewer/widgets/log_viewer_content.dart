@@ -9,7 +9,9 @@ import '../mana_log_collector.dart';
 import 'log_item_widget.dart';
 
 class LogViewerContent extends StatefulWidget {
-  const LogViewerContent({super.key});
+  final bool verboseLogs;
+
+  const LogViewerContent({super.key, required this.verboseLogs});
 
   @override
   State<LogViewerContent> createState() => _LogViewerContentState();
@@ -165,6 +167,7 @@ class _LogViewerContentState extends State<LogViewerContent>
           final d = _filteredData[index];
           return LogItemWidget(
             key: ValueKey(d.origin.time),
+            verboseLogs: widget.verboseLogs,
             log: d,
           );
         },

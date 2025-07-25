@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:example/utils/json_demo.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 import 'package:logger/logger.dart';
 
 class ReleaseFilter extends LogFilter {
@@ -13,7 +14,7 @@ class ReleaseFilter extends LogFilter {
 }
 
 class LogGenerator {
-  static final Logger _logger = Logger(level: Level.all, filter: ReleaseFilter());
+  static final Logger _logger = Logger(level: Level.all, filter: ReleaseFilter(), output: ManaLogCollector());
   static final Random _random = Random();
 
   static void generateRandomLog() {

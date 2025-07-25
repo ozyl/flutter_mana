@@ -24,6 +24,7 @@ mixin I18nMixin {
 
     // Log Viewer
     'log_viewer.filter_keywords': ['filter keywords...', '筛选字词...'],
+    'log_viewer.verbose_logs': ['Verbose Logs', '详细日志'],
 
     // Memory Info
     'memory_info.vm_info': ['VM Info', 'VM 信息'],

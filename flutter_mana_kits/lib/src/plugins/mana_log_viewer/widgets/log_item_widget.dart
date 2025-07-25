@@ -12,19 +12,22 @@ const Map<Level, Color> _levelColorMap = {
 };
 
 class LogItemWidget extends StatelessWidget {
+  final bool verboseLogs;
   final OutputEvent log;
 
-  const LogItemWidget({super.key, required this.log});
+  const LogItemWidget({super.key, required this.verboseLogs, required this.log});
 
   Color get _levelColor => _levelColorMap[log.level] ?? Colors.black;
 
   String _buildFullMessage() {
     final buf = StringBuffer(log.origin.message);
-    if (log.origin.error != null) {
-      buf.write('\n--------------- error ---------------\n${log.origin.error}');
-    }
-    if (log.origin.stackTrace != null) {
-      buf.write('\n--------------- stackTrace ---------------\n${log.origin.stackTrace}');
+    if (verboseLogs) {
+      if (log.origin.error != null) {
+        buf.write('\n--------------- error ---------------\n${log.origin.error}');
+      }
+      if (log.origin.stackTrace != null) {
+        buf.write('\n--------------- stackTrace ---------------\n${log.origin.stackTrace}');
+      }
     }
     return buf.toString().trim();
   }
