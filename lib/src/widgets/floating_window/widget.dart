@@ -146,14 +146,24 @@ class _FloatingWindowState extends State<FloatingWindow> {
                   onMinimize: () => _controller.onMinimize(widget.onMinimize),
                   onClose: () => _controller.onClose(widget.onClose)),
             Expanded(
-              child: ValueListenableBuilder(
-                valueListenable: _controller.showSetting,
-                builder: (context, showSetting, _) {
-                  if (showSetting && widget.setting != null) {
-                    return widget.setting ?? SizedBox();
-                  }
-                  return widget.content ?? SizedBox();
-                },
+              child: Stack(
+                children: [
+                  widget.content ?? SizedBox(),
+                  Positioned.fill(
+                    child: ValueListenableBuilder(
+                      valueListenable: _controller.showSetting,
+                      builder: (context, showSetting, _) {
+                        if (showSetting && widget.setting != null) {
+                          return ColoredBox(
+                            color: Colors.white,
+                            child: widget.setting ?? SizedBox.shrink(),
+                          );
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

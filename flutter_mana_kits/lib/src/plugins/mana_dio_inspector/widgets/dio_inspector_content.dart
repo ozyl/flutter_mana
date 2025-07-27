@@ -163,43 +163,25 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
   /// 创建中部区域
   Widget _buildCenter() {
     return Expanded(
-      child: Stack(
-        children: [
-          ListView.separated(
-            controller: _scrollController,
-            itemCount: _filteredData.length,
-            physics: const ClampingScrollPhysics(),
-            padding: const EdgeInsets.only(bottom: 20),
-            itemBuilder: (context, index) {
-              final d = _filteredData[index];
-              return ResponseTile(
-                response: d,
-                onTap: () {
-                  setState(() {
-                    _response = d;
-                  });
-                },
-              );
+      child: ListView.separated(
+        controller: _scrollController,
+        itemCount: _filteredData.length,
+        physics: const ClampingScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: 20),
+        itemBuilder: (context, index) {
+          final d = _filteredData[index];
+          return ResponseTile(
+            response: d,
+            onTap: () {
+              setState(() {
+                _response = d;
+              });
             },
-            separatorBuilder: (BuildContext context, int index) {
-              return _divider;
-            },
-          ),
-          if (_response != null)
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Colors.white,
-              child: ResponseDetail(
-                response: _response!,
-                onClose: () {
-                  setState(() {
-                    _response = null;
-                  });
-                },
-              ),
-            )
-        ],
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return _divider;
+        },
       ),
     );
   }
@@ -292,18 +274,37 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        if (_response == null) ...[
-          _divider,
-          _buildHeader(),
-        ],
-        _divider,
-        _buildCenter(),
-        if (_response == null) ...[
-          _divider,
-          _buildBottom(),
-        ],
+        Positioned.fill(
+          child: Column(
+            children: [
+              _divider,
+              _buildHeader(),
+              _divider,
+              _buildCenter(),
+              // 底部工具栏
+              _divider,
+              _buildBottom(),
+            ],
+          ),
+        ),
+        if (_response != null)
+          Positioned.fill(
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.white,
+              child: ResponseDetail(
+                response: _response!,
+                onClose: () {
+                  setState(() {
+                    _response = null;
+                  });
+                },
+              ),
+            ),
+          )
       ],
     );
   }

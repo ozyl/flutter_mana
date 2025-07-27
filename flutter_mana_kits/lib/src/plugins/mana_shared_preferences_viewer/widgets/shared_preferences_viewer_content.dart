@@ -151,56 +151,35 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
         : _data;
 
     return Expanded(
-      child: Stack(
-        children: [
-          ListView.separated(
-            controller: _scrollController,
-            itemCount: filterData.length,
-            physics: const ClampingScrollPhysics(),
-            padding: const EdgeInsets.only(bottom: 20),
-            itemBuilder: (context, index) {
-              final model = filterData[index];
-              return ModelTile(
-                key: ValueKey(model.key),
-                model: model,
-                onTap: () {
-                  setState(() {
-                    _model = model;
-                  });
-                },
-                onCopy: () {
-                  _copy(model);
-                },
-                onDelete: () {
-                  _removeKey(model.key);
-                },
-              );
+      child: ListView.separated(
+        controller: _scrollController,
+        itemCount: filterData.length,
+        physics: const ClampingScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: 20),
+        itemBuilder: (context, index) {
+          final model = filterData[index];
+          return ModelTile(
+            key: ValueKey(model.key),
+            model: model,
+            onTap: () {
+              setState(() {
+                _model = model;
+              });
             },
-            separatorBuilder: (BuildContext context, int index) {
-              return Divider(
-                height: 1,
-                color: Colors.grey[200],
-              );
+            onCopy: () {
+              _copy(model);
             },
-          ),
-          if (_model != null)
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Colors.white,
-              child: ModelDetail(
-                model: _model!,
-                onClose: () {
-                  setState(() {
-                    _model = null;
-                  });
-                },
-                onSave: (newModel) async {
-                  await _save(_model!, newModel);
-                },
-              ),
-            )
-        ],
+            onDelete: () {
+              _removeKey(model.key);
+            },
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return Divider(
+            height: 1,
+            color: Colors.grey[200],
+          );
+        },
       ),
     );
   }
@@ -288,14 +267,37 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        _divider,
-        _buildCenter(),
-        if (_model == null) ...[
-          _divider,
-          _buildBottom(),
-        ],
+        Positioned.fill(
+          child: Column(
+            children: [
+              _divider,
+              _buildCenter(),
+              _divider,
+              _buildBottom(),
+            ],
+          ),
+        ),
+        if (_model != null)
+          Positioned.fill(
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.white,
+              child: ModelDetail(
+                model: _model!,
+                onClose: () {
+                  setState(() {
+                    _model = null;
+                  });
+                },
+                onSave: (newModel) async {
+                  await _save(_model!, newModel);
+                },
+              ),
+            ),
+          )
       ],
     );
   }
