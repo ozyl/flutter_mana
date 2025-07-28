@@ -74,7 +74,6 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
   Widget build(BuildContext context) {
     return ManaFloatingWindow(
       name: widget.name,
-      position: PositionType.top,
       initialWidth: 300,
       initialHeight: 100,
       barrier: WidgetInfoInspectorBarrier(

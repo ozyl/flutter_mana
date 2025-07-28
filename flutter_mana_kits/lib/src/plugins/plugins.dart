@@ -5,6 +5,7 @@ export 'mana_device_info/index.dart' show ManaDeviceInfo;
 export 'mana_dio_inspector/index.dart' show ManaDioInspector;
 export 'mana_dio_inspector/mana_dio_collector.dart' show ManaDioCollector;
 export 'mana_fps_monitor/index.dart' show ManaFpsMonitor;
+export 'mana_license/index.dart' show ManaLicense;
 export 'mana_log_viewer/index.dart' show ManaLogViewer;
 export 'mana_log_viewer/mana_log_collector.dart' show ManaLogCollector;
 export 'mana_memory_info/index.dart' show ManaMemoryInfo;

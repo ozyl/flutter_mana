@@ -32,6 +32,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ManaPluginManager.instance
+    ..register(ManaLicense())
     ..register(ManaPackageInfo())
     ..register(ManaMemoryInfo())
     ..register(ManaShowCode())
@@ -74,6 +75,7 @@ class App extends StatelessWidget {
 - [x] [显示代码 - ShowCode](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_show_code)
 - [x] [内存信息 - MemoryInfo](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_memory_info)
 - [x] [包信息 - PackageInfo](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_package_info)
+- [x] [许可 - License](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_license)
 
 | 插件                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
@@ -194,3 +196,4 @@ class App extends StatelessWidget {
 - [flutter：全局 context 在 navigator 与 overlay 中的运用](https://juejin.cn/post/7200191765516615737)
 - [内存泄漏检测原理](https://juejin.cn/post/6922625442323103758)
 - [内存泄漏检测库](https://github.com/liujiakuoyx/leak_detector)
+- [卡顿检测](https://juejin.cn/post/7434899217804902427)

@@ -73,6 +73,10 @@ class FloatingWindowController extends ChangeNotifier {
     } else if (_initialWidth == double.infinity) {
       width = _screenSize.width;
     }
+    if (width > _screenSize.width) {
+      width = _screenSize.width;
+    }
+
     double height = _initialHeight ?? 0;
     if (_initialHeight == null) {
       height = _screenSize.height * 0.6;
@@ -81,6 +85,10 @@ class FloatingWindowController extends ChangeNotifier {
     } else if (_initialHeight != null && _initialHeight! > 0 && _initialHeight! < 1) {
       height = _screenSize.height * _initialHeight!;
     }
+    if (height > _screenSize.height) {
+      height = _screenSize.height;
+    }
+
     return Size(width, height);
   }
 
