@@ -69,7 +69,7 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
         child: Column(

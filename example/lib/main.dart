@@ -11,8 +11,6 @@ import 'utils/dio_client.dart';
 import 'utils/log_generator.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   ManaPluginManager.instance
     ..register(ManaLicense())
     ..register(ManaPackageInfo())

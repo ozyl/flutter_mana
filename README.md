@@ -29,8 +29,6 @@ import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   ManaPluginManager.instance
     ..register(ManaLicense())
     ..register(ManaPackageInfo())
@@ -194,6 +192,7 @@ class App extends StatelessWidget {
 - [debug friend](https://pub.dev/packages/debug_friend)
 - [widget with codeview](https://github.com/X-Wei/widget_with_codeview)
 - [flutter：全局 context 在 navigator 与 overlay 中的运用](https://juejin.cn/post/7200191765516615737)
+- [fconsole](https://github.com/fluttercandies/fconsole/blob/8b32f57399396ecb7f5792c0e6c86df3e991d002/lib/src/widget/console.dart#L117)
 - [内存泄漏检测原理](https://juejin.cn/post/6922625442323103758)
 - [内存泄漏检测库](https://github.com/liujiakuoyx/leak_detector)
 - [卡顿检测](https://juejin.cn/post/7434899217804902427)

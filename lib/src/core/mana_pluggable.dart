@@ -19,7 +19,7 @@ abstract class ManaPluggable {
   /// This method should contain the plugin's main logic.
   ///
   /// 当插件被触发时调用的方法，执行主要逻辑。
-  void onTrigger();
+  void onTrigger() {}
 
   /// Optionally builds a widget to display the plugin's content within the UI.
   /// Returns `null` if the plugin does not have a visual component.
@@ -36,5 +36,5 @@ abstract class ManaPluggable {
   /// Async initialization for the plugin.
   ///
   /// 插件的异步初始化方法
-  Future<void> initialize();
+  Future<void> initialize() async {}
 }

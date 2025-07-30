@@ -73,6 +73,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
       length: 3,
       child: Column(
         children: [
+          _divider,
           Row(
             children: [
               IconButton(
