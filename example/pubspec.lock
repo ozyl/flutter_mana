@@ -121,14 +121,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.1"
   flutter_mana_kits:
     dependency: "direct main"
     description:
       path: "../flutter_mana_kits"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
