@@ -110,8 +110,9 @@ class _FloatingWindowState extends State<FloatingWindow> {
   }
 
   Widget _buildContent(Size screenSize, Size windowSize, bool fullscreen) {
-    final radius =
-        (fullscreen || widget.initialHeight == double.infinity) ? BorderRadius.zero : BorderRadius.circular(8);
+    final radius = (fullscreen || widget.initialHeight == double.infinity)
+        ? BorderRadius.zero
+        : BorderRadius.circular(8);
 
     return Container(
       clipBehavior: Clip.antiAlias,
@@ -200,19 +201,24 @@ class _FloatingWindowState extends State<FloatingWindow> {
                           return ValueListenableBuilder(
                             valueListenable: _controller.offset,
                             builder: (context, offset, _) {
-                              final double currentLeft = fullscreen ? 0 : offset.dx;
-                              final double currentTop = fullscreen ? 0 : offset.dy;
-                              final double currentWidth =
-                                  fullscreen ? _controller.screenSize.width : _controller.windowSize.width;
-                              final double currentHeight =
-                                  fullscreen ? _controller.screenSize.height : _controller.windowSize.height;
+                              final double currentLeft =
+                                  fullscreen ? 0 : offset.dx;
+                              final double currentTop =
+                                  fullscreen ? 0 : offset.dy;
+                              final double currentWidth = fullscreen
+                                  ? _controller.screenSize.width
+                                  : _controller.windowSize.width;
+                              final double currentHeight = fullscreen
+                                  ? _controller.screenSize.height
+                                  : _controller.windowSize.height;
 
                               return Positioned(
                                 left: currentLeft,
                                 top: currentTop,
                                 width: currentWidth,
                                 height: currentHeight,
-                                child: _buildContent(_controller.screenSize, _controller.windowSize, fullscreen),
+                                child: _buildContent(_controller.screenSize,
+                                    _controller.windowSize, fullscreen),
                               );
                             },
                           );

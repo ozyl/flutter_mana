@@ -28,12 +28,17 @@ class SpClient {
         await prefs.setBool(key, value);
         break;
       case 3:
-        value = _random.nextBool() ? _randomString(_random.nextInt(8) + 3) : jsonEncode(jsonDemo);
+        value = _random.nextBool()
+            ? _randomString(_random.nextInt(8) + 3)
+            : jsonEncode(jsonDemo);
         await prefs.setString(key, value);
         break;
       case 4:
         int len = _random.nextInt(5) + 1;
-        value = List<String>.generate(len, (_) => _randomString(_random.nextInt(6) + 2));
+        value = List<String>.generate(
+          len,
+          (_) => _randomString(_random.nextInt(6) + 2),
+        );
         await prefs.setStringList(key, value);
         break;
     }
@@ -45,7 +50,11 @@ class SpClient {
   }
 
   static String _randomString(int length) {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    return List.generate(length, (index) => chars[_random.nextInt(chars.length)]).join();
+    const chars =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return List.generate(
+      length,
+      (index) => chars[_random.nextInt(chars.length)],
+    ).join();
   }
 }

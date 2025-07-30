@@ -15,10 +15,12 @@ class SharedPreferencesViewerContent extends StatefulWidget {
   const SharedPreferencesViewerContent({super.key});
 
   @override
-  State<SharedPreferencesViewerContent> createState() => _SharedPreferencesViewerContentState();
+  State<SharedPreferencesViewerContent> createState() =>
+      _SharedPreferencesViewerContentState();
 }
 
-class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewerContent> with I18nMixin {
+class _SharedPreferencesViewerContentState
+    extends State<SharedPreferencesViewerContent> with I18nMixin {
   final TextEditingController _filterController = TextEditingController();
   Timer? _debounceTimer;
 
@@ -198,9 +200,11 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
               style: const TextStyle(fontSize: _fontSize),
               decoration: InputDecoration(
                 hintText: t('shared_preferences_viewer.filter_keywords'),
-                hintStyle: TextStyle(fontSize: _fontSize, color: Colors.black54),
+                hintStyle:
+                    TextStyle(fontSize: _fontSize, color: Colors.black54),
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12.0, vertical: 12.0),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                 ),
@@ -219,7 +223,8 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
               return ToggleButtons(
                 isSelected: selects,
                 renderBorder: false,
-                constraints: BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
+                constraints:
+                    BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
                 textStyle: const TextStyle(fontSize: _fontSize),
                 onPressed: (int index) {
                   switch (index) {

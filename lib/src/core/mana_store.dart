@@ -23,14 +23,16 @@ class ManaStore {
 
   SharedPreferences get prefs {
     if (!_isInitialized) {
-      throw Exception('ManaStore must be initialized first. Call init() before using prefs.');
+      throw Exception(
+          'ManaStore must be initialized first. Call init() before using prefs.');
     }
     return _prefs!;
   }
 
   ManaState getManaState() {
     final floatActionButtonSize = prefs.getDouble('mana_floating_button_size');
-    final floatActionButtonOpacity = prefs.getDouble('mana_floating_button_opacity');
+    final floatActionButtonOpacity =
+        prefs.getDouble('mana_floating_button_opacity');
 
     return ManaState(
       initialFloatingButtonSize: floatActionButtonSize,
@@ -39,8 +41,10 @@ class ManaStore {
   }
 
   Future<void> setManaState(ManaState manaState) async {
-    await prefs.setDouble('mana_floating_button_size', manaState.floatingButtonSize.value);
-    await prefs.setDouble('mana_floating_button_opacity', manaState.floatingButtonOpacity.value);
+    await prefs.setDouble(
+        'mana_floating_button_size', manaState.floatingButtonSize.value);
+    await prefs.setDouble(
+        'mana_floating_button_opacity', manaState.floatingButtonOpacity.value);
   }
 
   (double, double) getFloatActionButtonPosition() {
@@ -50,7 +54,9 @@ class ManaStore {
   }
 
   Future<void> setFloatActionButtonPosition(double x, double y) async {
-    await prefs.setDouble('mana_floating_button_x', double.parse(x.toStringAsFixed(1)));
-    await prefs.setDouble('mana_floating_button_y', double.parse(y.toStringAsFixed(1)));
+    await prefs.setDouble(
+        'mana_floating_button_x', double.parse(x.toStringAsFixed(1)));
+    await prefs.setDouble(
+        'mana_floating_button_y', double.parse(y.toStringAsFixed(1)));
   }
 }

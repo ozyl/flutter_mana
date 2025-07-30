@@ -51,7 +51,8 @@ class _ShowCodeContentState extends State<ShowCodeContent> {
     return FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData)
+          return const Center(child: CircularProgressIndicator());
 
         final packagePath = snapshot.data!.packagePath;
         final textSpan = snapshot.data!.textSpan;

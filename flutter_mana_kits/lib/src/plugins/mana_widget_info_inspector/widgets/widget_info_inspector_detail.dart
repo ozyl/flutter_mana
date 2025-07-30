@@ -102,7 +102,9 @@ class _InfoPageState extends State<InfoPage> {
     }
     final RegExp reg = RegExp(query, caseSensitive: false);
     setState(() {
-      _filteredList = _originalList.where((item) => reg.hasMatch(item.element.widget.toStringShort())).toList();
+      _filteredList = _originalList
+          .where((item) => reg.hasMatch(item.element.widget.toStringShort()))
+          .toList();
     });
   }
 
@@ -150,9 +152,11 @@ class _InfoPageState extends State<InfoPage> {
               onChanged: _onSearchChanged,
               decoration: InputDecoration(
                 hintText: 'Search widget',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 prefixIcon: const Icon(KitIcons.search),
-                suffixIcon: InkWell(onTap: _clear, child: const Icon(KitIcons.close)),
+                suffixIcon:
+                    InkWell(onTap: _clear, child: const Icon(KitIcons.close)),
                 isDense: true,
               ),
             ),
@@ -165,7 +169,8 @@ class _InfoPageState extends State<InfoPage> {
                   : ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       itemCount: _filteredList.length,
-                      itemBuilder: (_, index) => _buildItem(_filteredList[index]),
+                      itemBuilder: (_, index) =>
+                          _buildItem(_filteredList[index]),
                     ),
             ),
           ),

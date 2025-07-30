@@ -8,7 +8,8 @@ class ManaSharedPreferencesViewer implements ManaPluggable {
   const ManaSharedPreferencesViewer();
 
   @override
-  Widget? buildWidget(BuildContext? context) => SharedPreferencesViewer(name: name);
+  Widget? buildWidget(BuildContext? context) =>
+      SharedPreferencesViewer(name: name);
 
   @override
   String getLocalizedDisplayName(Locale locale) {

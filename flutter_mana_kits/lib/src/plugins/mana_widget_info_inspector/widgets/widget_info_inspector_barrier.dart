@@ -6,7 +6,8 @@ class WidgetInfoInspectorBarrier extends StatelessWidget {
 
   final GestureTapDownCallback? onTapDown;
 
-  const WidgetInfoInspectorBarrier({super.key, required this.selection, this.onTapDown});
+  const WidgetInfoInspectorBarrier(
+      {super.key, required this.selection, this.onTapDown});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,8 @@ class WidgetInfoInspectorBarrier extends StatelessWidget {
     );
     children.add(gesture);
 
-    children.add(RepaintBoundary(child: InspectorOverlay(selection: selection)));
+    children
+        .add(RepaintBoundary(child: InspectorOverlay(selection: selection)));
 
     return Stack(textDirection: TextDirection.ltr, children: children);
   }

@@ -25,7 +25,11 @@ class DioClient {
   Future<Response> _postRequest() async {
     return await _dio.post(
       '/posts',
-      data: {'title': 'add post', 'body': 'this is ${Random().nextInt(100) + 1}', 'userId': Random().nextInt(10) + 1},
+      data: {
+        'title': 'add post',
+        'body': 'this is ${Random().nextInt(100) + 1}',
+        'userId': Random().nextInt(10) + 1,
+      },
     );
   }
 
@@ -33,7 +37,12 @@ class DioClient {
     final id = Random().nextInt(100) + 1;
     return await _dio.put(
       '/posts/$id',
-      data: {'id': id, 'title': 'updated post', 'body': 'this is $id', 'userId': Random().nextInt(10) + 1},
+      data: {
+        'id': id,
+        'title': 'updated post',
+        'body': 'this is $id',
+        'userId': Random().nextInt(10) + 1,
+      },
     );
   }
 

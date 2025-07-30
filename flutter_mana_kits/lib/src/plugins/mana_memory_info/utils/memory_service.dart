@@ -113,7 +113,8 @@ class FormattedClassHeapStats extends ClassHeapStats {
       bytesCurrent: stats.bytesCurrent,
       instancesAccumulated: stats.instancesAccumulated,
       instancesCurrent: stats.instancesCurrent,
-      accumulatedSizeFormatted: MemoryService.byteToString(stats.accumulatedSize ?? 0),
+      accumulatedSizeFormatted:
+          MemoryService.byteToString(stats.accumulatedSize ?? 0),
     );
   }
 }
@@ -142,10 +143,19 @@ class MemoryService with VmInspectorMixin {
       ]);
 
       // 使用模式匹配解构 results 列表，并进行类型安全检查。
-      if (results case [List<ClassHeapStats> heapStats, MemoryUsage memoryUsage, VM vm]) {
+      if (results
+          case [
+            List<ClassHeapStats> heapStats,
+            MemoryUsage memoryUsage,
+            VM vm
+          ]) {
         // 处理并存储格式化后的类堆统计信息
-        classHeapStatsList = heapStats.map((stats) => FormattedClassHeapStats.fromClassHeapStats(stats)).toList()
-          ..sort((a, b) => b.accumulatedSize?.compareTo(a.accumulatedSize ?? 0) ?? 0); // 默认按累积大小降序排序
+        classHeapStatsList = heapStats
+            .map((stats) => FormattedClassHeapStats.fromClassHeapStats(stats))
+            .toList()
+          ..sort((a, b) =>
+              b.accumulatedSize?.compareTo(a.accumulatedSize ?? 0) ??
+              0); // 默认按累积大小降序排序
 
         vmInfo = VmInfo(
           pid: vm.pid,
@@ -185,7 +195,8 @@ class MemoryService with VmInspectorMixin {
     final instanceSet = await vmInspector.getInstances(classId, limit);
     // 使用 null-aware 操作符和 map 转换列表，确保安全。
     // 如果 instances 为 null，则返回一个空列表。
-    final instanceIds = instanceSet.instances?.map((e) => e.id).whereType<String>().toList();
+    final instanceIds =
+        instanceSet.instances?.map((e) => e.id).whereType<String>().toList();
     completion(instanceIds);
   }
 
@@ -235,8 +246,11 @@ class MemoryService with VmInspectorMixin {
       final funcObj = await vmInspector.getObject(funcRef.id!);
       if (funcObj is Func) {
         // 过滤掉 [Stub] 函数，并清理名称中的 [Unoptimized] 和 [Optimized]
-        if (funcObj.code?.name != null && !funcObj.code!.name!.contains("[Stub]")) {
-          String cleanedCodeName = funcObj.code!.name!.replaceAll('[Unoptimized] ', '').replaceAll('[Optimized] ', '');
+        if (funcObj.code?.name != null &&
+            !funcObj.code!.name!.contains("[Stub]")) {
+          String cleanedCodeName = funcObj.code!.name!
+              .replaceAll('[Unoptimized] ', '')
+              .replaceAll('[Optimized] ', '');
           functions.add(cleanedCodeName);
         }
       }
