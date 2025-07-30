@@ -73,14 +73,24 @@ class FloatingWindowController extends ChangeNotifier {
     } else if (_initialWidth == double.infinity) {
       width = _screenSize.width;
     }
+    if (width > _screenSize.width) {
+      width = _screenSize.width;
+    }
+
     double height = _initialHeight ?? 0;
     if (_initialHeight == null) {
       height = _screenSize.height * 0.6;
     } else if (_initialHeight == double.infinity) {
       height = _screenSize.height;
-    } else if (_initialHeight != null && _initialHeight! > 0 && _initialHeight! < 1) {
+    } else if (_initialHeight != null &&
+        _initialHeight! > 0 &&
+        _initialHeight! < 1) {
       height = _screenSize.height * _initialHeight!;
     }
+    if (height > _screenSize.height) {
+      height = _screenSize.height;
+    }
+
     return Size(width, height);
   }
 
@@ -88,12 +98,14 @@ class FloatingWindowController extends ChangeNotifier {
     _screenSize = MediaQuery.of(context).size;
     _windowSize = _getWindowActualSize();
 
-    final dx = _initialPosition?.dx ?? (_screenSize.width - _windowSize.width) / 2;
+    final dx =
+        _initialPosition?.dx ?? (_screenSize.width - _windowSize.width) / 2;
     double dy = 0;
 
     switch (_position) {
       case PositionType.normal:
-        dy = _initialPosition?.dy ?? (_screenSize.height - _windowSize.height) / 2;
+        dy = _initialPosition?.dy ??
+            (_screenSize.height - _windowSize.height) / 2;
 
       case PositionType.top:
         dy = 100;
@@ -106,8 +118,10 @@ class FloatingWindowController extends ChangeNotifier {
   }
 
   void onPanUpdate(DragUpdateDetails details) {
-    final dx = (offset.value.dx + details.delta.dx).clamp(0.0, screenSize.width - windowSize.width);
-    final dy = (offset.value.dy + details.delta.dy).clamp(0.0, screenSize.height - windowSize.height);
+    final dx = (offset.value.dx + details.delta.dx)
+        .clamp(0.0, screenSize.width - windowSize.width);
+    final dy = (offset.value.dy + details.delta.dy)
+        .clamp(0.0, screenSize.height - windowSize.height);
     offset.value = Offset(dx, dy);
   }
 

@@ -11,9 +11,8 @@ import 'utils/dio_client.dart';
 import 'utils/log_generator.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   ManaPluginManager.instance
+    ..register(ManaLicense())
     ..register(ManaPackageInfo())
     ..register(ManaMemoryInfo())
     ..register(ManaShowCode())
@@ -37,7 +36,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Example',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent)),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+      ),
       home: HomePage(),
     );
   }
@@ -57,9 +58,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void toggleOrientation() {
     if (isLandscape) {
-      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
     } else {
-      SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
     }
     setState(() {
       isLandscape = !isLandscape;
@@ -82,7 +89,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -94,12 +104,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 text: 'Detail Page',
                 backgroundColor: Colors.orange,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailPage()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DetailPage()),
+                  );
                 },
               ),
-              CustomButton(text: 'Toggle Orientation', backgroundColor: Colors.blue, onPressed: toggleOrientation),
-              CustomButton(text: 'Send Request', backgroundColor: Colors.red, onPressed: sendRequest),
-              CustomButton(text: 'Add Log', backgroundColor: Colors.cyan, onPressed: addLog),
+              CustomButton(
+                text: 'Toggle Orientation',
+                backgroundColor: Colors.blue,
+                onPressed: toggleOrientation,
+              ),
+              CustomButton(
+                text: 'Send Request',
+                backgroundColor: Colors.red,
+                onPressed: sendRequest,
+              ),
+              CustomButton(
+                text: 'Add Log',
+                backgroundColor: Colors.cyan,
+                onPressed: addLog,
+              ),
               CustomButton(
                 text: 'Add SharedPreferences',
                 backgroundColor: Colors.deepPurple,
@@ -155,8 +180,14 @@ class _CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: _isLoading ? null : _handlePress,
-      style: ElevatedButton.styleFrom(backgroundColor: widget.backgroundColor, foregroundColor: widget.foregroundColor),
-      child: Text(widget.text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: widget.backgroundColor,
+        foregroundColor: widget.foregroundColor,
+      ),
+      child: Text(
+        widget.text,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      ),
     );
   }
 }

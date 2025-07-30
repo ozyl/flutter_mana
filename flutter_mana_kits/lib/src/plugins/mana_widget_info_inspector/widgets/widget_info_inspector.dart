@@ -14,8 +14,10 @@ class WidgetInfoInspector extends StatefulWidget {
   State<WidgetInfoInspector> createState() => _WidgetInfoInspectorState();
 }
 
-class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsBindingObserver {
-  _WidgetInfoInspectorState() : selection = WidgetInspectorService.instance.selection;
+class _WidgetInfoInspectorState extends State<WidgetInfoInspector>
+    with WidgetsBindingObserver {
+  _WidgetInfoInspectorState()
+      : selection = WidgetInspectorService.instance.selection;
 
   final InspectorSelection selection;
 
@@ -74,7 +76,6 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
   Widget build(BuildContext context) {
     return ManaFloatingWindow(
       name: widget.name,
-      position: PositionType.top,
       initialWidth: 300,
       initialHeight: 100,
       barrier: WidgetInfoInspectorBarrier(

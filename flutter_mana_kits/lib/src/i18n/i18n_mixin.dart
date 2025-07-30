@@ -3,7 +3,10 @@ import 'package:flutter_mana/flutter_mana.dart';
 mixin I18nMixin {
   static const _strings = {
     // Align Ruler
-    'align_ruler.tip': ['Snap to nearest widget edge on release', '开启后松手将会自动吸附至最近部件边缘'],
+    'align_ruler.tip': [
+      'Snap to nearest widget edge on release',
+      '开启后松手将会自动吸附至最近部件边缘'
+    ],
 
     // Color Sucker
     'color_sucker.magnification': ['Magnification', '放大率'],
@@ -45,16 +48,28 @@ mixin I18nMixin {
     'memory_info.function': ['Function:', '方法:'],
 
     // Shared Preferences Viewer
-    'shared_preferences_viewer.filter_keywords': ['filter keywords...', '筛选字词...'],
+    'shared_preferences_viewer.filter_keywords': [
+      'filter keywords...',
+      '筛选字词...'
+    ],
     'shared_preferences_viewer.type': ['Type', '类型'],
     'shared_preferences_viewer.key': ['Key', '键'],
     'shared_preferences_viewer.key_required': ['Key Required', '键必填'],
     'shared_preferences_viewer.value': ['Value', '值'],
     'shared_preferences_viewer.value_required': ['Value Required', '值必填'],
-    'shared_preferences_viewer.value_must_double': ['Value Must Double', '值必须是Double类型'],
-    'shared_preferences_viewer.value_must_bool': ['Value Must Bool', '值必须是Bool类型'],
+    'shared_preferences_viewer.value_must_double': [
+      'Value Must Double',
+      '值必须是Double类型'
+    ],
+    'shared_preferences_viewer.value_must_bool': [
+      'Value Must Bool',
+      '值必须是Bool类型'
+    ],
     'shared_preferences_viewer.value_must_int': ['Value Must Int', '值必须是Int类型'],
-    'shared_preferences_viewer.value_must_list_of_string': ['Value Must List<String>', '值必须是List<String>类型'],
+    'shared_preferences_viewer.value_must_list_of_string': [
+      'Value Must List<String>',
+      '值必须是List<String>类型'
+    ],
     'shared_preferences_viewer.save': ['Save', '保存'],
     'shared_preferences_viewer.cancel': ['Cancel', '取消'],
 

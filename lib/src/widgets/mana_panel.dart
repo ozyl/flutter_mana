@@ -57,7 +57,8 @@ class ManaPanel extends StatelessWidget {
                 },
                 // Build the visual representation of the plugin item.
                 // 构建插件项的可视化表示。
-                child: _buildPluginItem(plugin, manaState.activePluginName.value == plugin.name),
+                child: _buildPluginItem(
+                    plugin, manaState.activePluginName.value == plugin.name),
               );
             },
           ).toList(),
@@ -80,7 +81,8 @@ class ManaPanel extends StatelessWidget {
     // Apply a different style if the plugin is active.
     // 如果插件处于活动状态，则应用不同的样式。
     if (active) {
-      style = const TextStyle(fontSize: 10, color: Colors.redAccent, fontWeight: FontWeight.bold);
+      style = const TextStyle(
+          fontSize: 10, color: Colors.redAccent, fontWeight: FontWeight.bold);
     }
 
     return Column(

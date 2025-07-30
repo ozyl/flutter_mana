@@ -1,8 +1,15 @@
+## 1.0.1
+
+- refactor(ui): preserve state when switching panels
+- feat: add mana_license plugin and documentation
+- chore: update dependencies and adjust ui
+- style: dart format
+
 ## 1.0.0
 
 首个正式版本发布！
 
-### 🧩 插件
+### 插件
 
 - **ManaPackageInfo**：显示应用包信息（版本号、构建号等）。
 - **ManaMemoryInfo**：查看内存信息。

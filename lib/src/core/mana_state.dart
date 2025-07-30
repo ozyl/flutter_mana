@@ -31,12 +31,17 @@ class ManaState {
     double? initialFloatingButtonSize,
     double? initialFloatingButtonOpacity,
   })  : activePluginName = ValueNotifier(initialActivePluginName ?? ''),
-        pluginManagementPanelVisible = ValueNotifier(initialPluginManagementPanelVisible ?? false),
-        floatWindowMainVisible = ValueNotifier(initialFloatWindowMainVisible ?? true),
-        floatWindowMainFullscreen = ValueNotifier(floatWindowMainFullscreen ?? false),
-        floatingButtonVisible = ValueNotifier(initialFloatingButtonVisible ?? true),
+        pluginManagementPanelVisible =
+            ValueNotifier(initialPluginManagementPanelVisible ?? false),
+        floatWindowMainVisible =
+            ValueNotifier(initialFloatWindowMainVisible ?? true),
+        floatWindowMainFullscreen =
+            ValueNotifier(floatWindowMainFullscreen ?? false),
+        floatingButtonVisible =
+            ValueNotifier(initialFloatingButtonVisible ?? true),
         floatingButtonSize = ValueNotifier(initialFloatingButtonSize ?? 50),
-        floatingButtonOpacity = ValueNotifier(initialFloatingButtonOpacity ?? 1);
+        floatingButtonOpacity =
+            ValueNotifier(initialFloatingButtonOpacity ?? 1);
 
   // 释放资源
   void dispose() {

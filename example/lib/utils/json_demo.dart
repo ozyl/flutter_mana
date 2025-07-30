@@ -11,7 +11,12 @@ const jsonDemo = {
     "roles": ["editor", "reviewer", "admin"],
     "contact": {
       "phone": "+1-555-123-4567",
-      "address": {"street": "123 Main St", "city": "Anytown", "zipCode": "12345", "country": "USA"},
+      "address": {
+        "street": "123 Main St",
+        "city": "Anytown",
+        "zipCode": "12345",
+        "country": "USA",
+      },
     },
   },
   "sections": [
@@ -19,10 +24,15 @@ const jsonDemo = {
       "sectionId": "sec-001",
       "title": "Executive Summary",
       "pageRange": "1-5",
-      "content": "A high-level overview of the year's performance and key achievements.",
+      "content":
+          "A high-level overview of the year's performance and key achievements.",
       "keywords": ["summary", "performance", "achievements"],
       "figures": [
-        {"figureId": "fig-001", "caption": "Revenue Growth Chart", "url": "https://example.com/charts/revenue.png"},
+        {
+          "figureId": "fig-001",
+          "caption": "Revenue Growth Chart",
+          "url": "https://example.com/charts/revenue.png",
+        },
         {
           "figureId": "fig-002",
           "caption": "Market Share Distribution",
@@ -34,7 +44,8 @@ const jsonDemo = {
       "sectionId": "sec-002",
       "title": "Financial Performance",
       "pageRange": "6-20",
-      "content": "Detailed financial statements including revenue, expenses, and profits.",
+      "content":
+          "Detailed financial statements including revenue, expenses, and profits.",
       "keywords": ["finance", "revenue", "expenses", "profit"],
       "dataTables": [
         {

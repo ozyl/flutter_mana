@@ -110,8 +110,9 @@ class _FloatingWindowState extends State<FloatingWindow> {
   }
 
   Widget _buildContent(Size screenSize, Size windowSize, bool fullscreen) {
-    final radius =
-        (fullscreen || widget.initialHeight == double.infinity) ? BorderRadius.zero : BorderRadius.circular(8);
+    final radius = (fullscreen || widget.initialHeight == double.infinity)
+        ? BorderRadius.zero
+        : BorderRadius.circular(8);
 
     return Container(
       clipBehavior: Clip.antiAlias,
@@ -146,14 +147,24 @@ class _FloatingWindowState extends State<FloatingWindow> {
                   onMinimize: () => _controller.onMinimize(widget.onMinimize),
                   onClose: () => _controller.onClose(widget.onClose)),
             Expanded(
-              child: ValueListenableBuilder(
-                valueListenable: _controller.showSetting,
-                builder: (context, showSetting, _) {
-                  if (showSetting && widget.setting != null) {
-                    return widget.setting ?? SizedBox();
-                  }
-                  return widget.content ?? SizedBox();
-                },
+              child: Stack(
+                children: [
+                  widget.content ?? SizedBox(),
+                  Positioned.fill(
+                    child: ValueListenableBuilder(
+                      valueListenable: _controller.showSetting,
+                      builder: (context, showSetting, _) {
+                        if (showSetting && widget.setting != null) {
+                          return ColoredBox(
+                            color: Colors.white,
+                            child: widget.setting ?? SizedBox.shrink(),
+                          );
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -179,37 +190,43 @@ class _FloatingWindowState extends State<FloatingWindow> {
       child: Stack(
         children: [
           if (widget.showBarrier) _buildBarrier(),
-          ValueListenableBuilder(
-            valueListenable: _controller.manaState.floatWindowMainVisible,
-            builder: (context, visible, _) {
-              return visible
-                  ? ValueListenableBuilder(
-                      valueListenable: _controller.fullscreen,
-                      builder: (context, fullscreen, _) {
-                        return ValueListenableBuilder(
-                          valueListenable: _controller.offset,
-                          builder: (context, offset, _) {
-                            final double currentLeft = fullscreen ? 0 : offset.dx;
-                            final double currentTop = fullscreen ? 0 : offset.dy;
-                            final double currentWidth =
-                                fullscreen ? _controller.screenSize.width : _controller.windowSize.width;
-                            final double currentHeight =
-                                fullscreen ? _controller.screenSize.height : _controller.windowSize.height;
+          if (widget.content != null)
+            ValueListenableBuilder(
+              valueListenable: _controller.manaState.floatWindowMainVisible,
+              builder: (context, visible, _) {
+                return visible
+                    ? ValueListenableBuilder(
+                        valueListenable: _controller.fullscreen,
+                        builder: (context, fullscreen, _) {
+                          return ValueListenableBuilder(
+                            valueListenable: _controller.offset,
+                            builder: (context, offset, _) {
+                              final double currentLeft =
+                                  fullscreen ? 0 : offset.dx;
+                              final double currentTop =
+                                  fullscreen ? 0 : offset.dy;
+                              final double currentWidth = fullscreen
+                                  ? _controller.screenSize.width
+                                  : _controller.windowSize.width;
+                              final double currentHeight = fullscreen
+                                  ? _controller.screenSize.height
+                                  : _controller.windowSize.height;
 
-                            return Positioned(
-                              left: currentLeft,
-                              top: currentTop,
-                              width: currentWidth,
-                              height: currentHeight,
-                              child: _buildContent(_controller.screenSize, _controller.windowSize, fullscreen),
-                            );
-                          },
-                        );
-                      },
-                    )
-                  : nilPosition;
-            },
-          ),
+                              return Positioned(
+                                left: currentLeft,
+                                top: currentTop,
+                                width: currentWidth,
+                                height: currentHeight,
+                                child: _buildContent(_controller.screenSize,
+                                    _controller.windowSize, fullscreen),
+                              );
+                            },
+                          );
+                        },
+                      )
+                    : nilPosition;
+              },
+            ),
         ],
       ),
     );

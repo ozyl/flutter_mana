@@ -12,11 +12,12 @@ class ScreenPixelGrabber {
 
   Future<void> captureImage({required double pixelRatio}) async {
     try {
-      final RenderRepaintBoundary? boundary =
-          repaintBoundaryKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      final RenderRepaintBoundary? boundary = repaintBoundaryKey.currentContext
+          ?.findRenderObject() as RenderRepaintBoundary?;
 
       if (boundary == null) {
-        debugPrint("Error: Repaint boundary context is null or not a RenderRepaintBoundary.");
+        debugPrint(
+            "Error: Repaint boundary context is null or not a RenderRepaintBoundary.");
         _capturedImage = null;
         return;
       }
@@ -34,9 +35,11 @@ class ScreenPixelGrabber {
       return null;
     }
 
-    final RenderBox? box = repaintBoundaryKey.currentContext?.findRenderObject() as RenderBox?;
+    final RenderBox? box =
+        repaintBoundaryKey.currentContext?.findRenderObject() as RenderBox?;
     if (box == null) {
-      debugPrint("Warning: Repaint boundary context or RenderBox is null in getColorAt.");
+      debugPrint(
+          "Warning: Repaint boundary context or RenderBox is null in getColorAt.");
       return null;
     }
 
@@ -44,10 +47,13 @@ class ScreenPixelGrabber {
 
     final double pixelRatio = _capturedImage!.width / box.size.width;
 
-    int px = (local.dx * pixelRatio).round().clamp(0, _capturedImage!.width - 1);
-    int py = (local.dy * pixelRatio).round().clamp(0, _capturedImage!.height - 1);
+    int px =
+        (local.dx * pixelRatio).round().clamp(0, _capturedImage!.width - 1);
+    int py =
+        (local.dy * pixelRatio).round().clamp(0, _capturedImage!.height - 1);
 
-    final ByteData? data = await _capturedImage!.toByteData(format: ui.ImageByteFormat.rawRgba);
+    final ByteData? data =
+        await _capturedImage!.toByteData(format: ui.ImageByteFormat.rawRgba);
     if (data == null) {
       debugPrint("Error: Could not get byte data from image in getColorAt.");
       return null;

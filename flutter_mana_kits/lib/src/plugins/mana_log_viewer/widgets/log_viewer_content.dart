@@ -18,7 +18,10 @@ class LogViewerContent extends StatefulWidget {
 }
 
 class _LogViewerContentState extends State<LogViewerContent>
-    with SingleTickerProviderStateMixin, I18nMixin, AutomaticKeepAliveClientMixin {
+    with
+        SingleTickerProviderStateMixin,
+        I18nMixin,
+        AutomaticKeepAliveClientMixin {
   late TabController _tabController;
   late final TextEditingController _filterController;
   final ScrollController _scrollController = ScrollController();
@@ -44,7 +47,8 @@ class _LogViewerContentState extends State<LogViewerContent>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this)..addListener(_handleTabSelection);
+    _tabController = TabController(length: _tabs.length, vsync: this)
+      ..addListener(_handleTabSelection);
     _filterController = TextEditingController()..addListener(_onTextChanged);
     ManaLogCollector().addListener(_onDataChanged);
     _onDataChanged();
@@ -84,10 +88,13 @@ class _LogViewerContentState extends State<LogViewerContent>
 
   void _updateFilteredData(Iterable<OutputEvent> data) {
     final filtered = data.where((d) {
-      final matchLevel = _currentTab == 'All' || d.level.name.toLowerCase() == _currentTab.toLowerCase();
+      final matchLevel = _currentTab == 'All' ||
+          d.level.name.toLowerCase() == _currentTab.toLowerCase();
       final matchKeyword = !_filter ||
           _filterKeywords.isEmpty ||
-          (_filter && _filterKeywords.isNotEmpty && d.origin.message.toString().contains(_filterKeywords));
+          (_filter &&
+              _filterKeywords.isNotEmpty &&
+              d.origin.message.toString().contains(_filterKeywords));
       return matchLevel && matchKeyword;
     });
 
@@ -149,7 +156,8 @@ class _LogViewerContentState extends State<LogViewerContent>
         dividerHeight: 0,
         isScrollable: false,
         tabs: _tabs.map((tab) => Tab(text: tab, height: 36)).toList(),
-        labelStyle: const TextStyle(fontSize: _fontSize, fontWeight: FontWeight.bold),
+        labelStyle:
+            const TextStyle(fontSize: _fontSize, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -178,7 +186,8 @@ class _LogViewerContentState extends State<LogViewerContent>
 
   Widget _buildBottom() {
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         children: [
           if (_filter) ...[
@@ -187,9 +196,11 @@ class _LogViewerContentState extends State<LogViewerContent>
               style: const TextStyle(fontSize: _fontSize),
               decoration: InputDecoration(
                 hintText: t('log_viewer.filter_keywords'),
-                hintStyle: const TextStyle(fontSize: _fontSize, color: Colors.black54),
+                hintStyle:
+                    const TextStyle(fontSize: _fontSize, color: Colors.black54),
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12.0, vertical: 12.0),
                 filled: true,
                 fillColor: Colors.grey.shade200,
                 border: InputBorder.none,
@@ -205,7 +216,8 @@ class _LogViewerContentState extends State<LogViewerContent>
               return ToggleButtons(
                 isSelected: selects,
                 renderBorder: false,
-                constraints: BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
+                constraints:
+                    BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
                 textStyle: const TextStyle(fontSize: _fontSize),
                 onPressed: (index) {
                   switch (index) {

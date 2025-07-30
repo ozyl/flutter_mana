@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../widgets/mana_overlay.dart';
 import 'mana_plugin_manager.dart';
@@ -59,6 +60,15 @@ class ManaWidget extends StatelessWidget {
     /// 在经过多种方案尝试后，只有在这嵌套一层MaterialApp是侵入性最小、功能完善最好的方案，其他方案多多少少有瑕疵。
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('zh', 'CN'),
+      ],
       home: Stack(
         children: [
           /// Wraps the child widget with RepaintBoundary and assigns `manaRootKey` to it.

@@ -9,13 +9,16 @@ class WidgetInfoInspectorContent extends StatefulWidget {
 
   final ValueChanged<bool>? onChanged;
 
-  const WidgetInfoInspectorContent({super.key, required this.selection, this.onChanged});
+  const WidgetInfoInspectorContent(
+      {super.key, required this.selection, this.onChanged});
 
   @override
-  State<WidgetInfoInspectorContent> createState() => _WidgetInfoInspectorContentState();
+  State<WidgetInfoInspectorContent> createState() =>
+      _WidgetInfoInspectorContentState();
 }
 
-class _WidgetInfoInspectorContentState extends State<WidgetInfoInspectorContent> with I18nMixin {
+class _WidgetInfoInspectorContentState extends State<WidgetInfoInspectorContent>
+    with I18nMixin {
   bool _debugPaintSizeEnabled = false;
 
   void _onChange(bool value) {
@@ -58,7 +61,9 @@ class _WidgetInfoInspectorContentState extends State<WidgetInfoInspectorContent>
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) {
-                              return InfoPage(elements: widget.selection.currentElement!.debugGetDiagnosticChain());
+                              return InfoPage(
+                                  elements: widget.selection.currentElement!
+                                      .debugGetDiagnosticChain());
                             },
                           ),
                         );

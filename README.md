@@ -29,9 +29,8 @@ import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   ManaPluginManager.instance
+    ..register(ManaLicense())
     ..register(ManaPackageInfo())
     ..register(ManaMemoryInfo())
     ..register(ManaShowCode())
@@ -74,6 +73,7 @@ class App extends StatelessWidget {
 - [x] [显示代码 - ShowCode](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_show_code)
 - [x] [内存信息 - MemoryInfo](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_memory_info)
 - [x] [包信息 - PackageInfo](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_package_info)
+- [x] [许可 - License](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_license)
 
 | 插件                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
@@ -85,6 +85,8 @@ class App extends StatelessWidget {
 | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_fps_monitor.png" alt="帧率监控">  | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_shared_preferences_viewer.png" alt="SharedPreferences查看器"> | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.png" alt="标尺">       |
 | 显示代码                                                                                                                  | 内存信息                                                                                                                                               | 包信息                                                                                                                      |
 | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_show_code.png" alt="显示代码">    | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_memory_info.png" alt="内存信息">                               | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_package_info.png" alt="包信息">     |
+| 许可                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
+| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_license.png" alt="许可">        |                                                                                                                                                    |                                                                                                                          |
 
 ## 插件开发
 
@@ -192,5 +194,7 @@ class App extends StatelessWidget {
 - [debug friend](https://pub.dev/packages/debug_friend)
 - [widget with codeview](https://github.com/X-Wei/widget_with_codeview)
 - [flutter：全局 context 在 navigator 与 overlay 中的运用](https://juejin.cn/post/7200191765516615737)
+- [fconsole](https://github.com/fluttercandies/fconsole/blob/8b32f57399396ecb7f5792c0e6c86df3e991d002/lib/src/widget/console.dart#L117)
 - [内存泄漏检测原理](https://juejin.cn/post/6922625442323103758)
 - [内存泄漏检测库](https://github.com/liujiakuoyx/leak_detector)
+- [卡顿检测](https://juejin.cn/post/7434899217804902427)

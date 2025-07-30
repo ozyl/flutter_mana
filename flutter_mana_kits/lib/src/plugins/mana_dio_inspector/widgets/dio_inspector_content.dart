@@ -16,7 +16,8 @@ class DioInspectorContent extends StatefulWidget {
   State<DioInspectorContent> createState() => _DioInspectorContentState();
 }
 
-class _DioInspectorContentState extends State<DioInspectorContent> with SingleTickerProviderStateMixin, I18nMixin {
+class _DioInspectorContentState extends State<DioInspectorContent>
+    with SingleTickerProviderStateMixin, I18nMixin {
   late TabController _tabController;
 
   late final TextEditingController _filterController;
@@ -49,7 +50,8 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this)..addListener(_handleTabSelection);
+    _tabController = TabController(length: _tabs.length, vsync: this)
+      ..addListener(_handleTabSelection);
     _filterController = TextEditingController()..addListener(_onTextChanged);
     ManaDioCollector().addListener(_onDataChanged);
     _onDataChanged();
@@ -89,10 +91,13 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
 
   void _updateFilteredData(Iterable<Response> data) {
     final filtered = data.where((d) {
-      final matchLevel = _currentTab == 'All' || d.requestOptions.method.toLowerCase() == _currentTab.toLowerCase();
+      final matchLevel = _currentTab == 'All' ||
+          d.requestOptions.method.toLowerCase() == _currentTab.toLowerCase();
       final matchKeyword = !_filter ||
           _filterKeywords.isEmpty ||
-          (_filter && _filterKeywords.isNotEmpty && d.requestOptions.uri.toString().contains(_filterKeywords));
+          (_filter &&
+              _filterKeywords.isNotEmpty &&
+              d.requestOptions.uri.toString().contains(_filterKeywords));
       return matchLevel && matchKeyword;
     });
 
@@ -154,7 +159,8 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
         indicatorColor: Colors.transparent,
         dividerHeight: 0,
         isScrollable: false,
-        labelStyle: const TextStyle(fontSize: _fontSize, fontWeight: FontWeight.bold),
+        labelStyle:
+            const TextStyle(fontSize: _fontSize, fontWeight: FontWeight.bold),
         tabs: _tabs.map((tab) => Tab(text: tab, height: 36)).toList(),
       ),
     );
@@ -163,43 +169,25 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
   /// 创建中部区域
   Widget _buildCenter() {
     return Expanded(
-      child: Stack(
-        children: [
-          ListView.separated(
-            controller: _scrollController,
-            itemCount: _filteredData.length,
-            physics: const ClampingScrollPhysics(),
-            padding: const EdgeInsets.only(bottom: 20),
-            itemBuilder: (context, index) {
-              final d = _filteredData[index];
-              return ResponseTile(
-                response: d,
-                onTap: () {
-                  setState(() {
-                    _response = d;
-                  });
-                },
-              );
+      child: ListView.separated(
+        controller: _scrollController,
+        itemCount: _filteredData.length,
+        physics: const ClampingScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: 20),
+        itemBuilder: (context, index) {
+          final d = _filteredData[index];
+          return ResponseTile(
+            response: d,
+            onTap: () {
+              setState(() {
+                _response = d;
+              });
             },
-            separatorBuilder: (BuildContext context, int index) {
-              return _divider;
-            },
-          ),
-          if (_response != null)
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Colors.white,
-              child: ResponseDetail(
-                response: _response!,
-                onClose: () {
-                  setState(() {
-                    _response = null;
-                  });
-                },
-              ),
-            )
-        ],
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return _divider;
+        },
       ),
     );
   }
@@ -218,9 +206,11 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
               style: const TextStyle(fontSize: _fontSize),
               decoration: InputDecoration(
                 hintText: t('dio_inspector.filter_keywords'),
-                hintStyle: TextStyle(fontSize: _fontSize, color: Colors.black54),
+                hintStyle:
+                    TextStyle(fontSize: _fontSize, color: Colors.black54),
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12.0, vertical: 12.0),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                 ),
@@ -239,7 +229,8 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
               return ToggleButtons(
                 isSelected: selects,
                 renderBorder: false,
-                constraints: BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
+                constraints:
+                    BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
                 textStyle: const TextStyle(fontSize: _fontSize),
                 onPressed: (int index) {
                   switch (index) {
@@ -292,18 +283,37 @@ class _DioInspectorContentState extends State<DioInspectorContent> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        if (_response == null) ...[
-          _divider,
-          _buildHeader(),
-        ],
-        _divider,
-        _buildCenter(),
-        if (_response == null) ...[
-          _divider,
-          _buildBottom(),
-        ],
+        Positioned.fill(
+          child: Column(
+            children: [
+              _divider,
+              _buildHeader(),
+              _divider,
+              _buildCenter(),
+              // 底部工具栏
+              _divider,
+              _buildBottom(),
+            ],
+          ),
+        ),
+        if (_response != null)
+          Positioned.fill(
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.white,
+              child: ResponseDetail(
+                response: _response!,
+                onClose: () {
+                  setState(() {
+                    _response = null;
+                  });
+                },
+              ),
+            ),
+          )
       ],
     );
   }

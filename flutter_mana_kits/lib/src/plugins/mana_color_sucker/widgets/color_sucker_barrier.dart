@@ -99,11 +99,13 @@ class _ColorSuckerBarrierState extends State<ColorSuckerBarrier> {
             left: dragPosition.dx - widget.magnifierRadius,
             top: dragPosition.dy - widget.magnifierRadius,
             child: RawMagnifier(
-              size: Size(widget.magnifierRadius * 2, widget.magnifierRadius * 2),
+              size:
+                  Size(widget.magnifierRadius * 2, widget.magnifierRadius * 2),
               magnificationScale: widget.magnification,
               decoration: MagnifierDecoration(
                 shape: CircleBorder(
-                  side: BorderSide(color: widget.borderColor, width: widget.borderWidth),
+                  side: BorderSide(
+                      color: widget.borderColor, width: widget.borderWidth),
                 ),
               ),
               focalPointOffset: Offset.zero,

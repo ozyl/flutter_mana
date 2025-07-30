@@ -73,7 +73,8 @@ class _Cell extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: SelectableText(
           text,
-          style: TextStyle(fontWeight: bold ? FontWeight.bold : FontWeight.normal),
+          style:
+              TextStyle(fontWeight: bold ? FontWeight.bold : FontWeight.normal),
         ),
       );
 }
