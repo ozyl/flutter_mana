@@ -128,7 +128,7 @@ packages:
       path: "../flutter_mana_kits"
       relative: true
     source: path
-    version: "1.0.2"
+    version: "1.0.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter

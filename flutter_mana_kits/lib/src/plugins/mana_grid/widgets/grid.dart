@@ -14,8 +14,27 @@ class Grid extends StatefulWidget {
 }
 
 class _GridState extends State<Grid> {
-  double step = 50;
-  bool showNumbers = true;
+  double _gap = 50;
+  bool _showNumbers = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _gap = ManaStore.instance.prefs.getDouble('mana_grid_gap') ?? 50;
+    _showNumbers = ManaStore.instance.prefs.getBool('mana_grid_show_numbers') ?? true;
+  }
+
+  void _onGapChanged(double value) async {
+    _gap = value;
+    await ManaStore.instance.prefs.setDouble('mana_grid_gap', value);
+    setState(() {});
+  }
+
+  void _onShowNumbersChanged(bool value) async {
+    _showNumbers = value;
+    await ManaStore.instance.prefs.setBool('mana_grid_show_numbers', value);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +43,14 @@ class _GridState extends State<Grid> {
       initialHeight: 180,
       position: PositionType.top,
       content: GridContent(
-        onStepChanged: (value) {
-          setState(() {
-            step = value;
-          });
-        },
-        onShowNumbers: (value) {
-          setState(() {
-            showNumbers = value;
-          });
-        },
+        gap: _gap,
+        showNumbers: _showNumbers,
+        onGapChanged: _onGapChanged,
+        onShowNumbersChanged: _onShowNumbersChanged,
       ),
       barrier: GridBarrier(
-        step: step,
-        showNumbers: showNumbers,
+        gap: _gap,
+        showNumbers: _showNumbers,
       ),
     );
   }
