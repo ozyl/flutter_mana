@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
 class GridContent extends StatefulWidget {
-  final ValueChanged<bool>? onShowNumbers;
-  final ValueChanged<double>? onStepChanged;
+  final double gap;
+  final bool showNumbers;
 
-  const GridContent({super.key, this.onShowNumbers, this.onStepChanged});
+  final ValueChanged<bool>? onShowNumbersChanged;
+  final ValueChanged<double>? onGapChanged;
+
+  const GridContent({
+    super.key,
+    required this.gap,
+    required this.showNumbers,
+    this.onShowNumbersChanged,
+    this.onGapChanged,
+  });
 
   @override
   State<GridContent> createState() => _GridContentState();
@@ -13,14 +22,21 @@ class GridContent extends StatefulWidget {
 class _GridContentState extends State<GridContent> {
   bool _showNumbers = true;
 
-  double _step = 50;
-  final List<double> _stepOptions = List.generate(
+  double _gap = 50;
+  final List<double> _gapOptions = List.generate(
     20,
     (index) => (index + 1) * 10,
   );
 
+  @override
+  void initState() {
+    super.initState();
+    _gap = widget.gap;
+    _showNumbers = widget.showNumbers;
+  }
+
   void _onShowNumbersChanged(bool value) {
-    widget.onShowNumbers?.call(value);
+    widget.onShowNumbersChanged?.call(value);
     setState(() {
       _showNumbers = value;
     });
@@ -58,18 +74,18 @@ class _GridContentState extends State<GridContent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 8,
             children: [
-              Text('Step: ${_step.toInt()}px', style: TextStyle(fontSize: 16)),
+              Text('Gap: ${_gap.toInt()}px', style: TextStyle(fontSize: 16)),
               Slider(
                 padding: EdgeInsets.zero,
-                value: _step,
-                min: _stepOptions.first,
-                max: _stepOptions.last,
-                divisions: _stepOptions.length - 1,
-                label: '${_step.toInt()}px',
+                value: _gap,
+                min: _gapOptions.first,
+                max: _gapOptions.last,
+                divisions: _gapOptions.length - 1,
+                label: '${_gap.toInt()}px',
                 onChanged: (value) {
                   // 吸附到最近的预设值（可选）
-                  _step = _stepOptions.reduce((a, b) => (value - a).abs() < (value - b).abs() ? a : b);
-                  widget.onStepChanged?.call(_step);
+                  _gap = _gapOptions.reduce((a, b) => (value - a).abs() < (value - b).abs() ? a : b);
+                  widget.onGapChanged?.call(_gap);
                   setState(() {});
                 },
               ),

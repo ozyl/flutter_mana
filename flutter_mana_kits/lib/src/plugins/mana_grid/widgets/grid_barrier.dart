@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class GridBarrier extends StatelessWidget {
-  final double step;
+  final double gap;
   final bool showNumbers;
 
-  const GridBarrier({super.key, required this.step, required this.showNumbers});
+  const GridBarrier({super.key, required this.gap, required this.showNumbers});
 
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
       child: CustomPaint(
         painter: _GridPainter(
-          step: step,
+          gap: gap,
           color: Colors.grey.withAlpha(180),
           centerColor: Colors.redAccent.withAlpha(180),
           strokeWidth: 0.5,
@@ -24,14 +24,14 @@ class GridBarrier extends StatelessWidget {
 }
 
 class _GridPainter extends CustomPainter {
-  final double step;
+  final double gap;
   final Color color;
   final Color centerColor;
   final double strokeWidth;
   final bool showNumbers;
 
   _GridPainter({
-    required this.step,
+    required this.gap,
     required this.color,
     required this.centerColor,
     required this.strokeWidth,
@@ -54,7 +54,7 @@ class _GridPainter extends CustomPainter {
     );
 
     // 垂直线
-    for (double x = 0; x <= size.width; x += step) {
+    for (double x = 0; x <= size.width; x += gap) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), gridPaint);
       if (showNumbers) {
         textPainter.text = TextSpan(
@@ -67,7 +67,7 @@ class _GridPainter extends CustomPainter {
     }
 
     // 水平线
-    for (double y = 0; y <= size.height; y += step) {
+    for (double y = 0; y <= size.height; y += gap) {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
       if (showNumbers) {
         textPainter.text = TextSpan(
@@ -108,7 +108,7 @@ class _GridPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _GridPainter oldDelegate) {
-    return oldDelegate.step != step ||
+    return oldDelegate.gap != gap ||
         oldDelegate.color != color ||
         oldDelegate.centerColor != centerColor ||
         oldDelegate.strokeWidth != strokeWidth ||

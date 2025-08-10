@@ -1,3 +1,7 @@
+## 1.0.3
+
+- fix: mana_grid bug
+
 ## 1.0.2
 
 - feat: add mana_grid plugin and documentation
