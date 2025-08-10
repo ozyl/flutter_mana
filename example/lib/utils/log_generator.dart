@@ -14,11 +14,7 @@ class ReleaseFilter extends LogFilter {
 }
 
 class LogGenerator {
-  static final Logger _logger = Logger(
-    level: Level.all,
-    filter: ReleaseFilter(),
-    output: ManaLogCollector(),
-  );
+  static final Logger _logger = Logger(level: Level.all, filter: ReleaseFilter(), output: ManaLogCollector());
   static final Random _random = Random();
 
   static void generateRandomLog() {
@@ -45,9 +41,7 @@ class LogGenerator {
       return;
     }
 
-    final error = _random.nextBool()
-        ? null
-        : Exception("随机异常 ${_random.nextInt(100)}");
+    final error = _random.nextBool() ? null : Exception("随机异常 ${_random.nextInt(100)}");
     final stackTrace = _random.nextDouble() > 0.7 ? StackTrace.current : null;
 
     _logger.log(level, message, error: error, stackTrace: stackTrace);

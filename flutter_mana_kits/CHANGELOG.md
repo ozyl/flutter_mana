@@ -1,3 +1,7 @@
+## 1.0.2
+
+- feat: add mana_grid plugin and documentation
+
 ## 1.0.1
 
 - refactor(ui): preserve state when switching panels
