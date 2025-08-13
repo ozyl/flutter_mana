@@ -2,6 +2,9 @@
 
 [![pub package](https://img.shields.io/pub/v/flutter_mana?label=flutter_mana)](https://pub.dev/packages/flutter_mana)
 [![pub package](https://img.shields.io/pub/v/flutter_mana_kits?label=flutter_mana_kits)](https://pub.dev/packages/flutter_mana_kits)
+![Last Commit](https://img.shields.io/github/last-commit/lhlyu/flutter_mana)
+
+
 
 Flutter 应用内调试工具平台.
 an in-app debug kits platform for Flutter.
