@@ -105,6 +105,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 backgroundColor: Colors.deepPurple,
                 onPressed: addSharedPreferences,
               ),
+              TextField(),
             ],
           ),
         ),
