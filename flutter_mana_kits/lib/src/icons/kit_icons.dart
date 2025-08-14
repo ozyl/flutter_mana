@@ -18,10 +18,13 @@ abstract final class KitIcons {
   static const down = Icons.vertical_align_bottom_outlined;
   static const filter_on = Icons.filter_list_sharp;
   static const filter_off = Icons.filter_list_off_sharp;
+
   // 升序
   static const sort_asc = Icons.arrow_drop_up;
+
   // 降序
   static const sort_desc = Icons.arrow_drop_down;
+
   // 自动
   static const sort_auto = Icons.unfold_more;
 

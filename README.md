@@ -4,8 +4,6 @@
 [![pub package](https://img.shields.io/pub/v/flutter_mana_kits?label=flutter_mana_kits)](https://pub.dev/packages/flutter_mana_kits)
 ![Last Commit](https://img.shields.io/github/last-commit/lhlyu/flutter_mana)
 
-
-
 Flutter 应用内调试工具平台.
 an in-app debug kits platform for Flutter.
 
@@ -33,6 +31,7 @@ import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
 void main() async {
   ManaPluginManager.instance
+    ..register(ManaVisualHelper())
     ..register(ManaGrid())
     ..register(ManaLicense())
     ..register(ManaPackageInfo())
@@ -79,6 +78,7 @@ class App extends StatelessWidget {
 - [x] [包信息 - PackageInfo](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_package_info)
 - [x] [许可 - License](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_license)
 - [x] [网格 - Grid](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_grid)
+- [x] [视觉辅助 - VisualHelper](https://github.com/lhlyu/flutter_mana/tree/master/flutter_mana_kits/lib/src/plugins/mana_visual_helper)
 
 | 插件                                                                                                                    |                                                                                                                                                    |                                                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
@@ -90,8 +90,8 @@ class App extends StatelessWidget {
 | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_fps_monitor.png" alt="帧率监控">  | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_shared_preferences_viewer.png" alt="SharedPreferences查看器"> | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_align_ruler.png" alt="标尺">       |
 | 显示代码                                                                                                                  | 内存信息                                                                                                                                               | 包信息                                                                                                                      |
 | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_show_code.png" alt="显示代码">    | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_memory_info.png" alt="内存信息">                               | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_package_info.png" alt="包信息">     |
-| 许可                                                                                                                    | 网格                                                                                                                                                 |                                                                                                                          |
-| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_license.png" alt="许可">        | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_grid.png" alt="网格">                                        |                                                                                                                          |
+| 许可                                                                                                                    | 网格                                                                                                                                                 | 视觉辅助                                                                                                                     |
+| <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_license.png" alt="许可">        | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_grid.png" alt="网格">                                        | <img width="200" src="https://github.com/lhlyu/flutter_mana/raw/master/screenshots/mana_visual_helper.png" alt="视觉辅助">   |
 
 ## 插件开发
 

@@ -18,8 +18,7 @@ class ColorSuckerContent extends StatefulWidget {
   State<ColorSuckerContent> createState() => _ColorSuckerContentState();
 }
 
-class _ColorSuckerContentState extends State<ColorSuckerContent>
-    with I18nMixin {
+class _ColorSuckerContentState extends State<ColorSuckerContent> with I18nMixin {
   late Color _color;
 
   @override
@@ -93,8 +92,7 @@ class _ColorSuckerContentState extends State<ColorSuckerContent>
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 8,
             children: [
-              Text('${t('color_sucker.magnification')}: ${_zoomLevel.toInt()}x',
-                  style: TextStyle(fontSize: 16)),
+              Text('${t('color_sucker.magnification')}: ${_zoomLevel.toInt()}x', style: TextStyle(fontSize: 16)),
               Slider(
                 padding: EdgeInsets.zero,
                 value: _zoomLevel,
@@ -104,8 +102,7 @@ class _ColorSuckerContentState extends State<ColorSuckerContent>
                 label: '${_zoomLevel.toInt()}x',
                 onChanged: (value) {
                   // 吸附到最近的预设值（可选）
-                  _zoomLevel = _zoomOptions.reduce(
-                      (a, b) => (value - a).abs() < (value - b).abs() ? a : b);
+                  _zoomLevel = _zoomOptions.reduce((a, b) => (value - a).abs() < (value - b).abs() ? a : b);
                   widget.onMagnificationChanged?.call(_zoomLevel);
                   setState(() {});
                 },

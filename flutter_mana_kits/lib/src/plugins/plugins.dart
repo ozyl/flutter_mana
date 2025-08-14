@@ -13,4 +13,5 @@ export 'mana_memory_info/index.dart' show ManaMemoryInfo;
 export 'mana_package_info/index.dart' show ManaPackageInfo;
 export 'mana_shared_preferences_viewer/index.dart' show ManaSharedPreferencesViewer;
 export 'mana_show_code/index.dart' show ManaShowCode;
+export 'mana_visual_helper/index.dart' show ManaVisualHelper;
 export 'mana_widget_info_inspector/index.dart' show ManaWidgetInfoInspector;

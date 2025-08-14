@@ -18,6 +18,7 @@ class ShowCodeContent extends StatefulWidget {
 class _ShowCodeContentState extends State<ShowCodeContent> {
   // 统一的字体大小
   static const double _fontSize = 12.0;
+
   // 分割线颜色
   static final Color _dividerColor = Colors.grey.shade200;
 
@@ -51,8 +52,7 @@ class _ShowCodeContentState extends State<ShowCodeContent> {
     return FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return const Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
         final packagePath = snapshot.data!.packagePath;
         final textSpan = snapshot.data!.textSpan;

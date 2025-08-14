@@ -1,3 +1,8 @@
+## 1.0.2
+
+- refactor: replace ValueListenableBuilder with AnimatedBuilder and add maintainContent
+- style: dart format
+
 ## 1.0.1
 
 - refactor(ui): preserve state when switching panels

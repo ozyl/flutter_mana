@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../i18n/i18n_mixin.dart';
+
 class GridContent extends StatefulWidget {
   final double gap;
   final bool showNumbers;
@@ -19,7 +21,7 @@ class GridContent extends StatefulWidget {
   State<GridContent> createState() => _GridContentState();
 }
 
-class _GridContentState extends State<GridContent> {
+class _GridContentState extends State<GridContent> with I18nMixin {
   bool _showNumbers = true;
 
   double _gap = 50;
@@ -60,7 +62,7 @@ class _GridContentState extends State<GridContent> {
               ),
               Expanded(
                 child: Text(
-                  'Show Numbers',
+                  t('grid.show_numbers'),
                   style: const TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
@@ -74,7 +76,7 @@ class _GridContentState extends State<GridContent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 8,
             children: [
-              Text('Gap: ${_gap.toInt()}px', style: TextStyle(fontSize: 16)),
+              Text('${t('grid.gap')}: ${_gap.toInt()}px', style: TextStyle(fontSize: 16)),
               Slider(
                 padding: EdgeInsets.zero,
                 value: _gap,

@@ -20,6 +20,7 @@ class ShowCode extends StatelessWidget {
       initialHeight: double.infinity,
       drag: false,
       showBarrier: false,
+      maintainContent: false,
       content: ShowCodeContent(highlighter: highlighter),
     );
   }

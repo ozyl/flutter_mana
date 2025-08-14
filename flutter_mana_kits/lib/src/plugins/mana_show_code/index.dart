@@ -11,8 +11,7 @@ class ManaShowCode implements ManaPluggable {
   const ManaShowCode();
 
   @override
-  Widget? buildWidget(BuildContext? context) =>
-      ShowCode(name: name, highlighter: highlighter);
+  Widget? buildWidget(BuildContext? context) => ShowCode(name: name, highlighter: highlighter);
 
   @override
   String getLocalizedDisplayName(Locale locale) {

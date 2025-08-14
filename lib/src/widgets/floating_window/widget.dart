@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana/src/widgets/floating_window/window_controls.dart';
-import 'package:flutter_mana/src/widgets/nil.dart';
 
+import '../nil.dart';
 import 'controller.dart';
 
 class FloatingWindow extends StatefulWidget {
@@ -36,6 +36,9 @@ class FloatingWindow extends StatefulWidget {
   /// 是否显示遮罩
   final bool showBarrier;
 
+  /// 主体隐藏时是否保留主体的子树，默认是true - 保留
+  final bool maintainContent;
+
   /// 是否允许拖拽
   final bool drag;
 
@@ -57,6 +60,7 @@ class FloatingWindow extends StatefulWidget {
     this.initialPosition,
     this.showControls = true,
     this.showBarrier = true,
+    this.maintainContent = true,
     this.drag = true,
     this.onClose,
     this.onMinimize,
@@ -110,9 +114,8 @@ class _FloatingWindowState extends State<FloatingWindow> {
   }
 
   Widget _buildContent(Size screenSize, Size windowSize, bool fullscreen) {
-    final radius = (fullscreen || widget.initialHeight == double.infinity)
-        ? BorderRadius.zero
-        : BorderRadius.circular(8);
+    final radius =
+        (fullscreen || widget.initialHeight == double.infinity) ? BorderRadius.zero : BorderRadius.circular(8);
 
     return Container(
       clipBehavior: Clip.antiAlias,
@@ -191,40 +194,33 @@ class _FloatingWindowState extends State<FloatingWindow> {
         children: [
           if (widget.showBarrier) _buildBarrier(),
           if (widget.content != null)
-            ValueListenableBuilder(
-              valueListenable: _controller.manaState.floatWindowMainVisible,
-              builder: (context, visible, _) {
-                return visible
-                    ? ValueListenableBuilder(
-                        valueListenable: _controller.fullscreen,
-                        builder: (context, fullscreen, _) {
-                          return ValueListenableBuilder(
-                            valueListenable: _controller.offset,
-                            builder: (context, offset, _) {
-                              final double currentLeft =
-                                  fullscreen ? 0 : offset.dx;
-                              final double currentTop =
-                                  fullscreen ? 0 : offset.dy;
-                              final double currentWidth = fullscreen
-                                  ? _controller.screenSize.width
-                                  : _controller.windowSize.width;
-                              final double currentHeight = fullscreen
-                                  ? _controller.screenSize.height
-                                  : _controller.windowSize.height;
-
-                              return Positioned(
-                                left: currentLeft,
-                                top: currentTop,
-                                width: currentWidth,
-                                height: currentHeight,
-                                child: _buildContent(_controller.screenSize,
-                                    _controller.windowSize, fullscreen),
-                              );
-                            },
-                          );
-                        },
-                      )
-                    : nilPosition;
+            AnimatedBuilder(
+              animation: Listenable.merge([
+                _controller.manaState.floatWindowMainVisible,
+                _controller.fullscreen,
+                _controller.offset,
+              ]), // 合并多个 ValueListenable
+              builder: (context, _) {
+                final visible = _controller.manaState.floatWindowMainVisible.value;
+                final fullscreen = _controller.fullscreen.value;
+                final offset = _controller.offset.value;
+                final double currentLeft = fullscreen ? 0 : offset.dx;
+                final double currentTop = fullscreen ? 0 : offset.dy;
+                final double currentWidth = fullscreen ? _controller.screenSize.width : _controller.windowSize.width;
+                final double currentHeight = fullscreen ? _controller.screenSize.height : _controller.windowSize.height;
+                return Positioned(
+                  left: currentLeft,
+                  top: currentTop,
+                  width: currentWidth,
+                  height: currentHeight,
+                  child: Visibility(
+                    visible: visible,
+                    replacement: nil,
+                    maintainState: widget.maintainContent,
+                    maintainAnimation: widget.maintainContent,
+                    child: _buildContent(_controller.screenSize, _controller.windowSize, fullscreen),
+                  ),
+                );
               },
             ),
         ],

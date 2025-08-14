@@ -37,8 +37,7 @@ class AlignRulerBarrier extends StatefulWidget {
 class _AlignRulerBarrierState extends State<AlignRulerBarrier> {
   late Offset _dotPosition;
 
-  final ValueNotifier<RenderObject?> _selectedRenderObjectNotifier =
-      ValueNotifier<RenderObject?>(null);
+  final ValueNotifier<RenderObject?> _selectedRenderObjectNotifier = ValueNotifier<RenderObject?>(null);
 
   @override
   void initState() {
@@ -79,8 +78,7 @@ class _AlignRulerBarrierState extends State<AlignRulerBarrier> {
     for (final RenderObject obj in objects) {
       final Matrix4 transform = obj.getTransformTo(null);
 
-      final Rect rect = obj.paintBounds.shift(
-          Offset(transform.getTranslation().x, transform.getTranslation().y));
+      final Rect rect = obj.paintBounds.shift(Offset(transform.getTranslation().x, transform.getTranslation().y));
 
       if (rect.contains(_dotPosition)) {
         double dx, dy;
@@ -115,10 +113,8 @@ class _AlignRulerBarrierState extends State<AlignRulerBarrier> {
 
   @override
   Widget build(BuildContext context) {
-    final double verticalLeftOffset =
-        _dotPosition.dx - widget.coordinateTextSize.width;
-    final double horizontalTopOffset =
-        _dotPosition.dy - widget.coordinateTextSize.height;
+    final double verticalLeftOffset = _dotPosition.dx - widget.coordinateTextSize.width;
+    final double horizontalTopOffset = _dotPosition.dy - widget.coordinateTextSize.height;
 
     return Stack(
       alignment: Alignment.topLeft,
@@ -154,29 +150,24 @@ class _AlignRulerBarrierState extends State<AlignRulerBarrier> {
         Positioned(
           top: horizontalTopOffset,
           left: _dotPosition.dx / 2 - widget.coordinateTextSize.width / 2,
-          child: Text(_dotPosition.dx.toStringAsFixed(1),
-              style: widget.coordinateTextStyle),
+          child: Text(_dotPosition.dx.toStringAsFixed(1), style: widget.coordinateTextStyle),
         ),
         Positioned(
             left: verticalLeftOffset,
             top: _dotPosition.dy / 2 - widget.coordinateTextSize.height / 2,
-            child: Text(_dotPosition.dy.toStringAsFixed(1),
-                style: widget.coordinateTextStyle)),
+            child: Text(_dotPosition.dy.toStringAsFixed(1), style: widget.coordinateTextStyle)),
         Positioned(
-            left: _dotPosition.dx +
-                (widget.windowSize.width - _dotPosition.dx) / 2 -
-                widget.coordinateTextSize.width / 2,
+            left:
+                _dotPosition.dx + (widget.windowSize.width - _dotPosition.dx) / 2 - widget.coordinateTextSize.width / 2,
             top: horizontalTopOffset,
-            child: Text(
-                (widget.windowSize.width - _dotPosition.dx).toStringAsFixed(1),
+            child: Text((widget.windowSize.width - _dotPosition.dx).toStringAsFixed(1),
                 style: widget.coordinateTextStyle)),
         Positioned(
             top: _dotPosition.dy +
                 (widget.windowSize.height - _dotPosition.dy) / 2 -
                 widget.coordinateTextSize.height / 2,
             left: verticalLeftOffset,
-            child: Text(
-                (widget.windowSize.height - _dotPosition.dy).toStringAsFixed(1),
+            child: Text((widget.windowSize.height - _dotPosition.dy).toStringAsFixed(1),
                 style: widget.coordinateTextStyle)),
         Positioned(
           left: _dotPosition.dx - widget.dotCenterOffset.dx,
@@ -196,8 +187,7 @@ class _AlignRulerBarrierState extends State<AlignRulerBarrier> {
                 child: Container(
                   height: widget.dotSize.width / 2.5,
                   width: widget.dotSize.height / 2.5,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.red.withAlpha(130)),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red.withAlpha(130)),
                 ),
               ),
             ),

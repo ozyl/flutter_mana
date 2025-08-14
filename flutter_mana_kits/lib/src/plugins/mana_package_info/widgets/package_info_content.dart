@@ -65,6 +65,7 @@ class PackageInfoContent extends StatelessWidget {
 /// 复用 DeviceInfoContent 中的单元格组件
 class _Cell extends StatelessWidget {
   const _Cell(this.text, {this.bold = false});
+
   final String text;
   final bool bold;
 
@@ -73,8 +74,7 @@ class _Cell extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: SelectableText(
           text,
-          style:
-              TextStyle(fontWeight: bold ? FontWeight.bold : FontWeight.normal),
+          style: TextStyle(fontWeight: bold ? FontWeight.bold : FontWeight.normal),
         ),
       );
 }
