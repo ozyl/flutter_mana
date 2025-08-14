@@ -67,8 +67,7 @@ class _ManaLicenseState extends State<ManaLicense> {
             child: LicensePage(
               applicationName: snapshot.requireData.appName,
               applicationIcon: FlutterLogo(),
-              applicationVersion:
-                  'v${snapshot.requireData.version}+${snapshot.requireData.buildNumber}',
+              applicationVersion: 'v${snapshot.requireData.version}+${snapshot.requireData.buildNumber}',
               applicationLegalese: snapshot.requireData.packageName,
             ),
           );

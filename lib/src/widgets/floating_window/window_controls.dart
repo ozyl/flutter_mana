@@ -85,9 +85,7 @@ class _WindowControlsState extends State<WindowControls> {
             child: Row(
               children: [
                 _buildIconButton(
-                  icon: widget.isFullscreen
-                      ? _Icons.fullscreen_exit
-                      : _Icons.fullscreen,
+                  icon: widget.isFullscreen ? _Icons.fullscreen_exit : _Icons.fullscreen,
                   tooltip: widget.isFullscreen ? '退出全屏' : '全屏',
                   onPressed: widget.onFullscreen,
                 ),
@@ -168,8 +166,7 @@ class _DragHandle extends StatelessWidget {
       height: isPressed ? 6 : 4,
       width: isPressed ? 60 : 50,
       decoration: BoxDecoration(
-        color:
-            isPressed ? Theme.of(context).primaryColor : Colors.grey.shade400,
+        color: isPressed ? Theme.of(context).primaryColor : Colors.grey.shade400,
         borderRadius: BorderRadius.circular(isPressed ? 3 : 2),
       ),
     );

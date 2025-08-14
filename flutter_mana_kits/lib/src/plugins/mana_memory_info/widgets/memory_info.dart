@@ -17,6 +17,7 @@ class MemoryInfo extends StatelessWidget {
       position: PositionType.bottom,
       drag: false,
       showBarrier: false,
+      maintainContent: false,
       content: MemoryInfoContent(),
     );
   }

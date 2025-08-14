@@ -12,6 +12,7 @@ class PackageInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return ManaFloatingWindow(
       name: name,
+      showBarrier: false,
       content: PackageInfoContent(),
     );
   }

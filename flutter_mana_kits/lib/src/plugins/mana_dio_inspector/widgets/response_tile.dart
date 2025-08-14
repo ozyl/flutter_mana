@@ -12,8 +12,7 @@ class ResponseTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final RequestOptions requestOptions = response.requestOptions;
 
-    final DateTime? requestStartTime =
-        requestOptions.extra['manaDioRequestStartTime'];
+    final DateTime? requestStartTime = requestOptions.extra['manaDioRequestStartTime'];
     final DateTime? requestEndTime = response.extra['manaDioRequestEndTime'];
 
     Duration? duration;
@@ -40,8 +39,7 @@ class ResponseTile extends StatelessWidget {
   }
 
   // ExpansionTile Title: 请求时间、请求方法、响应状态码、请求耗时
-  Widget _buildTitle(
-      String requestTime, String method, int? statusCode, Duration? duration) {
+  Widget _buildTitle(String requestTime, String method, int? statusCode, Duration? duration) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       spacing: 8,
@@ -54,19 +52,13 @@ class ResponseTile extends StatelessWidget {
         // 方法
         Text(
           method,
-          style: TextStyle(
-              color: _getMethodColor(method),
-              fontSize: 12,
-              fontWeight: FontWeight.bold),
+          style: TextStyle(color: _getMethodColor(method), fontSize: 12, fontWeight: FontWeight.bold),
         ),
         // 状态码
         if (statusCode != null)
           Text(
             statusCode.toString(),
-            style: TextStyle(
-                color: _getStatusCodeColor(statusCode),
-                fontSize: 12,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(color: _getStatusCodeColor(statusCode), fontSize: 12, fontWeight: FontWeight.bold),
           ),
         // 耗时
         if (duration != null)

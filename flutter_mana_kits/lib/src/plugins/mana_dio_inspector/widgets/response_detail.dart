@@ -19,8 +19,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
   Widget build(BuildContext context) {
     final RequestOptions requestOptions = response.requestOptions;
 
-    final DateTime? requestStartTime =
-        requestOptions.extra['manaDioRequestStartTime'];
+    final DateTime? requestStartTime = requestOptions.extra['manaDioRequestStartTime'];
     final DateTime? requestEndTime = response.extra['manaDioRequestEndTime'];
 
     Duration duration = Duration.zero;
@@ -43,8 +42,8 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
     };
 
     // 请求头
-    final Map<String, String> requestHeaders = requestOptions.headers
-        .map((key, value) => MapEntry(key, value.toString()));
+    final Map<String, String> requestHeaders =
+        requestOptions.headers.map((key, value) => MapEntry(key, value.toString()));
 
     // 请求体
     var requestBody = '';
@@ -57,8 +56,8 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
     }
 
     // 响应头
-    final Map<String, String> responseHeaders = response.headers.map
-        .map((key, value) => MapEntry(key, value.join(';')));
+    final Map<String, String> responseHeaders =
+        response.headers.map.map((key, value) => MapEntry(key, value.join(';')));
 
     // 响应体
     var responseBody = '';
@@ -83,8 +82,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
                   color: Colors.grey,
                   size: 16,
                 ),
-                style: IconButton.styleFrom(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                 onPressed: onClose,
               ),
               Expanded(
@@ -107,8 +105,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
             indicatorColor: Colors.transparent,
             dividerHeight: 0,
             isScrollable: false,
-            labelStyle:
-                const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             tabs: [
               Tab(
                 text: t('dio_inspector.detail'),
@@ -140,19 +137,14 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
           children: [
             TableCell(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: Text(row.key,
-                    style:
-                        TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Text(row.key, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
               ),
             ),
             TableCell(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child:
-                    SelectableText(row.value, style: TextStyle(fontSize: 12)),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: SelectableText(row.value, style: TextStyle(fontSize: 12)),
               ),
             ),
           ],
@@ -201,8 +193,8 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(t('dio_inspector.request_details'),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child:
+                Text(t('dio_inspector.request_details'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildTable(details),
         ],
@@ -211,8 +203,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
   }
 
   // 构建请求详情
-  Widget _buildRequestDetails(
-      Map<String, String> requestHeaders, String requestBody) {
+  Widget _buildRequestDetails(Map<String, String> requestHeaders, String requestBody) {
     return SingleChildScrollView(
       physics: const ClampingScrollPhysics(),
       padding: EdgeInsets.only(bottom: 16),
@@ -221,14 +212,12 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(t('dio_inspector.request_header'),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: Text(t('dio_inspector.request_header'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildTable(requestHeaders),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(t('dio_inspector.request_body'),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: Text(t('dio_inspector.request_body'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildCodeBlock(requestBody),
         ],
@@ -237,8 +226,7 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
   }
 
   // 构建响应详情
-  Widget _buildResponseDetails(
-      Map<String, String> responseHeaders, String responseBody) {
+  Widget _buildResponseDetails(Map<String, String> responseHeaders, String responseBody) {
     return SingleChildScrollView(
       physics: const ClampingScrollPhysics(),
       padding: EdgeInsets.only(bottom: 16),
@@ -247,14 +235,13 @@ class ResponseDetail extends StatelessWidget with I18nMixin {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(t('dio_inspector.response_header'),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child:
+                Text(t('dio_inspector.response_header'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildTable(responseHeaders),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(t('dio_inspector.response_body'),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: Text(t('dio_inspector.response_body'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           _buildCodeBlock(responseBody),
         ],
@@ -281,8 +268,7 @@ class MorePopupMenu extends StatelessWidget {
     final url = request.uri.toString();
 
     // 请求头
-    final Map<String, String> requestHeaders =
-        request.headers.map((key, value) => MapEntry(key, value.toString()));
+    final Map<String, String> requestHeaders = request.headers.map((key, value) => MapEntry(key, value.toString()));
 
     requestHeaders.remove('content-length');
 
@@ -315,8 +301,7 @@ class MorePopupMenu extends StatelessWidget {
       padding: EdgeInsets.zero,
       menuPadding: EdgeInsets.zero,
       popUpAnimationStyle: AnimationStyle.noAnimation,
-      style:
-          IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+      style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       itemBuilder: (_) => List.generate(
         items.length,
@@ -334,16 +319,11 @@ class MorePopupMenu extends StatelessWidget {
             textToCopy = request.uri.toString();
             break;
           case 1:
-            final headers = requestHeaders.entries
-                .map((e) => '\t-H "${e.key}: ${e.value}"')
-                .join(' \\\n');
-            textToCopy =
-                'curl -X $method "$url" \\\n$headers \\\n\t-d \'$requestBody\'';
+            final headers = requestHeaders.entries.map((e) => '\t-H "${e.key}: ${e.value}"').join(' \\\n');
+            textToCopy = 'curl -X $method "$url" \\\n$headers \\\n\t-d \'$requestBody\'';
             break;
           case 2:
-            final headers = requestHeaders.entries
-                .map((e) => '${e.key}: ${e.value}')
-                .join('\n');
+            final headers = requestHeaders.entries.map((e) => '${e.key}: ${e.value}').join('\n');
             textToCopy = '$method $url\n$headers\n\n$requestBody';
             break;
           case 3:

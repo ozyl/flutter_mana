@@ -49,9 +49,8 @@ class _ManaOverlayState extends State<ManaOverlay> {
             ValueListenableBuilder(
               valueListenable: manaState.activePluginName,
               builder: (context, value, _) {
-                final currentActivatedPluginWidget = ManaPluginManager
-                    .instance.pluginsMap[manaState.activePluginName.value]
-                    ?.buildWidget(context);
+                final currentActivatedPluginWidget =
+                    ManaPluginManager.instance.pluginsMap[manaState.activePluginName.value]?.buildWidget(context);
                 return currentActivatedPluginWidget ?? nilPosition;
               },
             ),

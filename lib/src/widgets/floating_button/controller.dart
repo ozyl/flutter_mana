@@ -49,10 +49,9 @@ class FloatingButtonController extends ChangeNotifier {
     final maxX = _windowSize.width - _buttonSize;
     final maxY = _windowSize.height - _buttonSize;
 
-    offset.value =
-        (x > 0 && y > 0 && x < _windowSize.width && y < _windowSize.height)
-            ? Offset(x, y)
-            : Offset(maxX - _minMarginH, maxY - _bottomSafe);
+    offset.value = (x > 0 && y > 0 && x < _windowSize.width && y < _windowSize.height)
+        ? Offset(x, y)
+        : Offset(maxX - _minMarginH, maxY - _bottomSafe);
     _clampAndUpdate();
   }
 
@@ -61,9 +60,7 @@ class FloatingButtonController extends ChangeNotifier {
     final maxX = _windowSize.width - _buttonSize;
     final maxY = _windowSize.height - _buttonSize;
 
-    double x = offset.value.dx + _buttonSize / 2 < _windowSize.width / 2
-        ? _minMarginH
-        : maxX - _minMarginH;
+    double x = offset.value.dx + _buttonSize / 2 < _windowSize.width / 2 ? _minMarginH : maxX - _minMarginH;
 
     double y = offset.value.dy.clamp(_minMarginV, maxY - _minMarginV);
 
@@ -80,21 +77,22 @@ class FloatingButtonController extends ChangeNotifier {
 
   void handleDragEnd(DragEndDetails _) {
     _clampAndUpdate();
-    ManaStore.instance
-        .setFloatActionButtonPosition(offset.value.dx, offset.value.dy);
+    ManaStore.instance.setFloatActionButtonPosition(offset.value.dx, offset.value.dy);
   }
 
   // 点击
   void onTap() {
-    if (_state.activePluginName.value.isNotEmpty &&
-        !_state.floatWindowMainVisible.value) {
+    // 让软键盘隐藏、复制选中取消
+    if (manaRootKey.currentContext != null) {
+      FocusScope.of(manaRootKey.currentContext!).unfocus();
+    }
+    if (_state.activePluginName.value.isNotEmpty && !_state.floatWindowMainVisible.value) {
       _state.floatWindowMainVisible.value = true;
       if (_state.floatWindowMainFullscreen.value) {
         _state.floatingButtonVisible.value = false;
       }
     } else {
-      _state.pluginManagementPanelVisible.value =
-          !_state.pluginManagementPanelVisible.value;
+      _state.pluginManagementPanelVisible.value = !_state.pluginManagementPanelVisible.value;
     }
   }
 

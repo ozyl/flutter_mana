@@ -51,6 +51,7 @@ class DeviceInfoContent extends StatelessWidget {
 
 class _Cell extends StatelessWidget {
   const _Cell(this.text, {this.bold = false});
+
   final String text;
   final bool bold;
 
@@ -60,8 +61,7 @@ class _Cell extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: SelectableText(
         text,
-        style:
-            TextStyle(fontWeight: bold ? FontWeight.bold : FontWeight.normal),
+        style: TextStyle(fontWeight: bold ? FontWeight.bold : FontWeight.normal),
       ),
     );
   }

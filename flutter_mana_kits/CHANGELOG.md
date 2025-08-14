@@ -1,3 +1,8 @@
+## 1.0.4
+
+- feat: add mana_visual_helper plugin and documentation
+- style: dart format
+
 ## 1.0.3
 
 - fix: mana_grid bug
