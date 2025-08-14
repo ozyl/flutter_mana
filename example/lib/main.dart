@@ -8,7 +8,6 @@ import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
 import 'utils/animated_ball.dart';
 import 'utils/custom_button.dart';
-import 'utils/custom_text_field.dart';
 import 'utils/dio_client.dart';
 import 'utils/log_generator.dart';
 import 'utils/sp_client.dart';
@@ -84,8 +83,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
@@ -111,7 +108,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 backgroundColor: Colors.deepPurple,
                 onPressed: addSharedPreferences,
               ),
-              CommonTextField(initialValue: '文本测试'),
+              Container(
+                width: double.infinity,
+                color: Colors.grey.shade200,
+                padding: EdgeInsets.all(16),
+                child: SelectableText('测试动画'),
+              ),
               AnimatedBall(),
               SizedBox(width: 300, child: Image.asset('assets/test.jpeg', fit: BoxFit.cover)),
             ],
