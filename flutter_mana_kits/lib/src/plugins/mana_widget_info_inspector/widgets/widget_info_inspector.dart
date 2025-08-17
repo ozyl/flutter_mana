@@ -14,8 +14,10 @@ class WidgetInfoInspector extends StatefulWidget {
   State<WidgetInfoInspector> createState() => _WidgetInfoInspectorState();
 }
 
-class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsBindingObserver {
-  _WidgetInfoInspectorState() : selection = WidgetInspectorService.instance.selection;
+class _WidgetInfoInspectorState extends State<WidgetInfoInspector>
+    with WidgetsBindingObserver {
+  _WidgetInfoInspectorState()
+      : selection = WidgetInspectorService.instance.selection;
 
   final InspectorSelection selection;
 
@@ -72,20 +74,22 @@ class _WidgetInfoInspectorState extends State<WidgetInfoInspector> with WidgetsB
 
   @override
   Widget build(BuildContext context) {
-    return ManaFloatingWindow(
-      name: widget.name,
-      initialWidth: 300,
-      initialHeight: 100,
-      barrier: WidgetInfoInspectorBarrier(
-        selection: selection,
-        onTapDown: _handleTapDown,
-      ),
-      content: WidgetInfoInspectorContent(
-        selection: selection,
-        onChanged: (value) {
-          selection.clear();
-          _showAllSize();
-        },
+    return ManaNavigator(
+      child: ManaFloatingWindow(
+        name: widget.name,
+        initialWidth: 300,
+        initialHeight: 100,
+        barrier: WidgetInfoInspectorBarrier(
+          selection: selection,
+          onTapDown: _handleTapDown,
+        ),
+        content: WidgetInfoInspectorContent(
+          selection: selection,
+          onChanged: (value) {
+            selection.clear();
+            _showAllSize();
+          },
+        ),
       ),
     );
   }
