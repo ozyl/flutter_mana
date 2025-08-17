@@ -97,11 +97,13 @@ class _ManaWidgetState extends State<ManaWidget> {
                     GlobalWidgetsLocalizations.delegate,
                   ],
                   locale: manaLocale,
-                  child: DefaultTextEditingShortcuts(
-                    child: Overlay(
-                      initialEntries: [
-                        OverlayEntry(builder: (context) => ManaOverlay()),
-                      ],
+                  child: ScaffoldMessenger(
+                    child: DefaultTextEditingShortcuts(
+                      child: Overlay(
+                        initialEntries: [
+                          OverlayEntry(builder: (context) => ManaOverlay()),
+                        ],
+                      ),
                     ),
                   ),
                 ),
