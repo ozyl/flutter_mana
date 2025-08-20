@@ -10,7 +10,7 @@ import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
 void main() {
   /// add plugin
-  ManaPluginManager.instance.register(ManaSharedPreferencesViewer());
+  ManaPluginManager.instance.register(ManaStorageViewer());
 
   runApp(ManaWidget(child: App()));
 }
