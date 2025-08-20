@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 
 import 'model.dart' show Model;
@@ -79,6 +80,9 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
             DropdownButtonFormField<String>(
               value: _selectedKind,
               isExpanded: true,
+              onTap: (){
+                ManaHitTestForwarder.disable();
+              },
               decoration: InputDecoration(
                 labelText: t('storage_viewer.type'),
                 border: OutlineInputBorder(),
@@ -104,6 +108,7 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
                 );
               }).toList(),
               onChanged: (String? newValue) {
+                ManaHitTestForwarder.enable();
                 setState(() {
                   _selectedKind = newValue!;
                 });

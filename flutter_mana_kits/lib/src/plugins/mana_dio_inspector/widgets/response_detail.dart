@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 
@@ -298,6 +299,12 @@ class MorePopupMenu extends StatelessWidget {
       icon: const Icon(KitIcons.more, size: 16, color: Colors.grey),
       color: Colors.white,
       elevation: 2,
+      onOpened: (){
+        ManaHitTestForwarder.disable();
+      },
+      onCanceled: (){
+        ManaHitTestForwarder.enable();
+      },
       padding: EdgeInsets.zero,
       menuPadding: EdgeInsets.zero,
       popUpAnimationStyle: AnimationStyle.noAnimation,
