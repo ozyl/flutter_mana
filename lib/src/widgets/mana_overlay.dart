@@ -22,21 +22,9 @@ class ManaOverlay extends StatefulWidget {
 }
 
 class _ManaOverlayState extends State<ManaOverlay> {
-  /// The state object for Mana, which must be preserved using a StatefulWidget.
-  ///
-  /// Mana 的状态对象，必须使用 StatefulWidget 进行状态保存。
-  final ManaState _manaState = ManaStore.instance.getManaState();
 
   @override
-  void dispose() {
-    _manaState.dispose();
-    super.dispose();
-  }
-
-  /// Builds the stack of overlay widgets.
-  ///
-  /// 构建覆盖层小部件的堆栈。
-  Widget _buildStack() {
+  Widget build(BuildContext context) {
     return Builder(
       builder: (BuildContext context) {
         // Access the ManaState from the context.
@@ -49,8 +37,9 @@ class _ManaOverlayState extends State<ManaOverlay> {
             ValueListenableBuilder(
               valueListenable: manaState.activePluginName,
               builder: (context, value, _) {
-                final currentActivatedPluginWidget =
-                    ManaPluginManager.instance.pluginsMap[manaState.activePluginName.value]?.buildWidget(context);
+                final currentActivatedPluginWidget = ManaPluginManager
+                    .instance.pluginsMap[manaState.activePluginName.value]
+                    ?.buildWidget(context);
                 return currentActivatedPluginWidget ?? nilPosition;
               },
             ),
@@ -75,14 +64,6 @@ class _ManaOverlayState extends State<ManaOverlay> {
           ],
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ManaScope(
-      state: _manaState,
-      child: _buildStack(),
     );
   }
 }

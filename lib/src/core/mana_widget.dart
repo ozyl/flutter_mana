@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import '../../flutter_mana.dart';
 import '../widgets/mana_overlay.dart';
-import 'mana_plugin_manager.dart';
-import 'mana_store.dart';
 
 /// A global key used to access the root node of the ManaWidget.
 ///
@@ -15,7 +14,7 @@ Locale manaLocale = Locale('en');
 /// Provides the entry point and basic structure for the Mana plugin system.
 ///
 /// 提供了 Mana 插件体系的入口和基础结构。
-class ManaWidget extends StatelessWidget {
+class ManaWidget extends StatefulWidget {
   /// The child widget of ManaWidget.
   ///
   /// ManaWidget 的子组件。
@@ -33,12 +32,27 @@ class ManaWidget extends StatelessWidget {
   /// 构造函数，用于创建 ManaWidget 实例。
   const ManaWidget({super.key, required this.child, this.enable = true});
 
+  @override
+  State<ManaWidget> createState() => _ManaWidgetState();
+}
+
+class _ManaWidgetState extends State<ManaWidget> {
+  /// 初始化 Future，用于 FutureBuilder
+  late final Future<ManaState> _initializationFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializationFuture = _initialize();
+  }
+
   /// Initializes the Mana store.
   ///
-  /// 初始化 Mana 存储。
-  Future<void> _initialize() async {
+  /// 初始化 Mana 存储 。
+  Future<ManaState> _initialize() async {
     await ManaStore.instance.init();
     await ManaPluginManager.instance.initialize();
+    return ManaStore.instance.getManaState();
   }
 
   @override
@@ -46,8 +60,8 @@ class ManaWidget extends StatelessWidget {
     /// If `enable` is `false`, return the child widget directly without loading Mana-related features.
     ///
     /// 如果 `enable` 为 `false`，则直接返回子组件，不加载 Mana 相关功能。
-    if (!enable) {
-      return child;
+    if (!widget.enable) {
+      return widget.child;
     }
 
     // Get the platform dispatcher to access locale information for internationalization.
@@ -57,49 +71,55 @@ class ManaWidget extends StatelessWidget {
     // 获取第一个首选区域设置，用于显示本地化的插件名称。
     manaLocale = platformDispatcher.locales.first;
 
-    /// 在经过多种方案尝试后，只有在这嵌套一层MaterialApp是侵入性最小、功能完善最好的方案，其他方案多多少少有瑕疵。
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('zh', 'CN'),
-      ],
-      home: Stack(
-        children: [
-          /// Wraps the child widget with RepaintBoundary and assigns `manaRootKey` to it.
-          ///
-          /// 使用 RepaintBoundary 包裹子组件，并为其分配 `manaRootKey`。
-          RepaintBoundary(key: manaRootKey, child: child),
+    return Stack(
+      textDirection: TextDirection.ltr,
+      children: [
+        /// Wraps the child widget with RepaintBoundary and assigns `manaRootKey` to it.
+        ///
+        /// 使用 RepaintBoundary 包裹子组件，并为其分配 `manaRootKey`。
+        RepaintBoundary(key: manaRootKey, child: widget.child),
 
-          /// Uses FutureBuilder to display ManaOverlay after the Mana store is initialized.
-          ///
-          /// 使用 FutureBuilder 在 Mana 存储初始化完成后显示 ManaOverlay。
-          FutureBuilder<void>(
-            future: _initialize(),
-            builder: (context, snapshot) {
-              /// If initialization is not complete, return a shrink-wrapped box to avoid displaying content during loading.
-              ///
-              /// 如果初始化未完成，则返回一个空盒子，避免在加载时显示内容。
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const SizedBox.shrink();
-              }
-
-              /// After initialization is complete, display the ManaOverlay.
-              ///
-              /// 初始化完成后，显示 ManaOverlay。
-              return const Material(
+        // 使用 FutureBuilder 实现异步初始化，更简洁
+        FutureBuilder<ManaState>(
+          future: _initializationFuture,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const SizedBox.shrink();
+            }
+            final mana = ManaScope(
+              state: snapshot.data!,
+              child: ManaHitTestForwarder(
+                child: ManaNavigator(
+                  onGenerateRoute: (settings) => PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ManaOverlay(),
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero,
+                  ),
+                ),
+              ),
+            );
+            return Material(
                 type: MaterialType.transparency,
-                child: ManaOverlay(),
-              );
-            },
-          ),
-        ],
-      ),
+                child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Localizations(
+                    delegates: [
+                      GlobalCupertinoLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                    ],
+                    locale: manaLocale,
+                    child: ScaffoldMessenger(
+                      child: DefaultTextEditingShortcuts(
+                        child: mana,
+                      ),
+                    ),
+                  ),
+                ));
+          },
+        ),
+      ],
     );
   }
 }
