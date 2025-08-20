@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 
+import 'storage_plugin/get_storage.dart';
+import 'storage_plugin/shared_preferences_storage.dart';
 import 'utils/animated_ball.dart';
 import 'utils/custom_button.dart';
 import 'utils/dio_client.dart';
@@ -26,7 +28,11 @@ void main() async {
     ..register(ManaDioInspector())
     ..register(ManaWidgetInfoInspector())
     ..register(ManaFpsMonitor())
-    ..register(ManaSharedPreferencesViewer())
+    ..register(
+      ManaStorageViewer(
+        providers: [GetStorageProvider(), SharedPreferencesProvider()],
+      ),
+    )
     ..register(ManaAlignRuler());
 
   runApp(ManaWidget(child: MyApp()));
@@ -40,7 +46,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Example',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent)),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+      ),
       home: HomePage(),
     );
   }
@@ -60,9 +68,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void toggleOrientation() {
     if (isLandscape) {
-      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
     } else {
-      SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
     }
     setState(() {
       isLandscape = !isLandscape;
@@ -85,7 +99,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -97,12 +114,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 text: 'Detail Page',
                 backgroundColor: Colors.orange,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailPage()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DetailPage()),
+                  );
                 },
               ),
-              CustomButton(text: 'Toggle Orientation', backgroundColor: Colors.blue, onPressed: toggleOrientation),
-              CustomButton(text: 'Send Request', backgroundColor: Colors.red, onPressed: sendRequest),
-              CustomButton(text: 'Add Log', backgroundColor: Colors.cyan, onPressed: addLog),
+              CustomButton(
+                text: 'Toggle Orientation',
+                backgroundColor: Colors.blue,
+                onPressed: toggleOrientation,
+              ),
+              CustomButton(
+                text: 'Send Request',
+                backgroundColor: Colors.red,
+                onPressed: sendRequest,
+              ),
+              CustomButton(
+                text: 'Add Log',
+                backgroundColor: Colors.cyan,
+                onPressed: addLog,
+              ),
               CustomButton(
                 text: 'Add SharedPreferences',
                 backgroundColor: Colors.deepPurple,
@@ -115,7 +147,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 child: SelectableText('测试动画'),
               ),
               AnimatedBall(),
-              SizedBox(width: 300, child: Image.asset('assets/test.jpeg', fit: BoxFit.cover)),
+              SizedBox(
+                width: 300,
+                child: Image.asset('assets/test.jpeg', fit: BoxFit.cover),
+              ),
             ],
           ),
         ),

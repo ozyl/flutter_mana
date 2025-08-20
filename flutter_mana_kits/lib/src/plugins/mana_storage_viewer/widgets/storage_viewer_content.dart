@@ -3,22 +3,24 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mana_kits/flutter_mana_kits.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_mana_kits/src/plugins/mana_storage_viewer/storage/storage_scope.dart';
 
 import 'model.dart';
 import 'model_detail.dart';
 import 'model_tile.dart';
 
-class SharedPreferencesViewerContent extends StatefulWidget {
-  const SharedPreferencesViewerContent({super.key});
+class StorageViewerContent extends StatefulWidget {
+  const StorageViewerContent({super.key});
 
   @override
-  State<SharedPreferencesViewerContent> createState() => _SharedPreferencesViewerContentState();
+  State<StorageViewerContent> createState() => _StorageViewerContentState();
 }
 
-class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewerContent> with I18nMixin {
+class _StorageViewerContentState extends State<StorageViewerContent>
+    with I18nMixin, SingleTickerProviderStateMixin {
   final TextEditingController _filterController = TextEditingController();
   Timer? _debounceTimer;
 
@@ -40,11 +42,29 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
 
   static final _divider = Divider(height: 1, color: Colors.grey.shade200);
 
+  final List<StorageProvider> _storageProviders = [];
+
+  StorageProvider? get _storageProvider =>
+      _storageProviders.elementAtOrNull(_tabController?.index ?? 0);
+
+  TabController? _tabController;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _storageProviders
+          .addAll(StorageScope.of(context)?.storageProviders ?? []);
+      _loadData();
+      _tabController =
+          TabController(length: _storageProviders.length, vsync: this)
+            ..addListener(() {
+              if (!_tabController!.indexIsChanging) {
+                _loadData();
+              }
+          });
+    });
     _filterController.addListener(_onTextChanged);
-    _loadPrefs();
   }
 
   @override
@@ -53,31 +73,34 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
     super.dispose();
   }
 
-  Future<void> _loadPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    final keys = prefs.getKeys().toList();
+  Future<void> _loadData() async {
+    try {
+      final keys = await _storageProvider?.getAllKeys() ?? [];
+      keys.sort();
 
-    keys.sort();
+      final List<Model> data = [];
+      for (final (index, key) in keys.indexed) {
+        final value = await _storageProvider?.getValue(key);
+        if (value != null) {
+          var kind = value.runtimeType.toString();
 
-    final List<Model> data = [];
-    for (final (index, key) in keys.indexed) {
-      final value = prefs.get(key);
-      if (value != null) {
-        var kind = value.runtimeType.toString();
+          if (kind.startsWith('List<')) {
+            kind = 'List<String>';
+          }
 
-        if (kind.startsWith('List<')) {
-          kind = 'List<String>';
+          var v = value.toString();
+          if (kind == 'List<String>') {
+            v = jsonEncode(value);
+          }
+
+          data.add(Model(index, key, v, kind));
         }
-
-        var v = value.toString();
-        if (kind == 'List<String>') {
-          v = jsonEncode(value);
-        }
-
-        data.add(Model(index, key, v, kind));
       }
+      setState(() => _data = data);
+    } catch (e) {
+      // 处理错误，显示错误信息
+      debugPrint('Error loading data: $e');
     }
-    setState(() => _data = data);
   }
 
   // 复制文本并显示提示的方法
@@ -88,44 +111,56 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
   }
 
   Future<void> _save(Model oldModel, Model newModel) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (oldModel.key.isNotEmpty) {
-      await prefs.remove(oldModel.key);
+    try {
+      if (oldModel.key.isNotEmpty) {
+        await _storageProvider?.removeKey(oldModel.key);
+      }
+
+      dynamic value;
+      switch (newModel.kind.toLowerCase()) {
+        case 'double':
+          value = double.parse(newModel.value);
+          break;
+        case 'bool':
+          value = newModel.value == 'true';
+          break;
+        case 'int':
+          value = int.parse(newModel.value);
+          break;
+        case 'string':
+          value = newModel.value;
+          break;
+        default:
+          value = jsonDecode(newModel.value) as List<dynamic>;
+          break;
+      }
+
+      await _storageProvider?.setValue(newModel.key, value);
+      await _loadData();
+      setState(() {
+        _model = null;
+      });
+    } catch (e) {
+      debugPrint('Error saving data: $e');
     }
-    switch (newModel.kind.toLowerCase()) {
-      case 'double':
-        await prefs.setDouble(newModel.key, double.parse(newModel.value));
-        break;
-      case 'bool':
-        await prefs.setBool(newModel.key, newModel.value == 'true');
-        break;
-      case 'int':
-        await prefs.setInt(newModel.key, int.parse(newModel.value));
-        break;
-      case 'string':
-        await prefs.setString(newModel.key, newModel.value);
-        break;
-      default:
-        final decoded = jsonDecode(newModel.value) as List<dynamic>;
-        await prefs.setStringList(newModel.key, decoded.cast<String>());
-        break;
-    }
-    await _loadPrefs();
-    setState(() {
-      _model = null;
-    });
   }
 
   Future<void> _clearAll() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    await _loadPrefs();
+    try {
+      await _storageProvider?.clear();
+      await _loadData();
+    } catch (e) {
+      debugPrint('Error clearing data: $e');
+    }
   }
 
   Future<void> _removeKey(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(key);
-    await _loadPrefs();
+    try {
+      await _storageProvider?.removeKey(key);
+      await _loadData();
+    } catch (e) {
+      debugPrint('Error removing key: $e');
+    }
   }
 
   void _onTextChanged() {
@@ -197,10 +232,12 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
               controller: _filterController,
               style: const TextStyle(fontSize: _fontSize),
               decoration: InputDecoration(
-                hintText: t('shared_preferences_viewer.filter_keywords'),
-                hintStyle: TextStyle(fontSize: _fontSize, color: Colors.black54),
+                hintText: t('storage_viewer.filter_keywords'),
+                hintStyle:
+                    TextStyle(fontSize: _fontSize, color: Colors.black54),
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12.0, vertical: 12.0),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                 ),
@@ -219,7 +256,8 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
               return ToggleButtons(
                 isSelected: selects,
                 renderBorder: false,
-                constraints: BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
+                constraints:
+                    BoxConstraints(minHeight: 36.0, minWidth: buttonWidth),
                 textStyle: const TextStyle(fontSize: _fontSize),
                 onPressed: (int index) {
                   switch (index) {
@@ -232,7 +270,7 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
                       });
                       return;
                     case 2:
-                      _loadPrefs();
+                      _loadData();
                       return;
                     case 3:
                       _toggleFilter();
@@ -273,6 +311,10 @@ class _SharedPreferencesViewerContentState extends State<SharedPreferencesViewer
           child: Column(
             children: [
               _divider,
+              if(_tabController!=null && _storageProviders.length>1)TabBar(
+                  controller: _tabController,
+                  tabs:
+                      _storageProviders.map((e) => Tab(text: e.name)).toList()),
               _buildCenter(),
               _divider,
               _buildBottom(),

@@ -14,7 +14,6 @@ dependencies:
   flutter_mana: ^1.0.2
   dio: ^5.9.0
   logger: ^2.6.1
-  shared_preferences: ^2.5.3
   device_info_plus: ^11.5.0
   syntax_highlight: ^0.4.0
   package_info_plus: ^8.3.1

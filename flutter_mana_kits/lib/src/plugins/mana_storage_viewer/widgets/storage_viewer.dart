@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
 
-import 'shared_preferences_viewer_content.dart';
-
-class SharedPreferencesViewer extends StatelessWidget {
+import 'storage_viewer_content.dart';
+class StorageViewer extends StatelessWidget {
   final String name;
 
-  const SharedPreferencesViewer({super.key, required this.name});
+  const StorageViewer({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,7 @@ class SharedPreferencesViewer extends StatelessWidget {
       position: PositionType.bottom,
       drag: false,
       showBarrier: false,
-      content: SharedPreferencesViewerContent(),
+      content: StorageViewerContent(),
     );
   }
 }

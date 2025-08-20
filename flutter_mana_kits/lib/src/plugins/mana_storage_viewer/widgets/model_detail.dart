@@ -80,7 +80,7 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
               value: _selectedKind,
               isExpanded: true,
               decoration: InputDecoration(
-                labelText: t('shared_preferences_viewer.type'),
+                labelText: t('storage_viewer.type'),
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
@@ -112,7 +112,7 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
             TextFormField(
               controller: _keyController,
               decoration: InputDecoration(
-                labelText: t('shared_preferences_viewer.key'),
+                labelText: t('storage_viewer.key'),
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
@@ -122,7 +122,7 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
               style: const TextStyle(fontSize: 14),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return t('shared_preferences_viewer.key_required');
+                  return t('storage_viewer.key_required');
                 }
                 return null;
               },
@@ -130,7 +130,7 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
             TextFormField(
               controller: _valueController,
               decoration: InputDecoration(
-                labelText: t('shared_preferences_viewer.value'),
+                labelText: t('storage_viewer.value'),
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
@@ -142,29 +142,29 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
               minLines: 2,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return t('shared_preferences_viewer.value_required');
+                  return t('storage_viewer.value_required');
                 }
                 switch (_selectedKind) {
                   case 'double':
                     if (isDouble(value)) {
                       return null;
                     }
-                    return t('shared_preferences_viewer.value_must_double');
+                    return t('storage_viewer.value_must_double');
                   case 'bool':
                     if (isBool(value)) {
                       return null;
                     }
-                    return t('shared_preferences_viewer.value_must_bool');
+                    return t('storage_viewer.value_must_bool');
                   case 'int':
                     if (isInt(value)) {
                       return null;
                     }
-                    return t('shared_preferences_viewer.value_must_int');
+                    return t('storage_viewer.value_must_int');
                   case 'List<String>':
                     if (isListOfString(value)) {
                       return null;
                     }
-                    return t('shared_preferences_viewer.value_must_list_of_string');
+                    return t('storage_viewer.value_must_list_of_string');
                   default:
                     return null;
                 }
@@ -182,7 +182,7 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: Text(t('shared_preferences_viewer.save'), style: TextStyle(fontSize: 14)),
+                    child: Text(t('storage_viewer.save'), style: TextStyle(fontSize: 14)),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -195,7 +195,7 @@ class _ModelDetailState extends State<ModelDetail> with I18nMixin {
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: Text(t('shared_preferences_viewer.cancel'), style: TextStyle(fontSize: 14)),
+                    child: Text(t('storage_viewer.cancel'), style: TextStyle(fontSize: 14)),
                   ),
                 ),
               ],
