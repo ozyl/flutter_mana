@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -219,10 +220,9 @@ class _MemoryInfoContentState extends State<MemoryInfoContent> with I18nMixin {
                 final isEven = index.isOdd;
 
                 return InkWell(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => MemoryDetail(detail: item, service: _memoryService),
-                    ),
+                  onTap: () => ManaNavigator.pushMaterial(
+                    context,
+                    MemoryDetail(detail: item, service: _memoryService),
                   ),
                   child: Container(
                     color: isEven ? Colors.grey.shade100 : Colors.white,

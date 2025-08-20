@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mana/flutter_mana.dart';
 import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 
 /// 用于封装每个 Element 及其随机颜色信息
@@ -76,19 +77,18 @@ class _InfoPageState extends State<InfoPage> {
 
   /// 页面跳转至详情页
   void _navigateToDetail(Element element) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => Scaffold(
+    ManaNavigator.pushMaterial(
+      context,
+      Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0.0,
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 0.0,
-            backgroundColor: Colors.white,
-            shadowColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            title: const Text("Widget Detail"),
-          ),
-          body: _ElementDetailPage(element: element),
+          shadowColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          title: const Text("Widget Detail"),
         ),
+        body: _ElementDetailPage(element: element),
       ),
     );
   }
@@ -102,7 +102,9 @@ class _InfoPageState extends State<InfoPage> {
     }
     final RegExp reg = RegExp(query, caseSensitive: false);
     setState(() {
-      _filteredList = _originalList.where((item) => reg.hasMatch(item.element.widget.toStringShort())).toList();
+      _filteredList = _originalList
+          .where((item) => reg.hasMatch(item.element.widget.toStringShort()))
+          .toList();
     });
   }
 
@@ -150,9 +152,11 @@ class _InfoPageState extends State<InfoPage> {
               onChanged: _onSearchChanged,
               decoration: InputDecoration(
                 hintText: 'Search widget',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 prefixIcon: const Icon(KitIcons.search),
-                suffixIcon: InkWell(onTap: _clear, child: const Icon(KitIcons.close)),
+                suffixIcon:
+                    InkWell(onTap: _clear, child: const Icon(KitIcons.close)),
                 isDense: true,
               ),
             ),
@@ -165,7 +169,8 @@ class _InfoPageState extends State<InfoPage> {
                   : ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       itemCount: _filteredList.length,
-                      itemBuilder: (_, index) => _buildItem(_filteredList[index]),
+                      itemBuilder: (_, index) =>
+                          _buildItem(_filteredList[index]),
                     ),
             ),
           ),
