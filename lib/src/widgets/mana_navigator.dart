@@ -269,6 +269,26 @@ class ManaHitTestForwarder extends SingleChildRenderObjectWidget {
     super.child,
   });
 
+  static final List<bool Function(Offset pos)> _hitTests = [];
+
+  static void addHitTest(bool Function(Offset pos) hitTest) {
+    _hitTests.add(hitTest);
+  }
+
+  static void removeHitTest(bool Function(Offset pos) hitTest) {
+    _hitTests.remove(hitTest);
+  }
+
+  static bool _disable = false;
+
+  static void disable() {
+    _disable = true;
+  }
+
+  static void enable() {
+    _disable = false;
+  }
+
   @override
   RenderManaHitTestForwarder createRenderObject(BuildContext context) {
     return RenderManaHitTestForwarder(context);
@@ -277,10 +297,17 @@ class ManaHitTestForwarder extends SingleChildRenderObjectWidget {
 
 class RenderManaHitTestForwarder extends RenderProxyBox {
   final BuildContext context;
+
   RenderManaHitTestForwarder(this.context);
 
   @override
   bool hitTest(BoxHitTestResult result, {required Offset position}) {
+    if(ManaHitTestForwarder._disable) return super.hitTest(result, position: position);
+    for (final hitTest in ManaHitTestForwarder._hitTests) {
+      if (hitTest(position)) {
+        return super.hitTest(result, position: position);
+      }
+    }
     // 转换为 List 以使用 reversed 方法
     for (final key in ManaHitTestManager.keys.toList().reversed) {
       if (key.currentContext?.findRenderObject()
