@@ -21,7 +21,6 @@ class ManaPluginManager {
   /// [ManaPluginManager] 的单一实例。
   static ManaPluginManager? _instance;
 
-
   late ManaStorageProvider _storageProvider;
 
   ManaStorageProvider get storageProvider => _storageProvider;
@@ -34,7 +33,23 @@ class ManaPluginManager {
   /// The internal map storing registered plugins.
   ///
   /// 存储已注册插件的内部映射。
-  final LinkedHashMap<String, ManaPluggable> _pluginsMap = LinkedHashMap<String, ManaPluggable>();
+  final LinkedHashMap<String, ManaPluggable> _pluginsMap =
+      LinkedHashMap<String, ManaPluggable>();
+
+  /// The list of inner observers.
+  ///
+  /// 内部观察者列表。
+  final List<WidgetsBindingObserver> _innerObservers = [];
+
+  List<WidgetsBindingObserver> get innerObservers => _innerObservers;
+
+  void addInnerObserver(WidgetsBindingObserver observer) {
+    _innerObservers.add(observer);
+  }
+
+  void removeInnerObserver(WidgetsBindingObserver observer) {
+    _innerObservers.remove(observer);
+  }
 
   /// Provides the singleton instance of [ManaPluginManager].
   /// If the instance does not exist, it will be created.

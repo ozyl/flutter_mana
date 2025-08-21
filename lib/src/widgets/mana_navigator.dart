@@ -95,7 +95,7 @@ class _ManaNavigatorState extends State<ManaNavigator>
       manaState.pluginManagementPanelVisible.value = false;
       return true;
     }
-    if (manaState.floatWindowMainVisible.value) {
+    if (manaState.floatWindowMainVisible.value && manaState.activePluginName.value.isNotEmpty) {
       manaState.floatWindowMainVisible.value = false;
       manaState.floatingButtonVisible.value = true;
       return true;
@@ -105,13 +105,13 @@ class _ManaNavigatorState extends State<ManaNavigator>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    ManaPluginManager.instance.addInnerObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    ManaPluginManager.instance.removeInnerObserver(this);
     super.dispose();
   }
 

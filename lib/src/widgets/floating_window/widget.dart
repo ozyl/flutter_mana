@@ -190,7 +190,7 @@ class _FloatingWindowState extends State<FloatingWindow> {
               _controller.offset,
             ]), // 合并多个 ValueListenable
             builder: (context, _) {
-              final visible =
+              final visible = ManaPluginManager.name == widget.name || 
                   _controller.manaState.floatWindowMainVisible.value;
               final fullscreen = _controller.fullscreen.value;
               final offset = _controller.offset.value;

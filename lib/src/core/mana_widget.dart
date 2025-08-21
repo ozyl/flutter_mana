@@ -36,14 +36,31 @@ class ManaWidget extends StatefulWidget {
   State<ManaWidget> createState() => _ManaWidgetState();
 }
 
-class _ManaWidgetState extends State<ManaWidget> {
+class _ManaWidgetState extends State<ManaWidget> with WidgetsBindingObserver {
   /// 初始化 Future，用于 FutureBuilder
   late final Future<ManaState> _initializationFuture;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _initializationFuture = _initialize();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Future<bool> didPopRoute() async {
+    for (final observer in ManaPluginManager.instance.innerObservers) {
+      if (await observer.didPopRoute()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /// Initializes the Mana store.

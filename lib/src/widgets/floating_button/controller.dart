@@ -93,7 +93,6 @@ class FloatingButtonController extends ChangeNotifier {
       }
     } else {
       _state.pluginManagementPanelVisible.value = !_state.pluginManagementPanelVisible.value;
-      _state.floatWindowMainVisible.value = true;
     }
   }
 
