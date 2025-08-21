@@ -45,7 +45,7 @@ class FloatingButtonController extends ChangeNotifier {
   }
 
   Future<void> _restorePosition() async {
-    final (x, y) = ManaStore.instance.getFloatActionButtonPosition();
+    final (x, y) = await ManaStore.instance.getFloatActionButtonPosition();
     final maxX = _windowSize.width - _buttonSize;
     final maxY = _windowSize.height - _buttonSize;
 
@@ -93,6 +93,7 @@ class FloatingButtonController extends ChangeNotifier {
       }
     } else {
       _state.pluginManagementPanelVisible.value = !_state.pluginManagementPanelVisible.value;
+      _state.floatWindowMainVisible.value = true;
     }
   }
 

@@ -20,19 +20,24 @@ class _GridState extends State<Grid> {
   @override
   void initState() {
     super.initState();
-    _gap = ManaStore.instance.prefs.getDouble('mana_grid_gap') ?? 50;
-    _showNumbers = ManaStore.instance.prefs.getBool('mana_grid_show_numbers') ?? true;
+    _init();
+  }
+
+  Future<void> _init() async {
+    _gap = await ManaStore.instance.storageProvider.getValue('mana_grid_gap') as double? ?? 50;
+    _showNumbers = await ManaPluginManager.instance.storageProvider.getValue('mana_grid_show_numbers') as bool? ?? true;
+    setState(() {});
   }
 
   void _onGapChanged(double value) async {
     _gap = value;
-    await ManaStore.instance.prefs.setDouble('mana_grid_gap', value);
+    await ManaStore.instance.storageProvider.setValue('mana_grid_gap', value);
     setState(() {});
   }
 
   void _onShowNumbersChanged(bool value) async {
     _showNumbers = value;
-    await ManaStore.instance.prefs.setBool('mana_grid_show_numbers', value);
+    await ManaPluginManager.instance.storageProvider.setValue('mana_grid_show_numbers', value);
     setState(() {});
   }
 

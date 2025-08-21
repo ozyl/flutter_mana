@@ -19,11 +19,18 @@ class _LogViewerState extends State<LogViewer> {
   @override
   void initState() {
     super.initState();
-    _verboseLogs = ManaStore.instance.prefs.getBool('mana_log_viewer_verbose_logs') ?? false;
+    _init();
+  }
+
+  Future<void> _init() async {
+    _verboseLogs = await ManaStore.instance.storageProvider.getValue('mana_log_viewer_verbose_logs') as bool? ?? false;
+    setState(() {
+      
+    });
   }
 
   void _onChange(bool? value) async {
-    await ManaStore.instance.prefs.setBool('mana_log_viewer_verbose_logs', value ?? false);
+    await ManaStore.instance.storageProvider.setValue('mana_log_viewer_verbose_logs', value ?? false);
     setState(() {
       _verboseLogs = value ?? false;
     });

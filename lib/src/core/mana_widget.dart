@@ -50,9 +50,8 @@ class _ManaWidgetState extends State<ManaWidget> {
   ///
   /// 初始化 Mana 存储 。
   Future<ManaState> _initialize() async {
-    await ManaStore.instance.init();
     await ManaPluginManager.instance.initialize();
-    return ManaStore.instance.getManaState();
+    return await ManaStore.instance.getManaState();
   }
 
   @override

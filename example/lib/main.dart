@@ -28,6 +28,7 @@ void main() async {
     ..register(ManaDioInspector())
     ..register(ManaWidgetInfoInspector())
     ..register(ManaFpsMonitor())
+    ..registerStorageProvider(SharedPreferencesProvider())
     ..register(
       ManaStorageViewer(
         providers: [GetStorageProvider(), SharedPreferencesProvider()],

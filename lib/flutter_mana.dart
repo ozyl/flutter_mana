@@ -15,3 +15,4 @@ export 'src/widgets/floating_window/index.dart'
     show ManaFloatingWindow, PositionType;
 export 'src/widgets/mana_navigator.dart'
     show ManaNavigator, ManaHitTestForwarder, ManaHitTestManager;
+export 'src/core/mana_storage_provider.dart';

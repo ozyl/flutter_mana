@@ -149,6 +149,7 @@ class FloatingWindowController extends ChangeNotifier {
     callback?.call();
     if (_name == ManaPluginManager.name) {
       _manaState.pluginManagementPanelVisible.value = false;
+      return;
     }
     _manaState.activePluginName.value = '';
     _manaState.floatingButtonVisible.value = true;

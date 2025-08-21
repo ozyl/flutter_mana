@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_mana/src/core/mana_storage_provider.dart';
 
 import 'mana_pluggable.dart';
 
@@ -19,6 +20,11 @@ class ManaPluginManager {
   ///
   /// [ManaPluginManager] 的单一实例。
   static ManaPluginManager? _instance;
+
+
+  late ManaStorageProvider _storageProvider;
+
+  ManaStorageProvider get storageProvider => _storageProvider;
 
   /// Returns an unmodifiable map of registered plugins, keyed by their names.
   ///
@@ -69,6 +75,10 @@ class ManaPluginManager {
     for (final plugin in plugins) {
       register(plugin);
     }
+  }
+
+  void registerStorageProvider(ManaStorageProvider storageProvider) {
+    _storageProvider = storageProvider;
   }
 
   Future<void> initialize() async {
