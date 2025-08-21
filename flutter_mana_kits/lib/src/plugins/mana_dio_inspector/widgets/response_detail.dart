@@ -319,6 +319,7 @@ class MorePopupMenu extends StatelessWidget {
         ),
       ),
       onSelected: (index) {
+        ManaHitTestForwarder.enable();
         String textToCopy = '';
 
         switch (index) {
