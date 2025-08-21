@@ -32,7 +32,7 @@ class ManaState {
     double? initialFloatingButtonOpacity,
   })  : activePluginName = ValueNotifier(initialActivePluginName ?? ''),
         pluginManagementPanelVisible = ValueNotifier(initialPluginManagementPanelVisible ?? false),
-        floatWindowMainVisible = ValueNotifier(initialFloatWindowMainVisible ?? true),
+        floatWindowMainVisible = ValueNotifier(initialFloatWindowMainVisible ?? false),
         floatWindowMainFullscreen = ValueNotifier(floatWindowMainFullscreen ?? false),
         floatingButtonVisible = ValueNotifier(initialFloatingButtonVisible ?? true),
         floatingButtonSize = ValueNotifier(initialFloatingButtonSize ?? 50),
