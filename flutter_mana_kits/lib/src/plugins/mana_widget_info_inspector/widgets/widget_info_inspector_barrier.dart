@@ -15,14 +15,8 @@ class WidgetInfoInspectorBarrier extends StatelessWidget {
     GestureDetector gesture = GestureDetector(
       onTapDown: onTapDown,
       behavior: HitTestBehavior.opaque,
-      child: IgnorePointer(
-        child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-        ),
-      ),
     );
-    children.add(gesture);
+    children.add(Positioned.fill(child: gesture));
 
     children.add(RepaintBoundary(child: InspectorOverlay(selection: selection)));
 
