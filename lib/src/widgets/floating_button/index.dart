@@ -26,6 +26,8 @@ class _FloatingButtonState extends State<FloatingButton> {
     _initialized = true;
   }
 
+  bool enableAnimated = false;
+
   @override
   void dispose() {
     _controller.dispose();
@@ -37,13 +39,26 @@ class _FloatingButtonState extends State<FloatingButton> {
     return ValueListenableBuilder(
       valueListenable: _controller.offset,
       builder: (context, pos, _) {
-        return Positioned(
+        return AnimatedPositioned(
           left: pos.dx,
           top: pos.dy,
+          duration: enableAnimated ? Duration(milliseconds: 300) : Duration.zero,
           child: GestureDetector(
             onTap: _controller.onTap,
+            onPanDown: (details) {
+              enableAnimated = false;
+              setState(() {
+                
+              });
+            },
             onPanUpdate: _controller.handleDragUpdate,
-            onPanEnd: _controller.handleDragEnd,
+            onPanEnd: (_) {
+              enableAnimated = true;
+              setState(() {
+                
+              });
+              _controller.handleDragEnd(_);
+            },
             child: ValueListenableBuilder(
               valueListenable: _controller.state.floatingButtonOpacity,
               builder: (context, opacity, _) {
