@@ -27,10 +27,13 @@ class ManaWidget extends StatefulWidget {
   /// 如果为 `false`，则不显示 Mana 相关的组件。
   final bool enable;
 
+
+  final Future<ManaState>? initialManaState;
+
   /// Constructor for creating a ManaWidget instance.
   ///
   /// 构造函数，用于创建 ManaWidget 实例。
-  const ManaWidget({super.key, required this.child, this.enable = true});
+  const ManaWidget({super.key, required this.child, this.enable = true, this.initialManaState});
 
   @override
   State<ManaWidget> createState() => _ManaWidgetState();
@@ -44,7 +47,7 @@ class _ManaWidgetState extends State<ManaWidget> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _initializationFuture = _initialize();
+    _initializationFuture =  _initialize();
   }
 
   @override
@@ -97,7 +100,7 @@ class _ManaWidgetState extends State<ManaWidget> with WidgetsBindingObserver {
 
         // 使用 FutureBuilder 实现异步初始化，更简洁
         FutureBuilder<ManaState>(
-          future: _initializationFuture,
+          future: widget.initialManaState ?? _initializationFuture,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox.shrink();
