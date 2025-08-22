@@ -97,16 +97,12 @@ class ManaPluginManager {
   }
 
   Future<void> initialize() async {
-    final List<Future<void>> initializationFutures = [];
-
-    pluginsMap.forEach((name, plugin) {
-      initializationFutures.add(plugin.initialize());
-    });
-
-    try {
-      await Future.wait(initializationFutures);
-    } catch (e) {
-      debugPrint('Plugin initialization failed: $e');
+    for (final plugin in pluginsMap.entries) {
+      try{
+        await plugin.value.initialize();
+      } catch (e) {
+        debugPrint('Plugin ${plugin.key} initialization failed: $e');
+      }
     }
   }
 }
