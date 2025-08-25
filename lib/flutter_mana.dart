@@ -6,7 +6,6 @@ export 'src/core/mana_scope.dart' show ManaScope;
 export 'src/core/mana_state.dart' show ManaState;
 export 'src/core/mana_store.dart' show ManaStore;
 export 'src/core/mana_widget.dart' show ManaWidget, manaRootKey, manaLocale;
-export 'src/services/inspector_overlay.dart' show InspectorOverlay;
 export 'src/services/vm_inspector.dart' show VmInspector;
 export 'src/services/vm_inspector_mixin.dart' show VmInspectorMixin;
 export 'src/utils/hit_test_utils.dart' show HitTestUtils;

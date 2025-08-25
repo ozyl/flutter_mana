@@ -59,7 +59,7 @@ mixin I18nMixin {
     'storage_viewer.cancel': ['Cancel', '取消'],
 
     // Widget Info Inspector
-    'widget_info_inspector.tip': ['Switch drawing mode', '切换绘制模式'],
+    'widget_info_inspector.tip': ['Switch Inspector', '启用 Inspector'],
 
     // Gird
     'grid.show_numbers': ['Show Numbers', '显示坐标'],

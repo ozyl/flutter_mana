@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mana/flutter_mana.dart';
+import 'package:flutter_mana_kits/src/plugins/mana_widget_info_inspector/widgets/widget_info_inspector.dart';
 
 import 'icon.dart';
-import 'widgets/widget_info_inspector.dart';
 
 class ManaWidgetInfoInspector implements ManaPluggable {
   const ManaWidgetInfoInspector();
@@ -12,12 +12,7 @@ class ManaWidgetInfoInspector implements ManaPluggable {
 
   @override
   String getLocalizedDisplayName(Locale locale) {
-    switch (locale.languageCode) {
-      case 'zh':
-        return 'Widget 信息';
-      default:
-        return 'Widget Info';
-    }
+    return 'Widget Inspector';
   }
 
   @override

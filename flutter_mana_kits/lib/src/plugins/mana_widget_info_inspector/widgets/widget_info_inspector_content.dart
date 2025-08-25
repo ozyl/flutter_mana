@@ -6,23 +6,52 @@ import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 import 'widget_info_inspector_detail.dart';
 
 class WidgetInfoInspectorContent extends StatefulWidget {
-  final InspectorSelection selection;
-
-  final ValueChanged<bool>? onChanged;
-
-  const WidgetInfoInspectorContent({super.key, required this.selection, this.onChanged});
+  const WidgetInfoInspectorContent({super.key});
 
   @override
-  State<WidgetInfoInspectorContent> createState() => _WidgetInfoInspectorContentState();
+  State<WidgetInfoInspectorContent> createState() =>
+      _WidgetInfoInspectorContentState();
 }
 
-class _WidgetInfoInspectorContentState extends State<WidgetInfoInspectorContent> with I18nMixin {
-  bool _debugPaintSizeEnabled = false;
-
-  void _onChange(bool value) {
-    _debugPaintSizeEnabled = value;
-    widget.onChanged?.call(value);
+class _WidgetInfoInspectorContentState extends State<WidgetInfoInspectorContent>
+    with I18nMixin {
+  _onSelectionChanged() {
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetInspectorService.instance.selection.addListener(_onSelectionChanged);
+    WidgetsBinding.instance.debugShowWidgetInspectorOverrideNotifier
+        .addListener(_onSelectionChanged);
+    WidgetsBinding.instance.debugWidgetInspectorSelectionOnTapEnabled
+        .addListener(_onSelectionChanged);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.debugWidgetInspectorSelectionOnTapEnabled.value =
+          true;
+      WidgetsBinding.instance.debugShowWidgetInspectorOverride = true;
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetInspectorService.instance.selection
+        .removeListener(_onSelectionChanged);
+    WidgetsBinding.instance.debugShowWidgetInspectorOverrideNotifier
+        .removeListener(_onSelectionChanged);
+    WidgetsBinding.instance.debugWidgetInspectorSelectionOnTapEnabled
+        .removeListener(_onSelectionChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _onSwitchChanged(false);
+    });
+    super.dispose();
+  }
+
+  _onSwitchChanged(bool value) {
+    WidgetsBinding.instance.debugWidgetInspectorSelectionOnTapEnabled.value =
+        value;
+    WidgetsBinding.instance.debugShowWidgetInspectorOverride = value;
   }
 
   @override
@@ -32,43 +61,36 @@ class _WidgetInfoInspectorContentState extends State<WidgetInfoInspectorContent>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            spacing: 8,
-            children: [
-              Switch(
-                value: _debugPaintSizeEnabled,
-                onChanged: _onChange,
-                activeColor: Colors.red,
-              ),
-              Text(
-                t('widget_info_inspector.tip'),
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              )
-            ],
+          Switch(
+            value: WidgetsBinding.instance.debugShowWidgetInspectorOverride,
+            onChanged: _onSwitchChanged,
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: widget.selection.currentElement == null
+          Text(
+            t('widget_info_inspector.tip'),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
+          IconButton(
+            onPressed:
+                WidgetInspectorService.instance.selection.currentElement == null
                     ? null
                     : () {
                         ManaNavigator.pushMaterial(
                           context,
-                          InfoPage(elements: widget.selection.currentElement!.debugGetDiagnosticChain()),
+                          InfoPage(
+                              elements: WidgetInspectorService
+                                  .instance.selection.currentElement!
+                                  .debugGetDiagnosticChain()),
                         );
                       },
-                constraints: const BoxConstraints(),
-                style: IconButton.styleFrom(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                icon: Icon(KitIcons.eye),
-              )
-            ],
-          ),
+            constraints: const BoxConstraints(),
+            style: IconButton.styleFrom(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            icon: Icon(KitIcons.eye),
+          )
         ],
       ),
     );
