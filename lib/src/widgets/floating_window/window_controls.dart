@@ -85,14 +85,14 @@ class _WindowControlsState extends State<WindowControls> {
             child: Row(
               children: [
                 _buildIconButton(
+                  icon: _Icons.close,
+                  tooltip: '关闭',
+                  onPressed: widget.onClose,
+                ),
+                _buildIconButton(
                   icon: widget.isFullscreen ? _Icons.fullscreen_exit : _Icons.fullscreen,
                   tooltip: widget.isFullscreen ? '退出全屏' : '全屏',
                   onPressed: widget.onFullscreen,
-                ),
-                _buildIconButton(
-                  icon: _Icons.minimize,
-                  tooltip: '最小化',
-                  onPressed: widget.onMinimize,
                 ),
               ],
             ),
@@ -139,9 +139,9 @@ class _WindowControlsState extends State<WindowControls> {
                   ),
                 ),
                 _buildIconButton(
-                  icon: _Icons.close,
-                  tooltip: '关闭',
-                  onPressed: widget.onClose,
+                  icon: _Icons.minimize,
+                  tooltip: '最小化',
+                  onPressed: widget.onMinimize,
                 ),
               ],
             ),

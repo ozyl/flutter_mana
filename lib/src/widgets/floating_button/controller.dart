@@ -86,8 +86,11 @@ class FloatingButtonController extends ChangeNotifier {
     if (manaRootKey.currentContext != null) {
       FocusScope.of(manaRootKey.currentContext!).unfocus();
     }
-    if (_state.activePluginName.value.isNotEmpty) {
-      _state.floatWindowMainVisible.value = !_state.floatWindowMainVisible.value;
+    if (_state.activePluginName.value.isNotEmpty && !_state.floatWindowMainVisible.value) {
+      _state.floatWindowMainVisible.value = true;
+      if (_state.floatWindowMainFullscreen.value) {
+        _state.floatingButtonVisible.value = false;
+      }
     } else {
       _state.pluginManagementPanelVisible.value = !_state.pluginManagementPanelVisible.value;
     }

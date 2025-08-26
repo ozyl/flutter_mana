@@ -152,7 +152,6 @@ class FloatingWindowController extends ChangeNotifier {
       return;
     }
     _manaState.activePluginName.value = '';
-    _manaState.pluginManagementPanelVisible.value  = true;
     _manaState.floatingButtonVisible.value = true;
   }
 }
