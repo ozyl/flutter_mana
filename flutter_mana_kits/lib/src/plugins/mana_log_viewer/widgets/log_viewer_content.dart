@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_mana_kits/src/i18n/i18n_mixin.dart';
 import 'package:flutter_mana_kits/src/icons/kit_icons.dart';
 import 'package:logger/logger.dart';
@@ -47,7 +48,17 @@ class _LogViewerContentState extends State<LogViewerContent>
     _tabController = TabController(length: _tabs.length, vsync: this)..addListener(_handleTabSelection);
     _filterController = TextEditingController()..addListener(_onTextChanged);
     ManaLogCollector().addListener(_onDataChanged);
-    _onDataChanged();
+    _filteredData = _filterEvents(ManaLogCollector().data);
+  }
+
+  List<OutputEvent> _filterEvents(Iterable<OutputEvent> data) {
+    return data.where((d) {
+      final matchLevel = _currentTab == 'All' || d.level.name.toLowerCase() == _currentTab.toLowerCase();
+      final matchKeyword = !_filter ||
+          _filterKeywords.isEmpty ||
+          (_filter && _filterKeywords.isNotEmpty && d.origin.message.toString().contains(_filterKeywords));
+      return matchLevel && matchKeyword;
+    }).toList();
   }
 
   @override
@@ -83,17 +94,21 @@ class _LogViewerContentState extends State<LogViewerContent>
   }
 
   void _updateFilteredData(Iterable<OutputEvent> data) {
-    final filtered = data.where((d) {
-      final matchLevel = _currentTab == 'All' || d.level.name.toLowerCase() == _currentTab.toLowerCase();
-      final matchKeyword = !_filter ||
-          _filterKeywords.isEmpty ||
-          (_filter && _filterKeywords.isNotEmpty && d.origin.message.toString().contains(_filterKeywords));
-      return matchLevel && matchKeyword;
-    });
+    final filtered = _filterEvents(data);
 
-    setState(() {
-      _filteredData = filtered.toList();
-    });
+    void apply() {
+      if (!mounted) return;
+      setState(() => _filteredData = filtered);
+    }
+
+    final phase = SchedulerBinding.instance.schedulerPhase;
+    if (phase == SchedulerPhase.transientCallbacks ||
+        phase == SchedulerPhase.midFrameMicrotasks ||
+        phase == SchedulerPhase.persistentCallbacks) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => apply());
+      return;
+    }
+    apply();
   }
 
   void _scrollToBottom([bool animate = true]) {
@@ -132,10 +147,8 @@ class _LogViewerContentState extends State<LogViewerContent>
   void _clear() => ManaLogCollector().clear();
 
   void _toggleFilter() {
-    _filter = !_filter;
-    setState(() {
-      _onDataChanged();
-    });
+    setState(() => _filter = !_filter);
+    _updateFilteredData(ManaLogCollector().data);
   }
 
   Widget _buildHeader() {
