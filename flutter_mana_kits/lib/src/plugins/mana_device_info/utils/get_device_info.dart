@@ -18,13 +18,6 @@ Future<Map<String, dynamic>> getDeviceInfo() async {
         TargetPlatform.windows => _readWindowsDeviceInfo(await deviceInfoPlugin.windowsInfo),
         TargetPlatform.macOS => _readMacOsDeviceInfo(await deviceInfoPlugin.macOsInfo),
         TargetPlatform.fuchsia => <String, dynamic>{'Error:': 'Fuchsia platform isn\'t supported'},
-        // 标准 SDK 没有 TargetPlatform.ohos，写死这个值 one_piece 编不过。
-        // 鸿蒙 SDK 多了这个枚举，落到这里再读 ohosDeviceInfo。
-        _ => defaultTargetPlatform.name == 'ohos'
-            ? await _readOhosDeviceInfo()
-            : <String, dynamic>{
-                'Error:': '${defaultTargetPlatform.name} isn\'t supported',
-              },
       };
     }
   } on PlatformException {
@@ -55,20 +48,20 @@ Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
     'manufacturer': build.manufacturer,
     'model': build.model,
     'product': build.product,
-    'name': _later(build, (v) => v.name),
+    'name': build.name,
     'supported32BitAbis': build.supported32BitAbis,
     'supported64BitAbis': build.supported64BitAbis,
     'supportedAbis': build.supportedAbis,
     'tags': build.tags,
     'type': build.type,
     'isPhysicalDevice': build.isPhysicalDevice,
-    'freeDiskSize': _later(build, (v) => v.freeDiskSize),
-    'totalDiskSize': _later(build, (v) => v.totalDiskSize),
+    'freeDiskSize': build.freeDiskSize,
+    'totalDiskSize': build.totalDiskSize,
     'systemFeatures': build.systemFeatures,
     'serialNumber': build.serialNumber,
     'isLowRamDevice': build.isLowRamDevice,
-    'physicalRamSize': _later(build, (v) => v.physicalRamSize),
-    'availableRamSize': _later(build, (v) => v.availableRamSize),
+    'physicalRamSize': build.physicalRamSize,
+    'availableRamSize': build.availableRamSize,
   };
 }
 
@@ -78,15 +71,15 @@ Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
     'systemName': data.systemName,
     'systemVersion': data.systemVersion,
     'model': data.model,
-    'modelName': _later(data, (v) => v.modelName),
+    'modelName': data.modelName,
     'localizedModel': data.localizedModel,
     'identifierForVendor': data.identifierForVendor,
     'isPhysicalDevice': data.isPhysicalDevice,
-    'isiOSAppOnMac': _later(data, (v) => v.isiOSAppOnMac),
-    'freeDiskSize': _later(data, (v) => v.freeDiskSize),
-    'totalDiskSize': _later(data, (v) => v.totalDiskSize),
-    'physicalRamSize': _later(data, (v) => v.physicalRamSize),
-    'availableRamSize': _later(data, (v) => v.availableRamSize),
+    'isiOSAppOnMac': data.isiOSAppOnMac,
+    'freeDiskSize': data.freeDiskSize,
+    'totalDiskSize': data.totalDiskSize,
+    'physicalRamSize': data.physicalRamSize,
+    'availableRamSize': data.availableRamSize,
     'utsname.sysname': data.utsname.sysname,
     'utsname.nodename': data.utsname.nodename,
     'utsname.release': data.utsname.release,
@@ -178,39 +171,4 @@ Map<String, dynamic> _readWindowsDeviceInfo(WindowsDeviceInfo data) {
     'releaseId': data.releaseId,
     'deviceId': data.deviceId,
   };
-}
-
-/// device_info 11.5 才有的字段。鸿蒙钉的 11.1 没有这些 getter，缺了就空。
-Object? _later(Object target, Object? Function(dynamic value) read) {
-  try {
-    return read(target);
-  } on NoSuchMethodError {
-    return null;
-  }
-}
-
-Future<Map<String, dynamic>> _readOhosDeviceInfo() async {
-  try {
-    final info = await (deviceInfoPlugin as dynamic).ohosDeviceInfo;
-    return <String, dynamic>{
-      'brand': info.brand,
-      'manufacture': info.manufacture,
-      'marketName': info.marketName,
-      'productSeries': info.productSeries,
-      'productModel': info.productModel,
-      'softwareModel': info.softwareModel,
-      'hardwareModel': info.hardwareModel,
-      'osFullName': info.osFullName,
-      'displayVersion': info.displayVersion,
-      'sdkApiVersion': info.sdkApiVersion,
-      'majorVersion': info.majorVersion,
-      'seniorVersion': info.seniorVersion,
-      'featureVersion': info.featureVersion,
-      'buildVersion': info.buildVersion,
-      'deviceType': info.deviceType,
-      'isPhysicalDevice': info.isPhysicalDevice,
-    };
-  } catch (e) {
-    return <String, dynamic>{'Error:': '$e'};
-  }
 }
